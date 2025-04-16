@@ -1,4 +1,5 @@
-# Venzo2025-MernStack-MongoDB-Express-React-Nodejs
+# Venzo2025
+This is a MernStack project "MongoDB|Express|React|Nodejs|TypeScript|TailwindCSS|Zustand|SASS
 
 # Back-end Setup Guide
 
