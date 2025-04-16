@@ -55,6 +55,7 @@ npm start
 - Review the logs in `logfile.log` for debugging any errors.
 
 ## venzo2025 postman workspace :
+After setting up the server, you can test all the APIs of this project in Postman using this link :
 https://www.postman.com/kharidino/workspace/venzo2025/request/34024160-810056b1-a6cd-45fc-befb-630c967b945d?action=share&creator=34024160&ctx=documentation
 
 
