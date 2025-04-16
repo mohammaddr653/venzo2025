@@ -56,5 +56,4 @@ npm start
 
 ## venzo2025 postman workspace :
 After setting up the server, you can test all the APIs of this project in Postman using this link :
-https://.postman.co/workspace/venzo2025~b7068ae2-eb85-4bb6-aa25-2673b2f510f7/request/34024160-be03bd29-fa15-4d1e-b6d8-96ffcadbc6fb?action=share&creator=34024160&ctx=documentation
-
+https://www.postman.com/mohammaddr653/workspace/venzo2025/collection/34024160-41655f65-50fb-4ecd-a119-aff96815e89c?action=share&creator=34024160
