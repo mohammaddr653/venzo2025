@@ -1,6 +1,6 @@
 {
-  "name": "auth project",
+  "name": "venzo2025",
   "db":{
-    "address":"mongodb://localhost:27017/venzo-db"
+    "address":"mongodb://localhost:27017/venzo2025-db"
   }
 }
