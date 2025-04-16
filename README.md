@@ -1,5 +1,7 @@
 # Venzo2025
-This is a MernStack project "MongoDB | Express | React | Nodejs | TypeScript | TailwindCSS | Zustand | SASS"
+This is my first MernStack project .
+### What I used in this project :
+"MongoDB | Express | React | Nodejs | TypeScript | TailwindCSS | Zustand | SASS"
 
 # Back-end Setup Guide
 
