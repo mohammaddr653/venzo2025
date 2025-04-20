@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
 import AxiosMessage from "../../components/common/axiosMessage";
 import { login } from "../../helpers/login";
+import LoadingButton from "./loadingButton";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,7 +11,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+  
   const [axiosMsgs, setAxiosMsgs] = useState<AxiosMessageType[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -20,11 +23,14 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await login(formData);
       navigate("/");
     } catch (error: any) {
       setAxiosMsgs([...axiosMsgs, error]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +55,7 @@ const Login = () => {
           className="border"
           onChange={handleChange}
         />
-        <button type="submit">submit</button>
+        <LoadingButton loading={loading}></LoadingButton>
       </form>
     </div>
   );
