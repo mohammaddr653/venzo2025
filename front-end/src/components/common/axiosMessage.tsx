@@ -2,8 +2,21 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { AxiosMessageProps } from "../../types/objects/axiosMessageProps";
 import { ServerResponse } from "../../types/objects/serverResponse";
+import { useEffect, useState } from "react";
 
 const AxiosMessage = (props: AxiosMessageProps) => {
+  const [show, setShow] = useState<any>(null);
+
+  useEffect(() => {
+    setShow(true);
+    const timer = setTimeout(() => {
+      setShow(false);
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [props.msg]);
+
   function isAxiosError(value: unknown): value is AxiosError {
     //checks that axios message is error
     return (value as AxiosError).isAxiosError !== undefined;
@@ -18,25 +31,31 @@ const AxiosMessage = (props: AxiosMessageProps) => {
       !("isAxiosError" in value)
     );
   }
+
+  function handleSuccessMsg(msg: any) {
+    return <h1 className="bg-green-300">{msg.data.message}</h1>;
+  }
+
+  function handleErrorMsg(msg: any) {
+    return msg.response ? (
+      <div className="bg-red-300">
+        <h1>{(msg.response.data as ServerResponse).message}</h1>
+        {(msg.response.data as ServerResponse).data?.errors?.map(
+          (err: any, index: number) => {
+            return <h1 key={index}>{err}</h1>;
+          }
+        )}
+      </div>
+    ) : (
+      <h1 className="bg-red-300">خطا در اتصال به سرور</h1>
+    );
+  }
+
+  if (!show) return null;
   return (
     <div>
-      {isAxiosResponse(props.msg) ? (
-        <h1 className="bg-green-300">{props.msg.data.message}</h1>
-      ) : null}
-      {isAxiosError(props.msg) ? (
-        props.msg.response ? (
-          <div className="bg-red-300">
-            <h1>{(props.msg.response.data as ServerResponse).message}</h1>
-            {(props.msg.response.data as ServerResponse).data?.errors?.map(
-              (err: any, index: number) => {
-                return <h1 key={index}>{err}</h1>;
-              }
-            )}
-          </div>
-        ) : (
-          <h1 className="bg-red-300">خطا در اتصال به سرور</h1>
-        )
-      ) : null}
+      {isAxiosResponse(props.msg) ? handleSuccessMsg(props.msg) : null}
+      {isAxiosError(props.msg) ? handleErrorMsg(props.msg) : null}
     </div>
   );
 };
