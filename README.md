@@ -1,4 +1,7 @@
-# Venzo2025
+# ⚠ Venzo2025 (I am still developing this project...)🛠
+This is my first MernStack project .
+### What I used in this project :
+"MongoDB | Express | React | Nodejs | TypeScript | TailwindCSS | Zustand | SASS"
 
 # Back-end Setup Guide
 
@@ -54,4 +57,6 @@ npm start
 - Ensure MongoDB is running before starting the server.
 - Review the logs in `logfile.log` for debugging any errors.
 
-
+## venzo2025 postman workspace :
+After setting up the server, you can test all the APIs of this project in Postman using this link :
+https://www.postman.com/mohammaddr653/workspace/venzo2025/collection/34024160-41655f65-50fb-4ecd-a119-aff96815e89c?action=share&creator=34024160
