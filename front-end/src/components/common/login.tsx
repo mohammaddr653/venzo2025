@@ -1,19 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
-import AxiosMessage from "../../components/common/axiosMessage";
-import { login } from "../../helpers/login";
 import LoadingButton from "./loadingButton";
+import { Toaster, toast } from "sonner";
+import callManager from "../../helpers/calls/callManager";
+import axios from "axios";
+import { SERVER_URL } from "../../../config";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { call, loading } = callManager();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  
-  const [axiosMsgs, setAxiosMsgs] = useState<AxiosMessageType[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,22 +20,12 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await login(formData);
-      navigate("/");
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    } finally {
-      setLoading(false);
-    }
+    call(axios.post(SERVER_URL + "/auth/login", formData), "/");
   };
 
   return (
     <div>
-      {axiosMsgs.length ? (
-        <AxiosMessage msg={axiosMsgs[axiosMsgs.length - 1]}></AxiosMessage>
-      ) : null}
+      <Toaster position="top-right" />
       <h1>ورود</h1>
       <form onSubmit={handleSubmit}>
         <input

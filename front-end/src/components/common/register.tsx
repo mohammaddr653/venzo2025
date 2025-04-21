@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
 import AxiosMessage from "../../components/common/axiosMessage";
-import { register } from "../../helpers/register";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../helpers/createUser";
+import { Toaster } from "sonner";
+import LoadingButton from "./loadingButton";
+import axios from "axios";
+import { SERVER_URL } from "../../../config";
+import callManager from "../../helpers/calls/callManager";
 
 interface RegisterArguments {
   isAdmin?: boolean;
 }
 
 const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
+  const { call, loading } = callManager();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -26,21 +31,17 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = isAdmin
-        ? await createUser(formData)
-        : await register(formData);
-      isAdmin ? setAxiosMsgs([...axiosMsgs, response]) : navigate("/auth/login");
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = isAdmin
+      ? createUser(formData)
+      : call(
+          axios.post(SERVER_URL + "/auth/register", formData),
+          "/auth/login"
+        );
   };
 
   return (
     <div>
-      {axiosMsgs.length ? (
-        <AxiosMessage msg={axiosMsgs[axiosMsgs.length - 1]}></AxiosMessage>
-      ) : null}
+      <Toaster position="top-right" />
       <h1>ثبت نام</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -64,7 +65,7 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           className="border"
           onChange={handleChange}
         />
-        <button type="submit">submit</button>
+        <LoadingButton loading={loading}></LoadingButton>
       </form>
     </div>
   );
