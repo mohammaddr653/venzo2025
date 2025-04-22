@@ -34,12 +34,16 @@ class CategoriesServices {
         motherId: req.body.motherId,
         path: req.body.path,
       };
-      const updateOp = await Category.updateOne(
-        { _id: category.id },
-        { $set: data }
-      );
-      if (updateOp.modifiedCount.valueOf() > 0) {
-        return true;
+      if (req.body.motherId !== category.id) {
+        const updateOp = await Category.updateOne(
+          { _id: category.id },
+          { $set: data }
+        );
+        if (updateOp.modifiedCount.valueOf() > 0) {
+          return true;
+        }
+      } else {
+        return false;
       }
     }
     return false;

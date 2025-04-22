@@ -18,7 +18,9 @@ const CategoriesPage = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -49,7 +51,7 @@ const CategoriesPage = () => {
     e: React.MouseEvent<HTMLButtonElement>,
     categoryId: any
   ) => {
-    navigate("/admin/update-category", { state: { categoryId } });
+    navigate("/admin/update-category", { state: { categoryId, categories } });
   };
 
   const handleRefresh = () => {
@@ -59,9 +61,10 @@ const CategoriesPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await call(
-      axios.post(SERVER_URL + "/admin/dashboard/categories",formData),
+      axios.post(SERVER_URL + "/admin/dashboard/categories", formData),
       true
     );
+    loadCategories();
   };
 
   return (
@@ -76,13 +79,21 @@ const CategoriesPage = () => {
             className="border"
             onChange={handleChange}
           />
-          <input
-            type="text"
+          <select
+            id="motherId"
             name="motherId"
-            placeholder="motherId"
-            className="border"
             onChange={handleChange}
-          />
+            className="border"
+          >
+            <option value="">دسته بندی مادر</option>
+            {categories?.map((category: any, index: any) => {
+              return (
+                <option key={index} value={category._id}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
           <input
             type="text"
             name="path"
@@ -99,7 +110,6 @@ const CategoriesPage = () => {
           <caption>list of categories</caption>
           <thead>
             <tr>
-              <th className="border">id</th>
               <th className="border">name</th>
               <th className="border">motherId</th>
               <th className="border">path</th>
@@ -110,7 +120,6 @@ const CategoriesPage = () => {
             {categories?.map((category: any, index: any) => {
               return (
                 <tr key={index}>
-                  <td className="border">{category._id}</td>
                   <td className="border">{category.name}</td>
                   <td className="border">{category.motherId}</td>
                   <td className="border">{category.path}</td>

@@ -15,7 +15,7 @@ const OneCategoryPage = () => {
     path: "",
   });
   const { state } = useLocation();
-  const { categoryId } = state || null;
+  const { categoryId, categories } = state || null;
 
   async function loadOneCategory() {
     const response = await call(
@@ -35,7 +35,9 @@ const OneCategoryPage = () => {
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -67,14 +69,24 @@ const OneCategoryPage = () => {
             value={formData?.name}
             onChange={handleChange}
           />
-          <input
-            type="text"
-            className="border rounded p-3"
-            placeholder="mother id"
+          <select
+            id="motherId"
             name="motherId"
             value={formData?.motherId}
             onChange={handleChange}
-          />
+            className="border"
+          >
+            <option value="">دسته بندی مادر</option>
+            {categories?.map((category: any, index: any) => {
+              if (category._id !== categoryId) {
+                return (
+                  <option key={index} value={category._id}>
+                    {category.name}
+                  </option>
+                );
+              }
+            })}
+          </select>
           <input
             type="text"
             className="border rounded p-3"
