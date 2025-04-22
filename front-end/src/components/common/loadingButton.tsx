@@ -8,7 +8,7 @@ const LoadingButton = (props: any) => {
       </button>
     );
   } else {
-    return <button type="submit">submit</button>;
+    return <button type="submit">{props.children}</button>;
   }
 };
 export default LoadingButton;

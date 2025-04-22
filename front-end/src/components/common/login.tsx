@@ -1,6 +1,5 @@
 import { useState } from "react";
 import LoadingButton from "./loadingButton";
-import { Toaster, toast } from "sonner";
 import callManager from "../../helpers/calls/callManager";
 import axios from "axios";
 import { SERVER_URL } from "../../../config";
@@ -20,12 +19,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    call(axios.post(SERVER_URL + "/auth/login", formData), "/");
+    const response=await call(axios.post(SERVER_URL + "/auth/login", formData),false, "/");
   };
 
   return (
     <div>
-      <Toaster position="top-right" />
       <h1>ورود</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -42,7 +40,7 @@ const Login = () => {
           className="border"
           onChange={handleChange}
         />
-        <LoadingButton loading={loading}></LoadingButton>
+        <LoadingButton loading={loading}>ورود</LoadingButton>
       </form>
     </div>
   );

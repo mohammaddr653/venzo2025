@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
 import Register from "../../components/common/register";
 import { useUserStore } from "../../store";
-import { getUsers } from "../../helpers/getUsers";
-import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
-import AxiosMessage from "../../components/common/axiosMessage";
-import { deleteUser } from "../../helpers/deleteUser";
 import { useNavigate } from "react-router-dom";
+import callManager from "../../helpers/calls/callManager";
+import { SERVER_URL } from "../../../config";
+import axios from "axios";
 
 const UsersPage = () => {
+  const { call, loading } = callManager();
   const { user } = useUserStore();
   const [users, setUsers] = useState<any[]>([]);
-  const [axiosMsgs, setAxiosMsgs] = useState<AxiosMessageType[]>([]);
   const navigate = useNavigate();
 
   async function loadUsers() {
-    try {
-      const response = await getUsers();
-      setUsers([...response.data.data]);
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = await call(
+      axios.get(SERVER_URL + "/admin/dashboard/users"),
+      false
+    );
+    setUsers([...response.data.data]);
   }
   useEffect(() => {
     loadUsers();
@@ -29,12 +27,10 @@ const UsersPage = () => {
     e: React.MouseEvent<HTMLButtonElement>,
     userId: any
   ) => {
-    try {
-      const response = await deleteUser(userId);
-      setAxiosMsgs([...axiosMsgs, response]);
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = await call(
+      axios.delete(SERVER_URL + `/admin/dashboard/users/${userId}`),
+      true
+    );
     loadUsers();
   };
 
@@ -51,9 +47,6 @@ const UsersPage = () => {
 
   return (
     <div>
-      {axiosMsgs.length ? (
-        <AxiosMessage msg={axiosMsgs[axiosMsgs.length - 1]}></AxiosMessage>
-      ) : null}
       <h1>مدیریت کاربران</h1>
       <div className="bg-red-300">
         <Register isAdmin={true}></Register>
