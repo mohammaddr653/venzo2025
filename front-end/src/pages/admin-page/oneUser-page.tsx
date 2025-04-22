@@ -1,33 +1,31 @@
 import { useEffect, useState } from "react";
 import { useUserStore } from "../../store";
-import { seeOneUser } from "../../helpers/seeOneUser";
-import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
 import { useLocation } from "react-router-dom";
-import AxiosMessage from "../../components/common/axiosMessage";
-import { updateUser } from "../../helpers/updateUser";
+import axios from "axios";
+import { SERVER_URL } from "../../../config";
+import callManager from "../../helpers/calls/callManager";
 
 const OneUserPage = () => {
+  const { call, loading } = callManager();
   const { user } = useUserStore();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
   });
-  const [axiosMsgs, setAxiosMsgs] = useState<AxiosMessageType[]>([]);
   const { state } = useLocation();
   const { userId } = state || null;
 
   async function loadOneUser() {
-    try {
-      const response = await seeOneUser(userId);
-      const matchedUser = response.data.data;
-      setFormData({
-        ...formData,
-        name: matchedUser.name,
-        email: matchedUser.email,
-      });
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = await call(
+      axios.get(SERVER_URL + `/admin/dashboard/users/${userId}`),
+      false
+    );
+    const matchedUser = response.data.data;
+    setFormData({
+      ...formData,
+      name: matchedUser.name,
+      email: matchedUser.email,
+    });
   }
   useEffect(() => {
     loadOneUser();
@@ -41,19 +39,14 @@ const OneUserPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await updateUser(userId, formData);
-      setAxiosMsgs([...axiosMsgs, response]);
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = await call(
+      axios.put(SERVER_URL + `/admin/dashboard/users/${userId}`, formData),
+      true
+    );
   };
 
   return (
     <div>
-      {axiosMsgs.length ? (
-        <AxiosMessage msg={axiosMsgs[axiosMsgs.length - 1]}></AxiosMessage>
-      ) : null}
       <h1>مشاهده یک کاربر</h1>
       <div className="my-form my-3">
         <form

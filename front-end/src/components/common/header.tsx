@@ -1,30 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store";
-import { logout } from "../../helpers/logout";
-import { useState } from "react";
-import { AxiosMessageType } from "../../types/objects/axiosMessageProps";
-import AxiosMessage from "./axiosMessage";
+import { SERVER_URL } from "../../../config";
+import axios from "axios";
+import callManager from "../../helpers/calls/callManager";
 
 const Header = () => {
+  const { call, loading } = callManager();
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const [axiosMsgs, setAxiosMsgs] = useState<AxiosMessageType[]>([]);
 
   async function userLogout() {
-    try {
-      const response = await logout(); //deletes the token cookie
-      window.location.pathname === "/" //reload the home page
-        ? window.location.reload()
-        : navigate("/");
-    } catch (error: any) {
-      setAxiosMsgs([...axiosMsgs, error]);
-    }
+    const response = await call(axios.get(SERVER_URL + "/token/logout"), false); //deletes the token cookie
+    window.location.pathname === "/" //reload the home page
+      ? window.location.reload()
+      : navigate("/");
   }
   return (
     <div className="bg-pink-300">
-      {axiosMsgs.length ? (
-        <AxiosMessage msg={axiosMsgs[axiosMsgs.length - 1]}></AxiosMessage>
-      ) : null}
       <h1>hello {user?.name} this is header</h1>
       {!user ? (
         <>

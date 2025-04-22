@@ -8,13 +8,15 @@ const callManager = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  async function call(call: any, path?: string) {
+  async function call(call: any, sucShow: boolean, path?: string) {
     setLoading(true);
     try {
       const response = await call;
-      path ? navigate(path) : toast(response.data.message);
+      path ? navigate(path) : null;
+      sucShow && !path ? toast(response.data.message) : null;
+      return response;
     } catch (error: any) {
-      if (error.response.data) {
+      if (error.response?.data) {
         if (error.response.data.data?.errors) {
           error.response.data.data.errors.forEach((msg: any) => {
             toast(msg);
