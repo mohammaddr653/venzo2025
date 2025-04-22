@@ -3,12 +3,13 @@ import LoadingButton from "../../components/common/loadingButton";
 import callManager from "../../helpers/calls/callManager";
 import { useUserStore } from "../../store";
 import { SERVER_URL } from "../../../config";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CategoriesPage = () => {
   const { call, loading } = callManager();
   const [categories, setCategories] = useState<any[]>([]);
+  const list = useRef<HTMLUListElement>(null);
   const { user } = useUserStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -35,6 +36,33 @@ const CategoriesPage = () => {
   useEffect(() => {
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    function loop(item: any, parent: any) {
+      const newLi = document.createElement("li");
+      const title = document.createElement("span");
+      title.classList.add("border");
+      title.innerHTML = item.name;
+      newLi.appendChild(title);
+      parent.appendChild(newLi);
+      categories.map((category) => {
+        if (category.motherId === item._id) {
+          const newUl = document.createElement("ul");
+          newUl.classList.add("p-5");
+          newLi.appendChild(newUl);
+          loop(category, newUl);
+        }
+      });
+    }
+    if (list.current) {
+      list.current.innerHTML = "";
+      categories.forEach((category: any) => {
+        if (category.motherId === "root") {
+          loop(category, list.current);
+        }
+      });
+    }
+  }, [categories]);
 
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -106,7 +134,7 @@ const CategoriesPage = () => {
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>
-        <table className="border">
+        {/* <table className="border">
           <caption>list of categories</caption>
           <thead>
             <tr>
@@ -143,7 +171,11 @@ const CategoriesPage = () => {
               );
             })}
           </tbody>
-        </table>
+        </table> */}
+        <h1>لیست دسته بندی ها</h1>
+        <ul className="bg-green-300" ref={list}>
+          list
+        </ul>
       </div>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">

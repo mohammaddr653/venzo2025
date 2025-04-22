@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 @font-face {
   font-family: "iransans";
   font-style: normal;
@@ -27,9 +29,7 @@
     url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_UltraLight.woff2");
 }
 
-* {
-  padding: 0;
-  margin: 0;
+span,h1,h2,h3,h4,h5,h6,p,a{
   font-family: "iransans";
   font-weight: 200;
   font-size: 16px;
