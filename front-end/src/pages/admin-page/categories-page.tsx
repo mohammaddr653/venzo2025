@@ -27,6 +27,12 @@ const CategoriesPage = () => {
   };
 
   async function loadCategories() {
+    setFormData({
+      name: "",
+      motherId: "",
+      path: "",
+    });
+
     const response = await call(
       axios.get(SERVER_URL + "/admin/dashboard/categories"),
       false
@@ -40,15 +46,44 @@ const CategoriesPage = () => {
   useEffect(() => {
     function loop(item: any, parent: any) {
       const newLi = document.createElement("li");
-      const title = document.createElement("span");
-      title.classList.add("border");
+
+      const liHead = document.createElement("div");
+      liHead.classList.add(
+        "border",
+        "p-2",
+        "my-1",
+        "flex",
+        "justify-between",
+        "gap-4"
+      );
+
+      const title = document.createElement("h4");
       title.innerHTML = item.name;
-      newLi.appendChild(title);
+
+      const liButtons = document.createElement("div");
+      liButtons.classList.add("flex", "gap-2");
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.innerText = "حذف";
+      const updateBtn = document.createElement("button");
+      updateBtn.innerText = "ویرایش";
+      [deleteBtn, updateBtn].forEach((btn, i) => {
+        btn.classList.add("bg-yellow-200");
+        liButtons.appendChild(btn);
+        btn.onclick = (e, categoryId = item._id) => {
+          i == 0 ? handleDelete(categoryId) : null;
+          i == 1 ? handleUpdate(categoryId) : null;
+        };
+      });
+
+      liHead.appendChild(title);
+      liHead.appendChild(liButtons);
+      newLi.appendChild(liHead);
       parent.appendChild(newLi);
       categories.map((category) => {
         if (category.motherId === item._id) {
           const newUl = document.createElement("ul");
-          newUl.classList.add("p-5");
+          newUl.classList.add("ps-5");
           newLi.appendChild(newUl);
           loop(category, newUl);
         }
@@ -64,10 +99,7 @@ const CategoriesPage = () => {
     }
   }, [categories]);
 
-  const handleDelete = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    categoryId: any
-  ) => {
+  const handleDelete = async (categoryId: any) => {
     const response = await call(
       axios.delete(SERVER_URL + `/admin/dashboard/categories/${categoryId}`),
       true
@@ -75,10 +107,7 @@ const CategoriesPage = () => {
     loadCategories();
   };
 
-  const handleUpdate = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    categoryId: any
-  ) => {
+  const handleUpdate = async (categoryId: any) => {
     navigate("/admin/update-category", { state: { categoryId, categories } });
   };
 
@@ -105,11 +134,13 @@ const CategoriesPage = () => {
             name="name"
             placeholder="name"
             className="border"
+            value={formData.name}
             onChange={handleChange}
           />
           <select
             id="motherId"
             name="motherId"
+            value={formData.motherId}
             onChange={handleChange}
             className="border"
           >
@@ -126,6 +157,7 @@ const CategoriesPage = () => {
             type="text"
             name="path"
             placeholder="path"
+            value={formData.path}
             className="border"
             onChange={handleChange}
           />
@@ -134,46 +166,8 @@ const CategoriesPage = () => {
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>
-        {/* <table className="border">
-          <caption>list of categories</caption>
-          <thead>
-            <tr>
-              <th className="border">name</th>
-              <th className="border">motherId</th>
-              <th className="border">path</th>
-              <th className="border">operation</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories?.map((category: any, index: any) => {
-              return (
-                <tr key={index}>
-                  <td className="border">{category.name}</td>
-                  <td className="border">{category.motherId}</td>
-                  <td className="border">{category.path}</td>
-                  <td className="border">
-                    <button
-                      onClick={(e, categoryId = category._id) => {
-                        handleDelete(e, categoryId);
-                      }}
-                    >
-                      REMOVE
-                    </button>
-                    <button
-                      onClick={(e, categoryId = category._id) => {
-                        handleUpdate(e, categoryId);
-                      }}
-                    >
-                      UPDATE
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table> */}
         <h1>لیست دسته بندی ها</h1>
-        <ul className="bg-green-300" ref={list}>
+        <ul className="bg-green-300 p-2" ref={list}>
           list
         </ul>
       </div>
