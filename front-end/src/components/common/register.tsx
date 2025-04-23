@@ -31,7 +31,7 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
         )
       : await call(
           axios.post(SERVER_URL + "/auth/register", formData),
-          false,
+          true,
           "/auth/login"
         );
   };
@@ -61,7 +61,7 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           className="border"
           onChange={handleChange}
         />
-        <LoadingButton loading={loading}></LoadingButton>
+        <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>
     </div>
   );

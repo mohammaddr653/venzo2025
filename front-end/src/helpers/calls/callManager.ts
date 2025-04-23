@@ -13,7 +13,7 @@ const callManager = () => {
     try {
       const response = await call;
       path ? navigate(path) : null;
-      sucShow && !path ? toast(response.data.message) : null;
+      sucShow ? toast(response.data.message) : null;
       return response;
     } catch (error: any) {
       if (error.response?.data) {

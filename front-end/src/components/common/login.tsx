@@ -19,7 +19,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response=await call(axios.post(SERVER_URL + "/auth/login", formData),false, "/");
+    const response=await call(axios.post(SERVER_URL + "/auth/login", formData),true, "/");
   };
 
   return (
