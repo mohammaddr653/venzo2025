@@ -76,7 +76,7 @@ const OneCategoryPage = () => {
             onChange={handleChange}
             className="border"
           >
-            <option value="">دسته بندی مادر</option>
+            <option value="root">دسته بندی مادر</option>
             {categories?.map((category: any, index: any) => {
               if (category._id !== categoryId) {
                 return (

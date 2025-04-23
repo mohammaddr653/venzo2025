@@ -17,6 +17,8 @@ class CategoriesServices {
       name: req.body.name,
     });
     if (req.body.motherId) {
+      const exist = await Category.findById(req.body.motherId);
+      if (!exist) return false;
       newCategory.motherId = new mongoose.Types.ObjectId(req.body.motherId);
     }
     if (req.body.path) {
@@ -35,6 +37,11 @@ class CategoriesServices {
         path: req.body.path,
       };
       if (req.body.motherId !== category.id) {
+        if (req.body.motherId !== "root") {
+          const exist = await Category.findById(req.body.motherId);
+          if (!exist) return false;
+        }
+
         const updateOp = await Category.updateOne(
           { _id: category.id },
           { $set: data }
