@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +16,35 @@ const OneCategoryPage = () => {
   });
   const { state } = useLocation();
   const { categoryId, categories } = state || null;
+  const selectionList = useRef<HTMLSelectElement>(null);
+
+  useEffect(() => {
+    function selectionListLoop(item: any, parent: any) {
+      const newOption = document.createElement("option");
+      newOption.value = item._id;
+      newOption.textContent = item.name;
+      if (item._id !== categoryId) {
+        parent.appendChild(newOption);
+        categories.map((category: any) => {
+          if (category.motherId === item._id) {
+            selectionListLoop(category, parent);
+          }
+        });
+      }
+    }
+    if (selectionList.current) {
+      selectionList.current.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "root";
+      defaultOption.textContent = "دسته بندی مادر";
+      selectionList.current.appendChild(defaultOption);
+      categories.forEach((category: any) => {
+        if (category.motherId === "root") {
+          selectionListLoop(category, selectionList.current);
+        }
+      });
+    }
+  }, [categories]);
 
   async function loadOneCategory() {
     const response = await call(
@@ -75,8 +104,8 @@ const OneCategoryPage = () => {
             value={formData?.motherId}
             onChange={handleChange}
             className="border"
+            ref={selectionList}
           >
-            <option value="root">دسته بندی مادر</option>
             {categories?.map((category: any, index: any) => {
               if (category._id !== categoryId) {
                 return (

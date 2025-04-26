@@ -139,14 +139,6 @@ const ProductsPage = () => {
             onChange={handleChange}
           />
           <br />
-          {/* <input
-            type="text"
-            placeholder="categoryId"
-            name="categoryId"
-            value={formData.categoryId}
-            className="border"
-            onChange={handleChange}
-          /> */}
           <select
             id="categoryId"
             name="categoryId"

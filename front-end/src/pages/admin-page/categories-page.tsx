@@ -10,6 +10,7 @@ const CategoriesPage = () => {
   const { call, loading } = callManager();
   const [categories, setCategories] = useState<any[]>([]);
   const list = useRef<HTMLUListElement>(null);
+  const selectionList = useRef<HTMLSelectElement>(null);
   const { user } = useUserStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ const CategoriesPage = () => {
   }, []);
 
   useEffect(() => {
-    function loop(item: any, parent: any) {
+    function listLoop(item: any, parent: any) {
       const newLi = document.createElement("li");
 
       const liHead = document.createElement("div");
@@ -85,7 +86,18 @@ const CategoriesPage = () => {
           const newUl = document.createElement("ul");
           newUl.classList.add("ps-5");
           newLi.appendChild(newUl);
-          loop(category, newUl);
+          listLoop(category, newUl);
+        }
+      });
+    }
+    function selectionListLoop(item: any, parent: any) {
+      const newOption = document.createElement("option");
+      newOption.value = item._id;
+      newOption.textContent = item.name;
+      parent.appendChild(newOption);
+      categories.map((category) => {
+        if (category.motherId === item._id) {
+          selectionListLoop(category, parent);
         }
       });
     }
@@ -93,7 +105,19 @@ const CategoriesPage = () => {
       list.current.innerHTML = "";
       categories.forEach((category: any) => {
         if (category.motherId === "root") {
-          loop(category, list.current);
+          listLoop(category, list.current);
+        }
+      });
+    }
+    if (selectionList.current) {
+      selectionList.current.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "دسته بندی مادر";
+      selectionList.current.appendChild(defaultOption);
+      categories.forEach((category: any) => {
+        if (category.motherId === "root") {
+          selectionListLoop(category, selectionList.current);
         }
       });
     }
@@ -143,15 +167,9 @@ const CategoriesPage = () => {
             value={formData.motherId}
             onChange={handleChange}
             className="border"
+            ref={selectionList}
           >
-            <option value="">دسته بندی مادر</option>
-            {categories?.map((category: any, index: any) => {
-              return (
-                <option key={index} value={category._id}>
-                  {category.name}
-                </option>
-              );
-            })}
+            {/* dynamic */}
           </select>
           <input
             type="text"
@@ -168,7 +186,7 @@ const CategoriesPage = () => {
         <button onClick={handleRefresh}>refresh</button>
         <h1>لیست دسته بندی ها</h1>
         <ul className="bg-green-300 p-2" ref={list}>
-          list
+          {/* dynamic */}
         </ul>
       </div>
       <div className="bg-sky-600">this is tailwind</div>
