@@ -11,6 +11,7 @@ const ProductsPage = () => {
   const { user } = useUserStore();
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const selectionList = useRef<HTMLSelectElement>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -36,6 +37,32 @@ const ProductsPage = () => {
     );
     setCategories([...response.data.data]);
   }
+
+  useEffect(() => {
+    function selectionListLoop(item: any, parent: any) {
+      const newOption = document.createElement("option");
+      newOption.value = item._id;
+      newOption.textContent = item.name;
+      parent.appendChild(newOption);
+      categories.map((category) => {
+        if (category.motherId === item._id) {
+          selectionListLoop(category, parent);
+        }
+      });
+    }
+    if (selectionList.current) {
+      selectionList.current.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "بدون دسته بندی";
+      selectionList.current.appendChild(defaultOption);
+      categories.forEach((category: any) => {
+        if (category.motherId === "root") {
+          selectionListLoop(category, selectionList.current);
+        }
+      });
+    }
+  }, [categories]);
 
   async function loadProductsAndCats() {
     setFormData({
@@ -145,15 +172,9 @@ const ProductsPage = () => {
             value={formData.categoryId}
             onChange={handleChange}
             className="border"
+            ref={selectionList}
           >
-            <option value="">دسته بندی</option>
-            {categories?.map((category: any, index: any) => {
-              return (
-                <option key={index} value={category._id}>
-                  {category.name}
-                </option>
-              );
-            })}
+            {/* dynamic */}
           </select>
 
           <textarea
