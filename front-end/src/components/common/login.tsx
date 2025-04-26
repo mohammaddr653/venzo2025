@@ -2,7 +2,7 @@ import { useState } from "react";
 import LoadingButton from "./loadingButton";
 import callManager from "../../helpers/calls/callManager";
 import axios from "axios";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 
 const Login = () => {
   const { call, loading } = callManager();
@@ -19,7 +19,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response=await call(axios.post(SERVER_URL + "/auth/login", formData),true, "/");
+    const response = await call(
+      axios.post(SERVER_API + "/auth/login", formData),
+      true,
+      "/"
+    );
   };
 
   return (

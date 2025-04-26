@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import callManager from "../../helpers/calls/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 
@@ -18,7 +18,7 @@ const OneUserPage = () => {
 
   async function loadOneUser() {
     const response = await call(
-      axios.get(SERVER_URL + `/admin/dashboard/users/${userId}`),
+      axios.get(SERVER_API + `/admin/dashboard/users/${userId}`),
       false
     );
     const matchedUser = response.data.data;
@@ -41,7 +41,7 @@ const OneUserPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await call(
-      axios.put(SERVER_URL + `/admin/dashboard/users/${userId}`, formData),
+      axios.put(SERVER_API + `/admin/dashboard/users/${userId}`, formData),
       true
     );
   };

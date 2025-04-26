@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoadingButton from "./loadingButton";
 import axios from "axios";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import callManager from "../../helpers/calls/callManager";
 
 interface RegisterArguments {
@@ -26,11 +26,11 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
     e.preventDefault();
     const response = isAdmin
       ? await call(
-          axios.post(SERVER_URL + "/admin/dashboard/users", formData),
+          axios.post(SERVER_API + "/admin/dashboard/users", formData),
           true
         )
       : await call(
-          axios.post(SERVER_URL + "/auth/register", formData),
+          axios.post(SERVER_API + "/auth/register", formData),
           true,
           "/auth/login"
         );

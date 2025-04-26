@@ -2,7 +2,7 @@ import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import callManager from "../../helpers/calls/callManager";
 import { useUserStore } from "../../store";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +34,7 @@ const CategoriesPage = () => {
     });
 
     const response = await call(
-      axios.get(SERVER_URL + "/admin/dashboard/categories"),
+      axios.get(SERVER_API + "/admin/dashboard/categories"),
       false
     );
     setCategories([...response.data.data]);
@@ -101,7 +101,7 @@ const CategoriesPage = () => {
 
   const handleDelete = async (categoryId: any) => {
     const response = await call(
-      axios.delete(SERVER_URL + `/admin/dashboard/categories/${categoryId}`),
+      axios.delete(SERVER_API + `/admin/dashboard/categories/${categoryId}`),
       true
     );
     loadCategories();
@@ -118,7 +118,7 @@ const CategoriesPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await call(
-      axios.post(SERVER_URL + "/admin/dashboard/categories", formData),
+      axios.post(SERVER_API + "/admin/dashboard/categories", formData),
       true
     );
     loadCategories();

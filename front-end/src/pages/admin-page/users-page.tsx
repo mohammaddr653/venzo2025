@@ -3,7 +3,7 @@ import Register from "../../components/common/register";
 import { useUserStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import callManager from "../../helpers/calls/callManager";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import axios from "axios";
 
 const UsersPage = () => {
@@ -14,7 +14,7 @@ const UsersPage = () => {
 
   async function loadUsers() {
     const response = await call(
-      axios.get(SERVER_URL + "/admin/dashboard/users"),
+      axios.get(SERVER_API + "/admin/dashboard/users"),
       false
     );
     setUsers([...response.data.data]);
@@ -28,7 +28,7 @@ const UsersPage = () => {
     userId: any
   ) => {
     const response = await call(
-      axios.delete(SERVER_URL + `/admin/dashboard/users/${userId}`),
+      axios.delete(SERVER_API + `/admin/dashboard/users/${userId}`),
       true
     );
     loadUsers();

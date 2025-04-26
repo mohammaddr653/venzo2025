@@ -22,7 +22,7 @@ import ProductsPage from "./pages/admin-page/products-page";
 import BlogsPage from "./pages/admin-page/blogs-page";
 import OneUserPage from "./pages/admin-page/oneUser-page";
 import { Toaster } from "sonner";
-import { SERVER_URL } from "../config";
+import { SERVER_API } from "../config";
 import callManager from "./helpers/calls/callManager";
 import OneCategoryPage from "./pages/admin-page/oneCategory-page";
 
@@ -38,7 +38,7 @@ function App() {
   }, [location.pathname]);
 
   async function getAuthedUser() {
-    const response = await call(axios.get(SERVER_URL + "/token"), false);
+    const response = await call(axios.get(SERVER_API + "/token"), false);
     const me = response?.data?.data?.user;
     me ? setUser(me) : setUser(null);
     setUserLoading(false);

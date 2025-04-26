@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import callManager from "../../helpers/calls/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 
@@ -19,7 +19,7 @@ const OneCategoryPage = () => {
 
   async function loadOneCategory() {
     const response = await call(
-      axios.get(SERVER_URL + `/admin/dashboard/categories/${categoryId}`),
+      axios.get(SERVER_API + `/admin/dashboard/categories/${categoryId}`),
       false
     );
     const matchedCategory = response.data.data;
@@ -46,7 +46,7 @@ const OneCategoryPage = () => {
     e.preventDefault();
     const response = await call(
       axios.put(
-        SERVER_URL + `/admin/dashboard/categories/${categoryId}`,
+        SERVER_API + `/admin/dashboard/categories/${categoryId}`,
         formData
       ),
       true

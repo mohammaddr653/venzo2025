@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store";
-import { SERVER_URL } from "../../../config";
+import { SERVER_API } from "../../../config";
 import axios from "axios";
 import callManager from "../../helpers/calls/callManager";
 
@@ -10,7 +10,7 @@ const Header = () => {
   const { user } = useUserStore();
 
   async function userLogout() {
-    const response = await call(axios.get(SERVER_URL + "/token/logout"), false); //deletes the token cookie
+    const response = await call(axios.get(SERVER_API + "/token/logout"), false); //deletes the token cookie
     window.location.pathname === "/" //reload the home page
       ? window.location.reload()
       : navigate("/");
