@@ -5,6 +5,7 @@ import callManager from "../../helpers/calls/callManager";
 import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
+import { buildSelectionList } from "../../helpers/buildSelectionList";
 
 const ProductsPage = () => {
   const { call, loading } = callManager();
@@ -39,29 +40,7 @@ const ProductsPage = () => {
   }
 
   useEffect(() => {
-    function selectionListLoop(item: any, parent: any) {
-      const newOption = document.createElement("option");
-      newOption.value = item._id;
-      newOption.textContent = item.name;
-      parent.appendChild(newOption);
-      categories.map((category) => {
-        if (category.motherId === item._id) {
-          selectionListLoop(category, parent);
-        }
-      });
-    }
-    if (selectionList.current) {
-      selectionList.current.innerHTML = "";
-      const defaultOption = document.createElement("option");
-      defaultOption.value = "";
-      defaultOption.textContent = "بدون دسته بندی";
-      selectionList.current.appendChild(defaultOption);
-      categories.forEach((category: any) => {
-        if (category.motherId === "root") {
-          selectionListLoop(category, selectionList.current);
-        }
-      });
-    }
+    buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
   }, [categories]);
 
   async function loadProductsAndCats() {

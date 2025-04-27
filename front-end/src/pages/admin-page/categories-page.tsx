@@ -5,6 +5,7 @@ import { useUserStore } from "../../store";
 import { SERVER_API } from "../../../config";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { buildSelectionList } from "../../helpers/buildSelectionList";
 
 const CategoriesPage = () => {
   const { call, loading } = callManager();
@@ -90,17 +91,6 @@ const CategoriesPage = () => {
         }
       });
     }
-    function selectionListLoop(item: any, parent: any) {
-      const newOption = document.createElement("option");
-      newOption.value = item._id;
-      newOption.textContent = item.name;
-      parent.appendChild(newOption);
-      categories.map((category) => {
-        if (category.motherId === item._id) {
-          selectionListLoop(category, parent);
-        }
-      });
-    }
     if (list.current) {
       list.current.innerHTML = "";
       categories.forEach((category: any) => {
@@ -109,18 +99,7 @@ const CategoriesPage = () => {
         }
       });
     }
-    if (selectionList.current) {
-      selectionList.current.innerHTML = "";
-      const defaultOption = document.createElement("option");
-      defaultOption.value = "";
-      defaultOption.textContent = "دسته بندی مادر";
-      selectionList.current.appendChild(defaultOption);
-      categories.forEach((category: any) => {
-        if (category.motherId === "root") {
-          selectionListLoop(category, selectionList.current);
-        }
-      });
-    }
+    buildSelectionList(selectionList, categories, "","دسته بندی مادر", null);
   }, [categories]);
 
   const handleDelete = async (categoryId: any) => {

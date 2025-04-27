@@ -5,6 +5,7 @@ import axios from "axios";
 import { SERVER_API } from "../../../config";
 import callManager from "../../helpers/calls/callManager";
 import LoadingButton from "../../components/common/loadingButton";
+import { buildSelectionList } from "../../helpers/buildSelectionList";
 
 const OneCategoryPage = () => {
   const { call, loading } = callManager();
@@ -19,31 +20,13 @@ const OneCategoryPage = () => {
   const selectionList = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
-    function selectionListLoop(item: any, parent: any) {
-      const newOption = document.createElement("option");
-      newOption.value = item._id;
-      newOption.textContent = item.name;
-      if (item._id !== categoryId) {
-        parent.appendChild(newOption);
-        categories.map((category: any) => {
-          if (category.motherId === item._id) {
-            selectionListLoop(category, parent);
-          }
-        });
-      }
-    }
-    if (selectionList.current) {
-      selectionList.current.innerHTML = "";
-      const defaultOption = document.createElement("option");
-      defaultOption.value = "root";
-      defaultOption.textContent = "دسته بندی مادر";
-      selectionList.current.appendChild(defaultOption);
-      categories.forEach((category: any) => {
-        if (category.motherId === "root") {
-          selectionListLoop(category, selectionList.current);
-        }
-      });
-    }
+    buildSelectionList(
+      selectionList,
+      categories,
+      "root",
+      "دسته بندی مادر",
+      categoryId
+    );
   }, [categories]);
 
   async function loadOneCategory() {
