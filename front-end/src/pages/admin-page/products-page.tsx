@@ -229,7 +229,13 @@ const ProductsPage = () => {
                   <td className="border">{product.price}</td>
                   <td className="border">{product.stock}</td>
                   <td className="border">
-                    {product.categoryId ? product.categoryId : "بدون دسته بندی"}
+                    {product.categoryId
+                      ? categories.map((category, index) => {
+                          return category._id === product.categoryId
+                            ? category.name
+                            : null;
+                        })
+                      : "بدون دسته بندی"}
                   </td>
                   <td className="border">
                     <button
