@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const cors = require("cors");
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "http://127.0.0.1:5173", credentials: true }));
 
 require("dotenv").config();
 const debug = require("debug")("app");
@@ -20,5 +20,6 @@ require("./startup/logging")();
 
 app.use("/api", router);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => debug(`listening on port ${port}`));
+const port = config.get("port") || 3000;
+const host = config.get("host");
+app.listen(port, host, () => debug(`listening on http://${host}:${port}`));

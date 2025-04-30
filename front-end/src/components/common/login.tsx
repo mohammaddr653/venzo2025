@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoadingButton from "./loadingButton";
 import callManager from "../../helpers/callManager";
 import axios from "axios";
-import { SERVER_API } from "../../../config";
-
+import { SERVER_API, SITE_KEY } from "../../../config";
+// @ts-ignore
+import ReCAPTCHA from "react-google-recaptcha";
 const Login = () => {
   const { call, loading } = callManager();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    token: "",
   });
+  const reRef = useRef<ReCAPTCHA | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCaptchaChange = (value: any) => {
+    setFormData({ ...formData, token: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,6 +31,7 @@ const Login = () => {
       true,
       "/"
     );
+    reRef.current?.reset();
   };
 
   return (
@@ -43,6 +51,11 @@ const Login = () => {
           placeholder="password"
           className="border"
           onChange={handleChange}
+        />
+        <ReCAPTCHA
+          sitekey={SITE_KEY}
+          ref={reRef}
+          onChange={handleCaptchaChange}
         />
         <LoadingButton loading={loading}>ورود</LoadingButton>
       </form>

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import LoadingButton from "./loadingButton";
 import axios from "axios";
-import { SERVER_API } from "../../../config";
+import { SERVER_API, SITE_KEY } from "../../../config";
 import callManager from "../../helpers/callManager";
+// @ts-ignore
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface RegisterArguments {
   isAdmin?: boolean;
@@ -14,7 +16,13 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
     name: "",
     email: "",
     password: "",
+    token: "",
   });
+  const reRef = useRef<ReCAPTCHA | null>(null);
+
+  const handleCaptchaChange = (value: any) => {
+    setFormData({ ...formData, token: value });
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,6 +42,7 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           true,
           "/auth/login"
         );
+    reRef.current?.reset();
   };
 
   return (
@@ -60,6 +69,11 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           placeholder="password"
           className="border"
           onChange={handleChange}
+        />
+        <ReCAPTCHA
+          sitekey={SITE_KEY}
+          ref={reRef}
+          onChange={handleCaptchaChange}
         />
         <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>

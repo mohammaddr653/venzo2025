@@ -1,3 +1,7 @@
 {
-    "jwt_key":"JWT_KEY"
+  "jwt_key": "JWT_KEY",
+  "port": "PORT",
+  "host": "HOST",
+  "site_key": "SITE_KEY",
+  "secret_key": "SECRET_KEY"
 }

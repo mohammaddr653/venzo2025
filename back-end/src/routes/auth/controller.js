@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const userServices = require("../../services/userServices");
+const validateRecaptcha = require("../../helpers/validateRecaptcha");
 
 module.exports = new (class extends controller {
   async getRegister(req, res) {
@@ -22,6 +23,16 @@ module.exports = new (class extends controller {
   }
 
   async register(req, res) {
+    const recaptchaResult = await validateRecaptcha(req);
+    //recaptcha wont authorized if environment config 'recaptcha' is false
+    if (!recaptchaResult && config.get("recaptcha")) {
+      return this.response({
+        res,
+        code: 400,
+        message: "لطفا ریکپچا را تایید کنید",
+      });
+    }
+
     //same as create user
     const result = await userServices.registerUser(req, res);
     if (result.code === 400) {
@@ -39,6 +50,15 @@ module.exports = new (class extends controller {
   }
 
   async login(req, res) {
+    const recaptchaResult = await validateRecaptcha(req);
+    //recaptcha wont authorized if environment config 'recaptcha' is false
+    if (!recaptchaResult && config.get("recaptcha")) {
+      return this.response({
+        res,
+        code: 400,
+        message: "لطفا ریکپچا را تایید کنید",
+      });
+    }
     const user = await this.User.findOne({ email: req.body.email });
     if (!user) {
       return this.response({
