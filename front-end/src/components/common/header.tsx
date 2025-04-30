@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 
 const Header = () => {
   const { call, loading } = callManager();

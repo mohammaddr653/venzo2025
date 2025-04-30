@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../store";
 import { useNavigate } from "react-router-dom";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import LoadingButton from "./loadingButton";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 
 interface RegisterArguments {
   isAdmin?: boolean;

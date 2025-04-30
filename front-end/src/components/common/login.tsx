@@ -1,6 +1,6 @@
 import { useState } from "react";
 import LoadingButton from "./loadingButton";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
 

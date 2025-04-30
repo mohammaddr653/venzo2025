@@ -3,7 +3,7 @@ import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 
 const OneUserPage = () => {

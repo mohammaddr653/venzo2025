@@ -23,7 +23,7 @@ import BlogsPage from "./pages/admin-page/blogs-page";
 import OneUserPage from "./pages/admin-page/oneUser-page";
 import { Toaster } from "sonner";
 import { SERVER_API } from "../config";
-import callManager from "./helpers/calls/callManager";
+import callManager from "./helpers/callManager";
 import OneCategoryPage from "./pages/admin-page/oneCategory-page";
 
 function App() {

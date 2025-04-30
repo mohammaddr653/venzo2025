@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Register from "../../components/common/register";
 import { useUserStore } from "../../store";
 import { useNavigate } from "react-router-dom";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
-import callManager from "../../helpers/calls/callManager";
+import callManager from "../../helpers/callManager";
 import { useUserStore } from "../../store";
 import { SERVER_API } from "../../../config";
 import { useRef, useEffect, useState } from "react";
@@ -99,7 +99,7 @@ const CategoriesPage = () => {
         }
       });
     }
-    buildSelectionList(selectionList, categories, "","دسته بندی مادر", null);
+    buildSelectionList(selectionList, categories, "", "دسته بندی مادر", null);
   }, [categories]);
 
   const handleDelete = async (categoryId: any) => {
