@@ -36,6 +36,15 @@ async function isLoggedIn(req, res, next) {
   res.status(401).json(response); //401 means is not logged in
 }
 
+//this middleware checks if req.user exists and not verified to access the verify or not
+async function notVerified(req, res, next) {
+  if (!req.user.verified) {
+    return next();
+  }
+  const response = serverResponse("ایمیل شما قبلا تایید شده است");
+  res.status(403).json(response); //401 means is not logged in
+}
+
 //this middleware checks if the req.user exists it cant access the auth anymore
 async function notLoggedIn(req, res, next) {
   if (!req.user) return next();
@@ -52,4 +61,4 @@ async function isAdmin(req, res, next) {
   next();
 }
 
-module.exports = { isLoggedIn, isAdmin, notLoggedIn, setReqUser };
+module.exports = { isLoggedIn, isAdmin, notVerified, notLoggedIn, setReqUser };

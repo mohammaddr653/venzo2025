@@ -11,12 +11,14 @@ const shopRouter = require("./shop");
 const singleShopRouter = require("./singleShop");
 const cartRouter = require("./cart");
 const tokenRouter = require("./token");
+const verify = require("./verify");
 
 const {
   isLoggedIn,
   isAdmin,
   notLoggedIn,
   setReqUser,
+  notVerified,
 } = require("./../middlewares/auth");
 const error = require("./../middlewares/error");
 
@@ -31,6 +33,7 @@ router.use("/single-archive", singleArchiveRouter);
 router.use("/shop", shopRouter);
 router.use("/single-shop", singleShopRouter);
 router.use("/cart", isLoggedIn, cartRouter);
+router.use("/verify", isLoggedIn, notVerified, verify);
 
 router.use(error);
 

@@ -86,5 +86,16 @@ class UserServices {
     }
     return false;
   }
+
+  async verifyUser(req, res) {
+    const updateOp = await User.updateOne(
+      { email: req.user.email },
+      { $set: { verified: true } }
+    );
+    if (updateOp.modifiedCount.valueOf() > 0) {
+      return true;
+    }
+    return false;
+  }
 }
 module.exports = new UserServices();

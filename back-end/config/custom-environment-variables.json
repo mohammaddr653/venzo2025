@@ -3,5 +3,8 @@
   "port": "PORT",
   "host": "HOST",
   "site_key": "SITE_KEY",
-  "secret_key": "SECRET_KEY"
+  "secret_key": "SECRET_KEY",
+  "gmail_user": "GMAIL_USER",
+  "gmail_host": "GMAIL_HOST",
+  "gmail_pass": "GMAIL_PASS"
 }
