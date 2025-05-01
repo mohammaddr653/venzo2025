@@ -59,12 +59,11 @@ const ProductsPage = () => {
     loadCategories();
     loadProducts();
   }
+
   useEffect(() => {
     loadProductsAndCats();
   }, []);
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+
   const handleFileChange = (event: any) => {
     setFormData({ ...formData, img: event.target.files[0] });
   };

@@ -25,6 +25,7 @@ import { Toaster } from "sonner";
 import { SERVER_API } from "../config";
 import callManager from "./helpers/callManager";
 import OneCategoryPage from "./pages/admin-page/oneCategory-page";
+import OneProductPage from "./pages/admin-page/oneProduct-page";
 
 function App() {
   const { call, loading } = callManager();
@@ -56,6 +57,7 @@ function App() {
         <Route element={<AdminRoute user={user} />}>
           <Route path="/admin/blogs" element={<BlogsPage />} />
           <Route path="/admin/products" element={<ProductsPage />} />
+          <Route path="/admin/update-product" element={<OneProductPage />} />
           <Route path="/admin/categories" element={<CategoriesPage />} />
           <Route path="/admin/update-category" element={<OneCategoryPage />} />
           <Route path="/admin/users" element={<UsersPage />} />

@@ -53,7 +53,7 @@ class ProductServices {
       name: req.body.name,
       price: req.body.price,
       stock: req.body.stock,
-      categoryId: product.categoryId,
+      categoryId: req.body.categoryId === "" ? null : product.categoryId,
       description: req.body.description,
       img: product.img,
     };

@@ -14,7 +14,7 @@ const AdminPage = () => {
         <Link to={"/admin/users"}>مدیریت کاربران</Link>
         <Link to={"/admin/categories"}>مدیریت دسته بندی ها</Link>
         <Link to={"/admin/products"}>مدیریت محصولات</Link>
-        <Link to={"/admin/blogs"}>مدیریت مقالات</Link>
+        {/* <Link to={"/admin/blogs"}>مدیریت مقالات</Link> */}
       </div>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">

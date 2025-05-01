@@ -9,8 +9,7 @@ const categorySchema = new mongoose.Schema({
     validate: {
       validator: function (value) {
         return value === "root" || value instanceof mongoose.Types.ObjectId;
-      },
-      message: "motherId must be either a root or an ObjectId",
+      }
     },
     ref: "Category",
   },
