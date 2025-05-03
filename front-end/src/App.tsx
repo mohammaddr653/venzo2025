@@ -28,6 +28,9 @@ import OneCategoryPage from "./pages/admin-page/oneCategory-page";
 import OneProductPage from "./pages/admin-page/oneProduct-page";
 import VerifyPage from "./pages/verify-page";
 import VerifyRoute from "./components/private-route-components/verifyRoute";
+import PassRestorePage from "./pages/passRestore-page";
+import PassRestoreRoute from "./components/private-route-components/passRestoreRoute";
+import PassRestoreFormPage from "./pages/passRestoreForm-page";
 
 function App() {
   const { call, loading } = callManager();
@@ -58,6 +61,10 @@ function App() {
         <Route path="/archive" element={<ArchivePage />} />
         <Route element={<VerifyRoute user={user} />}>
           <Route path="/verify" element={<VerifyPage />} />
+        </Route>
+        <Route element={<PassRestoreRoute user={user} />}>
+          <Route path="/pass-restore" element={<PassRestorePage />} />
+          <Route path="/pass-restore-form/:token" element={<PassRestoreFormPage />} />
         </Route>
         <Route element={<AdminRoute user={user} />}>
           <Route path="/admin/blogs" element={<BlogsPage />} />

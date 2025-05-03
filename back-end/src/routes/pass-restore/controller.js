@@ -8,12 +8,12 @@ module.exports = new (class extends controller {
     const token = await userServices.createResetPasswordToken(req, res);
     if (token) {
       let content = `<a href=${
-        "http://127.0.0.1:3000/pass-restore/" + token
+        "http://127.0.0.1:5173/pass-restore-form/" + token
       }>برای بازیابی رمزعبور کلیک کنید</a>`;
       sendEmail(req.body.email, content);
       return this.response({
         res,
-        message: `ما به ${req.body.email} ایمیلی فرستادیم .`,
+        message: "لطفا ایمیل خود را چک کنید .",
       });
     } else {
       return this.response({

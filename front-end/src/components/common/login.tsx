@@ -5,6 +5,7 @@ import axios from "axios";
 import { SERVER_API, SITE_KEY } from "../../../config";
 // @ts-ignore
 import ReCAPTCHA from "react-google-recaptcha";
+import { Link } from "react-router-dom";
 const Login = () => {
   const { call, loading } = callManager();
   const [formData, setFormData] = useState({
@@ -58,6 +59,8 @@ const Login = () => {
           onChange={handleCaptchaChange}
         />
         <LoadingButton loading={loading}>ورود</LoadingButton>
+        <br />
+        <Link to="/pass-restore">بازیابی رمز عبور</Link>
       </form>
     </div>
   );

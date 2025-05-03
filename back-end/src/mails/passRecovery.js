@@ -1,22 +1,22 @@
 //راه اندازی پکیج nodemailer
-require("dotenv").config();
+const config = require("config");
 const nodemailer = require("nodemailer");
 
-const sendEmail = (address,content) => {
+const sendEmail = (address, content) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.GMAIL_HOST,
+    host: config.get("gmail_host"),
     port: 587,
     secure: false,
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS,
+      user: config.get("gmail_user"),
+      pass: config.get("gmail_pass"),
     },
   });
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: config.get("gmail_user"),
     to: address,
     subject: "Password Recovery",
-    html:content
+    html: content,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
