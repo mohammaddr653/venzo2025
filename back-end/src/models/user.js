@@ -8,6 +8,8 @@ const userSchima = new mongoose.Schema({
   avatar: { type: String, default: null },
   isadmin: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
+  passwordResetToken: { type: String || null, default: null },
+  passwordResetTokenExpires: { type: Date || null, default: null },
 });
 userSchima.plugin(timestamp);
 

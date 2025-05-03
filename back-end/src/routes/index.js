@@ -12,6 +12,7 @@ const singleShopRouter = require("./singleShop");
 const cartRouter = require("./cart");
 const tokenRouter = require("./token");
 const verify = require("./verify");
+const passRestore = require("./pass-restore");
 
 const {
   isLoggedIn,
@@ -26,6 +27,7 @@ router.use(setReqUser); //if invalid token exists in request header set the req.
 router.use("/", homeRouter);
 router.use("/token", tokenRouter);
 router.use("/auth", notLoggedIn, authRouter);
+router.use("/pass-restore", passRestore);
 router.use("/user", isLoggedIn, userRouter);
 router.use("/admin", isLoggedIn, isAdmin, adminRouter);
 router.use("/archive", archiveRouter);
