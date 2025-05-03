@@ -26,6 +26,8 @@ import { SERVER_API } from "../config";
 import callManager from "./helpers/callManager";
 import OneCategoryPage from "./pages/admin-page/oneCategory-page";
 import OneProductPage from "./pages/admin-page/oneProduct-page";
+import VerifyPage from "./pages/verify-page";
+import VerifyRoute from "./components/private-route-components/verifyRoute";
 
 function App() {
   const { call, loading } = callManager();
@@ -54,6 +56,9 @@ function App() {
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/single-archive" element={<SingleArchivePage />} />
         <Route path="/archive" element={<ArchivePage />} />
+        <Route element={<VerifyRoute user={user} />}>
+          <Route path="/verify" element={<VerifyPage />} />
+        </Route>
         <Route element={<AdminRoute user={user} />}>
           <Route path="/admin/blogs" element={<BlogsPage />} />
           <Route path="/admin/products" element={<ProductsPage />} />

@@ -12,7 +12,11 @@ const callManager = () => {
     setLoading(true);
     try {
       const response = await call;
-      path ? navigate(path) : null;
+      if (path) {
+        path === window.location.pathname
+          ? window.location.reload()
+          : navigate(path);
+      }
       sucShow ? toast(response.data.message) : null;
       return response;
     } catch (error: any) {
