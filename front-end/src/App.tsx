@@ -55,7 +55,7 @@ function App() {
     <>
       <Toaster position="top-right" />
       <Routes>
-        <Route path="/single-shop" element={<SingleShopPage />} />
+        <Route path="/single-shop/:productId" element={<SingleShopPage />} />
         <Route path="/shop/:categoryId" element={<ShopPage />} />
         <Route path="/single-archive" element={<SingleArchivePage />} />
         <Route path="/archive/:categoryId" element={<ArchivePage />} />

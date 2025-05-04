@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../components/common/header";
 import { useUserStore } from "../store";
 import { useEffect, useState } from "react";
@@ -27,10 +27,14 @@ const ShopPage = () => {
     <div>
       <Header></Header>
       <h1>shop page</h1>
-      <div className="bg-amber-700 p-5">
+      <div className="bg-amber-700 p-5 flex flex-row gap-3">
         {products?.map((item: any, index) => {
           return (
-            <div key={index} className="border">
+            <Link
+              to={`/single-shop/${item._id}`}
+              key={index}
+              className="border"
+            >
               <img
                 src={item.img ? SERVER_URL + item.img : DEFAULT_PRODUCT}
                 alt=""
@@ -40,7 +44,7 @@ const ShopPage = () => {
               <p>{item.name}</p>
               <p>{item.price}</p>
               <p>{item.stock}</p>
-            </div>
+            </Link>
           );
         })}
       </div>
