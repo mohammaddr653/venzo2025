@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("./controller");
 
-router.get("/:categoryString", controller.getShop.bind(controller));
+router.get("/", controller.getProducts.bind(controller));
+router.get("/:categoryString", controller.getShopByCategory.bind(controller));
 
 module.exports = router;

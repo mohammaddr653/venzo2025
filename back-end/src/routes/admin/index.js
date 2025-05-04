@@ -57,7 +57,7 @@ router.delete(
 
 //products
 
-router.get("/dashboard/products", controller.getProducts.bind(controller));
+//get all products is in /shop
 
 router.get(
   "/dashboard/products/:productId",

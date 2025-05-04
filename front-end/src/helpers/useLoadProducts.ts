@@ -8,10 +8,7 @@ const useLoadProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
 
   async function loadProducts() {
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/products"),
-      false
-    );
+    const response = await call(axios.get(SERVER_API + "/shop"), false);
     setProducts([...response.data.data]);
   }
   return { products, loadProducts };

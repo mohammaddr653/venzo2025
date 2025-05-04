@@ -145,15 +145,7 @@ module.exports = new (class extends controller {
       });
     }
   }
-
-  async getProducts(req, res) {
-    const result = await productServices.getAllProducts(req, res);
-    this.response({
-      res,
-      message: "لیست تمام محصولات",
-      data: result,
-    });
-  }
+  
 
   async seeOneProduct(req, res) {
     const result = await productServices.seeOneProduct(req, res);
