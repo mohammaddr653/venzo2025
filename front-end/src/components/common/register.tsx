@@ -70,11 +70,13 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           className="border"
           onChange={handleChange}
         />
-        <ReCAPTCHA
-          sitekey={SITE_KEY}
-          ref={reRef}
-          onChange={handleCaptchaChange}
-        />
+        {isAdmin ? null : (
+          <ReCAPTCHA
+            sitekey={SITE_KEY}
+            ref={reRef}
+            onChange={handleCaptchaChange}
+          />
+        )}
         <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>
     </div>
