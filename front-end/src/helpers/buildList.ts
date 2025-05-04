@@ -4,18 +4,20 @@ export const buildList = (
   list: any,
   categories: any,
   handleDelete: Function | null,
-  handleUpdate: Function | null
+  handleUpdate: Function | null,
+  menu: boolean,
+  handleLink: Function | null
 ) => {
   if (list.current) {
     list.current.innerHTML = "";
     categories.forEach((category: any) => {
       if (category.motherId === "root") {
-        listLoop(category, list.current);
+        listLoop(category, list.current, category.path);
       }
     });
   }
 
-  function listLoop(item: any, parent: any) {
+  function listLoop(item: any, parent: any, origin: any) {
     const newLi = document.createElement("li");
 
     const liHead = document.createElement("div");
@@ -29,9 +31,15 @@ export const buildList = (
     );
 
     const title = document.createElement("h4");
+    if (menu && handleLink) {
+      title.onclick = () => {
+        handleLink(origin, item._id);
+      };
+    }
     title.innerHTML = item.name;
 
     liHead.appendChild(title);
+
     if (handleDelete && handleUpdate) {
       const liButtons = document.createElement("div");
       liButtons.classList.add("flex", "gap-2");
@@ -58,7 +66,7 @@ export const buildList = (
         const newUl = document.createElement("ul");
         newUl.classList.add("ps-5");
         newLi.appendChild(newUl);
-        listLoop(category, newUl);
+        listLoop(category, newUl, origin);
       }
     });
   }

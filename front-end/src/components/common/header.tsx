@@ -25,14 +25,18 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    buildList(list, categories, null, null);
+    buildList(list, categories, null, null, true, handleLink);
   }, [categories]);
+
+  function handleLink(origin: string, categoryId: string) {
+    navigate(`/${origin}/${categoryId}`);
+  }
 
   return (
     <div className="bg-pink-300">
       <h1>hello {user?.name} this is header</h1>
       <nav>
-        <ul ref={list}>list</ul>
+        <ul ref={list}>{/* dynamic */}</ul>
       </nav>
       {!user ? (
         <>

@@ -56,15 +56,18 @@ function App() {
       <Toaster position="top-right" />
       <Routes>
         <Route path="/single-shop" element={<SingleShopPage />} />
-        <Route path="/shop" element={<ShopPage />} />
+        <Route path="/shop/:categoryId" element={<ShopPage />} />
         <Route path="/single-archive" element={<SingleArchivePage />} />
-        <Route path="/archive" element={<ArchivePage />} />
+        <Route path="/archive/:categoryId" element={<ArchivePage />} />
         <Route element={<VerifyRoute user={user} />}>
           <Route path="/verify" element={<VerifyPage />} />
         </Route>
         <Route element={<PassRestoreRoute user={user} />}>
           <Route path="/pass-restore" element={<PassRestorePage />} />
-          <Route path="/pass-restore-form/:token" element={<PassRestoreFormPage />} />
+          <Route
+            path="/pass-restore-form/:token"
+            element={<PassRestoreFormPage />}
+          />
         </Route>
         <Route element={<AdminRoute user={user} />}>
           <Route path="/admin/blogs" element={<BlogsPage />} />

@@ -43,7 +43,7 @@ const CategoriesPage = () => {
   }, []);
 
   useEffect(() => {
-    buildList(list, categories, handleDelete, handleUpdate);
+    buildList(list, categories, handleDelete, handleUpdate, false, null);
     buildSelectionList(selectionList, categories, "", "دسته بندی مادر", null);
   }, [categories]);
 
@@ -95,6 +95,8 @@ const CategoriesPage = () => {
           >
             {/* dynamic */}
           </select>
+          <br />
+          <p>اگر دسته بندی مادر است حتما این فیلد را پر کنید</p>
           <input
             type="text"
             name="path"
