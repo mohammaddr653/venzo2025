@@ -18,6 +18,9 @@ const Header = () => {
   return (
     <div className="bg-pink-300">
       <h1>hello {user?.name} this is header</h1>
+      <nav>
+        list
+      </nav>
       {!user ? (
         <>
           <Link to={"/auth/register"}>register</Link>

@@ -6,10 +6,11 @@ import { SERVER_API } from "../../../config";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
+import useLoadCategories from "../../helpers/useLoadCategories";
 
 const CategoriesPage = () => {
   const { call, loading } = callManager();
-  const [categories, setCategories] = useState<any[]>([]);
+  const { categories, loadCategories } = useLoadCategories();
   const list = useRef<HTMLUListElement>(null);
   const selectionList = useRef<HTMLSelectElement>(null);
   const { user } = useUserStore();
@@ -28,21 +29,16 @@ const CategoriesPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  async function loadCategories() {
+  async function refresh() {
     setFormData({
       name: "",
       motherId: "",
       path: "",
     });
-
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/categories"),
-      false
-    );
-    setCategories([...response.data.data]);
+    loadCategories();
   }
   useEffect(() => {
-    loadCategories();
+    refresh();
   }, []);
 
   useEffect(() => {
@@ -107,7 +103,7 @@ const CategoriesPage = () => {
       axios.delete(SERVER_API + `/admin/dashboard/categories/${categoryId}`),
       true
     );
-    loadCategories();
+    refresh();
   };
 
   const handleUpdate = async (categoryId: any) => {
@@ -115,7 +111,7 @@ const CategoriesPage = () => {
   };
 
   const handleRefresh = () => {
-    loadCategories();
+    refresh();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -124,7 +120,7 @@ const CategoriesPage = () => {
       axios.post(SERVER_API + "/admin/dashboard/categories", formData),
       true
     );
-    loadCategories();
+    refresh();
   };
 
   return (

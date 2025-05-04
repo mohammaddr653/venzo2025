@@ -6,12 +6,13 @@ import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
+import useLoadCategories from "../../helpers/useLoadCategories";
 
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const [products, setProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -30,13 +31,6 @@ const ProductsPage = () => {
       false
     );
     setProducts([...response.data.data]);
-  }
-  async function loadCategories() {
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/categories"),
-      false
-    );
-    setCategories([...response.data.data]);
   }
 
   useEffect(() => {

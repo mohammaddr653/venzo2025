@@ -6,12 +6,13 @@ import { SERVER_API } from "../../../config";
 import callManager from "../../helpers/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
+import useLoadCategories from "../../helpers/useLoadCategories";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const selectionList = useRef<HTMLSelectElement>(null);
-  const [categories, setCategories] = useState<any[]>([]);
+  const { categories, loadCategories } = useLoadCategories();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -39,14 +40,6 @@ const OneProductPage = () => {
       description: matchedProduct.description,
       img: matchedProduct.img,
     });
-  }
-
-  async function loadCategories() {
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/categories"),
-      false
-    );
-    setCategories([...response.data.data]);
   }
 
   function refresh() {
