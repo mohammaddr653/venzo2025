@@ -83,15 +83,6 @@ module.exports = new (class extends controller {
     }
   }
 
-  async getCategories(req, res) {
-    const result = await categoriesServices.getAllCategories(req, res);
-    this.response({
-      res,
-      message: "لیست دسته بندی ها",
-      data: result,
-    });
-  }
-
   async createCategory(req, res) {
     const result = await categoriesServices.createCategory(req, res);
     if (result) {
@@ -145,7 +136,6 @@ module.exports = new (class extends controller {
       });
     }
   }
-  
 
   async seeOneProduct(req, res) {
     const result = await productServices.seeOneProduct(req, res);

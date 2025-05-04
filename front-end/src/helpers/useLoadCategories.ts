@@ -8,10 +8,7 @@ const useLoadCategories = () => {
   const [categories, setCategories] = useState<any[]>([]);
 
   async function loadCategories() {
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/categories"),
-      false
-    );
+    const response = await call(axios.get(SERVER_API + "/categories"), false);
     setCategories([...response.data.data]);
   }
   return { categories, loadCategories };

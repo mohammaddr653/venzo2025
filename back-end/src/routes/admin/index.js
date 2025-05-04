@@ -39,7 +39,9 @@ router.post(
   controller.validate.bind(controller),
   controller.createCategory.bind(controller)
 );
-router.get("/dashboard/categories", controller.getCategories.bind(controller));
+
+//list of all categories is in /categories
+
 router.get(
   "/dashboard/categories/:categoryId",
   controller.seeOneCategory.bind(controller)
