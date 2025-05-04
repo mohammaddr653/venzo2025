@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../helpers/useLoadCategories";
+import { buildList } from "../../helpers/buildList";
 
 const CategoriesPage = () => {
   const { call, loading } = callManager();
@@ -42,59 +43,7 @@ const CategoriesPage = () => {
   }, []);
 
   useEffect(() => {
-    function listLoop(item: any, parent: any) {
-      const newLi = document.createElement("li");
-
-      const liHead = document.createElement("div");
-      liHead.classList.add(
-        "border",
-        "p-2",
-        "my-1",
-        "flex",
-        "justify-between",
-        "gap-4"
-      );
-
-      const title = document.createElement("h4");
-      title.innerHTML = item.name;
-
-      const liButtons = document.createElement("div");
-      liButtons.classList.add("flex", "gap-2");
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.innerText = "حذف";
-      const updateBtn = document.createElement("button");
-      updateBtn.innerText = "ویرایش";
-      [deleteBtn, updateBtn].forEach((btn, i) => {
-        btn.classList.add("bg-yellow-200");
-        liButtons.appendChild(btn);
-        btn.onclick = (e, categoryId = item._id) => {
-          i == 0 ? handleDelete(categoryId) : null;
-          i == 1 ? handleUpdate(categoryId) : null;
-        };
-      });
-
-      liHead.appendChild(title);
-      liHead.appendChild(liButtons);
-      newLi.appendChild(liHead);
-      parent.appendChild(newLi);
-      categories.map((category) => {
-        if (category.motherId === item._id) {
-          const newUl = document.createElement("ul");
-          newUl.classList.add("ps-5");
-          newLi.appendChild(newUl);
-          listLoop(category, newUl);
-        }
-      });
-    }
-    if (list.current) {
-      list.current.innerHTML = "";
-      categories.forEach((category: any) => {
-        if (category.motherId === "root") {
-          listLoop(category, list.current);
-        }
-      });
-    }
+    buildList(list, categories, handleDelete, handleUpdate);
     buildSelectionList(selectionList, categories, "", "دسته بندی مادر", null);
   }, [categories]);
 
