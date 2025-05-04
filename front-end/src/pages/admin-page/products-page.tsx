@@ -7,11 +7,12 @@ import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../helpers/useLoadCategories";
+import useLoadProducts from "../../helpers/useLoadProducts";
 
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
-  const [products, setProducts] = useState<any[]>([]);
+  const { products, loadProducts } = useLoadProducts();
   const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
   const navigate = useNavigate();
@@ -24,14 +25,6 @@ const ProductsPage = () => {
     img: "",
   });
   const fileInputRef = useRef<any>(null);
-
-  async function loadProducts() {
-    const response = await call(
-      axios.get(SERVER_API + "/admin/dashboard/products"),
-      false
-    );
-    setProducts([...response.data.data]);
-  }
 
   useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
