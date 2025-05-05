@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import callManager from "../helpers/callManager";
-import { useUserStore } from "../store";
 import { DEFAULT_AVATAR, SERVER_API, SERVER_URL } from "../../config";
 import axios from "axios";
 import LoadingButton from "../components/common/loadingButton";
+import useLoadUser from "../helpers/useLoadUser";
 
 const UserPage = () => {
   const { call, loading } = callManager();
-  const { user } = useUserStore();
+  const { user, userLoading, getAuthedUser } = useLoadUser();
   const [formData, setFormData] = useState({
     name: "",
     avatar: "",
@@ -50,10 +50,9 @@ const UserPage = () => {
     });
     const response = await call(
       axios.put(SERVER_API + "/user/dashboard", dataToSend),
-      true,
-      "/user"
+      true
     );
-    refresh(); //may not always execute , only when the the call returns error
+    getAuthedUser();
   };
   return (
     <div>
