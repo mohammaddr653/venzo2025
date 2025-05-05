@@ -28,6 +28,7 @@ module.exports = new (class extends controller {
 
       this.response({
         res,
+        code: 400,
         message: "خطا در بروزرسانی",
       });
     }

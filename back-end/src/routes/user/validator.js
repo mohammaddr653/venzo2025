@@ -4,6 +4,6 @@ const { check } = require("express-validator");
 
 module.exports = new (class extends validator {
   updateCheck() {
-    return [this.emailCheck , this.nameCheck];
+    return [this.nameCheck];
   }
 })();
