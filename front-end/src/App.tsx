@@ -31,10 +31,11 @@ import VerifyRoute from "./components/private-route-components/verifyRoute";
 import PassRestorePage from "./pages/passRestore-page";
 import PassRestoreRoute from "./components/private-route-components/passRestoreRoute";
 import PassRestoreFormPage from "./pages/passRestoreForm-page";
+import useLoadUser from "./helpers/useLoadUser";
 
 function App() {
-  const { call, loading } = callManager();
-  const { user, userLoading, setUserLoading, setUser } = useUserStore();
+  const { user, userLoading, getAuthedUser } = useLoadUser();
+
   const location = useLocation(); // Detects route changes
   useEffect(() => {
     axios.defaults.withCredentials = true; //sends httponly cookies to the server by default
@@ -42,13 +43,6 @@ function App() {
   useEffect(() => {
     getAuthedUser(); //if token exist , set the user
   }, [location.pathname]);
-
-  async function getAuthedUser() {
-    const response = await call(axios.get(SERVER_API + "/token"), false);
-    const me = response?.data?.data?.user;
-    me ? setUser(me) : setUser(null);
-    setUserLoading(false);
-  }
 
   if (userLoading) return <p>Loading defaults...</p>; //waiting to read some values from server
   return (

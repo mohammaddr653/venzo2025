@@ -32,7 +32,7 @@ async function isLoggedIn(req, res, next) {
   if (req.user) {
     return next();
   }
-  const response = serverResponse("access denied");
+  const response = serverResponse("لطفا وارد حساب کاربری خود شوید");
   res.status(401).json(response); //401 means is not logged in
 }
 
@@ -57,14 +57,16 @@ async function verified(req, res, next) {
 //this middleware checks if the req.user exists it cant access the auth anymore
 async function notLoggedIn(req, res, next) {
   if (!req.user) return next();
-  const response = serverResponse("access denied");
+  const response = serverResponse(
+    "برای دسترسی به این مسیر ابتدا از حساب کاربری خود خارج شوید"
+  );
   res.status(403).json(response); //403 means user authenticated but cant access the next
 }
 
 //this middleware checks if user is admin to access the admin dashboard or not
 async function isAdmin(req, res, next) {
   if (!req.user.isadmin) {
-    const response = serverResponse("access denied");
+    const response = serverResponse("شما به این مسیر دسترسی ندارید");
     return res.status(403).json(response); //403 means is logged in but not admin
   }
   next();
