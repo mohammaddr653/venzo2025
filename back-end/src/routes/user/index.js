@@ -7,13 +7,13 @@ const avatarFileToReqBody = require("../../middlewares/avatarFileToReqBody");
 const validator = require("./validator");
 
 router.get("/dashboard", controller.dashboard.bind(controller));
-router.post(
-  "/dashboard/avatar",
+router.put(
+  "/dashboard",
   uploadAccountAvatar.single("avatar"),
   avatarFileToReqBody,
-  validator.avatar(),
+  validator.updateCheck(),
   controller.validate.bind(controller),
-  controller.uploadAvatar.bind(controller)
+  controller.updateProfile.bind(controller)
 );
 
 module.exports = router;

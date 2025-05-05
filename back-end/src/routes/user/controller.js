@@ -14,12 +14,12 @@ module.exports = new (class extends controller {
     });
   }
 
-  async uploadAvatar(req, res) {
-    const result = await userServices.uploadAvatar(req, res);
+  async updateProfile(req, res) {
+    const result = await userServices.updateProfile(req, res);
     if (result) {
       this.response({
         res,
-        message: "آواتار با موفقیت بروزرسانی شد",
+        message: " اکانت شما با موفقیت بروزرسانی شد",
       });
     } else {
       if (req.file)
@@ -28,7 +28,7 @@ module.exports = new (class extends controller {
 
       this.response({
         res,
-        message: "خطا در بروزرسانی آواتار",
+        message: "خطا در بروزرسانی",
       });
     }
   }

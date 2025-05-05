@@ -73,9 +73,20 @@ class UserServices {
     return false;
   }
 
-  //uploading avatar
-  async uploadAvatar(req, res) {
-    let data = {};
+  //update profile
+  async updateProfile(req, res) {
+    let data = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    let repeatedEmail = await User.findOne({ email: req.body.email });
+    if (req.user.email !== req.body.email) {
+      if (repeatedEmail) {
+        return false;
+      } else {
+        data.verified = false;
+      }
+    }
     if (req.file) {
       deleteFile("public" + req.user.avatar, "public" + req.user.avatar);
       data.avatar = req.file.path.replace(/\\/g, "/").substring(6); //some modifications on file address to store in db

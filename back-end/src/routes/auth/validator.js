@@ -1,19 +1,11 @@
 //validator
-const expressValidator = require("express-validator");
-const check = expressValidator.check;
+const validator = require("../validator");
 
-module.exports = new (class {
+module.exports = new (class extends validator {
   registerValidator() {
-    return [
-      check("email").isEmail().withMessage("فرمت ایمیل صحیح نیست"),
-      check("name").notEmpty().withMessage("نام نمیتواند خالی باشد"),
-      check("password").notEmpty().withMessage("رمز عبور نمی تواند خالی باشد"),
-    ];
+    return [this.emailCheck, this.nameCheck, this.passCheck];
   }
   loginValidator() {
-    return [
-      check("email").isEmail().withMessage("فرمت ایمیل صحیح نیست"),
-      check("password").notEmpty().withMessage("رمز عبور نمی تواند خالی باشد"),
-    ];
+    return [this.emailCheck, this.passCheck];
   }
 })();
