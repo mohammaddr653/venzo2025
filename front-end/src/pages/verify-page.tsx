@@ -1,14 +1,14 @@
 import axios from "axios";
 import { SERVER_API } from "../../config";
 import callManager from "../helpers/callManager";
-import { useUserStore } from "../store";
 import { useEffect, useState } from "react";
 import LoadingButton from "../components/common/loadingButton";
 import { useNavigate } from "react-router-dom";
+import useLoadUser from "../helpers/useLoadUser";
 
 const VerifyPage = () => {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const { user, userLoading, getAuthedUser } = useLoadUser();
   const { call, loading } = callManager();
   const [formData, setFormData] = useState({
     code: "",
@@ -26,9 +26,9 @@ const VerifyPage = () => {
 
     const response = await call(
       axios.post(SERVER_API + "/verify", formData),
-      true,
-      "/verify"
+      true
     );
+    getAuthedUser();
   };
 
   useEffect(() => {

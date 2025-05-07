@@ -89,6 +89,22 @@ class UserServices {
     return false;
   }
 
+  //admin update profile
+  async adminUpdateProfile(req, res) {
+    let data = {
+      name: req.body.name,
+    };
+    if (req.file) {
+      deleteFile("public" + req.user.avatar, "public" + req.user.avatar);
+      data.avatar = req.file.path.replace(/\\/g, "/").substring(6); //some modifications on file address to store in db
+    }
+    const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
+    if (updateOp.modifiedCount.valueOf() > 0) {
+      return true;
+    }
+    return false;
+  }
+
   async verifyUser(req, res) {
     const updateOp = await User.updateOne(
       { email: req.user.email },

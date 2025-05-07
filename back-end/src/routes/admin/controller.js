@@ -17,6 +17,26 @@ module.exports = new (class extends controller {
     });
   }
 
+  async updateProfile(req, res) {
+    const result = await userServices.adminUpdateProfile(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: " اکانت شما با موفقیت بروزرسانی شد",
+      });
+    } else {
+      if (req.file)
+        //if some files uploaded with this req , delete them
+        deleteFile(req.file.path, req.file.path);
+
+      this.response({
+        res,
+        code: 400,
+        message: "خطا در بروزرسانی",
+      });
+    }
+  }
+
   async getUsers(req, res) {
     const result = await userServices.getAllUsers(req);
     this.response({

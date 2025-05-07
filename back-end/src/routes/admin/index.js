@@ -5,10 +5,20 @@ const controller = require("./controller");
 const validator = require("./validator");
 const uploadProductImg = require("../../../upload/uploadProductImg");
 const uploadBlogImg = require("../../../upload/uploadBlogImg");
+const uploadAccountAvatar = require("../../../upload/uploadAccountAvatar");
+const avatarFileToReqBody = require("../../middlewares/avatarFileToReqBody");
 const productFileToReqBody = require("../../middlewares/productFileToReqBody");
 const blogFileToReqBody = require("../../middlewares/blogFileToReqBody");
 
 router.get("/dashboard", controller.dashboard.bind(controller));
+router.put(
+  "/dashboard",
+  uploadAccountAvatar.single("avatar"),
+  avatarFileToReqBody,
+  validator.updateProfileCheck(),
+  controller.validate.bind(controller),
+  controller.updateProfile.bind(controller)
+);
 
 //users
 

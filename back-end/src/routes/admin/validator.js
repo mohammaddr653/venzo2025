@@ -6,6 +6,9 @@ module.exports = new (class extends validator {
   createCheck() {
     return [this.emailCheck, this.passCheck];
   }
+  updateProfileCheck() {
+    return [this.nameCheck];
+  }
   updateCheck() {
     return [this.emailCheck];
   }
