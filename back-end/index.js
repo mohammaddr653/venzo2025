@@ -1,4 +1,7 @@
 require("express-async-errors");
+require("dotenv").config();
+const config = require("config");
+
 const express = require("express");
 const app = express();
 
@@ -6,11 +9,9 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const cors = require("cors");
-app.use(cors({ origin: "http://127.0.0.1:5173", credentials: true }));
+app.use(cors({ origin: config.get("origin_url"), credentials: true }));
 
-require("dotenv").config();
 const debug = require("debug")("app");
-const config = require("config");
 
 const router = require("./src/routes"); // the file name is index so the express will recognize it automaticly
 

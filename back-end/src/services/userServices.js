@@ -118,7 +118,6 @@ class UserServices {
 
   async createResetPasswordToken(req, res) {
     const resetToken = crypto.randomBytes(32).toString("hex");
-    console.log("here");
 
     const passwordResetToken = crypto
       .createHash("sha256")

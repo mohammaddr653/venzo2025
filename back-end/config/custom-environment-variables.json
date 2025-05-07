@@ -1,4 +1,5 @@
 {
+  "origin_url": "ORIGIN_URL",
   "jwt_key": "JWT_KEY",
   "port": "PORT",
   "host": "HOST",

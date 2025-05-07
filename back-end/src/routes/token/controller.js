@@ -1,10 +1,5 @@
 //controller
-const debug = require("debug")("app");
 const controller = require("../controller");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const userServices = require("../../services/userServices");
 
 module.exports = new (class extends controller {
   async getMe(req, res) {

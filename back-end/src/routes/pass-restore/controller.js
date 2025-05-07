@@ -1,5 +1,6 @@
 //controller
 const controller = require("../controller");
+const config = require("config");
 const userServices = require("../../services/userServices");
 const sendEmail = require("../../mails/passRecovery");
 
@@ -8,7 +9,7 @@ module.exports = new (class extends controller {
     const token = await userServices.createResetPasswordToken(req, res);
     if (token) {
       let content = `<a href=${
-        "http://127.0.0.1:5173/pass-restore-form/" + token
+        config.get("origin_url") + "/pass-restore-form/" + token
       }>برای بازیابی رمزعبور کلیک کنید</a>`;
       sendEmail(req.body.email, content);
       return this.response({
