@@ -76,7 +76,7 @@ function App() {
         <Route element={<UserRoute user={user} />}>
           <Route path="/user" element={<UserPage />} />
         </Route>
-        <Route element={<CartRoute />}>
+        <Route element={<CartRoute user={user} />}>
           <Route path="/cart" element={<CartPage />} />
         </Route>
         <Route element={<AuthRoute user={user} />}>

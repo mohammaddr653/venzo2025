@@ -15,10 +15,11 @@ const Header = () => {
   const list = useRef<HTMLUListElement>(null);
 
   async function userLogout() {
-    const response = await call(axios.get(SERVER_API + "/token/logout"), false); //deletes the token cookie
-    window.location.pathname === "/" //reload the home page
-      ? window.location.reload()
-      : navigate("/");
+    const response = await call(
+      axios.get(SERVER_API + "/token/logout"),
+      false,
+      "/"
+    ); //deletes the token cookie
   }
   useEffect(() => {
     loadCategories();
@@ -49,6 +50,8 @@ const Header = () => {
           {user?.isadmin ? <Link to={"/admin"}>پنل ادمین</Link> : null}
           <br />
           <Link to={"/user"}>حساب کاربری</Link>
+          <br />
+          <Link to={"/cart"}>سبد خرید</Link>
           <br />
           <button onClick={userLogout}>logout</button>
         </>

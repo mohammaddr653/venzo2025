@@ -23,6 +23,10 @@ const SingleShopPage = () => {
     );
     setProduct(response.data.data);
   }
+
+  async function handleAddToCart(id: string) {
+    const response = await call(axios.post(SERVER_API + `/cart/${id}`), true);
+  }
   return (
     <div>
       <Header></Header>
@@ -37,6 +41,9 @@ const SingleShopPage = () => {
         <p>{product?.name}</p>
         <p>{product?.price}</p>
         <p>{product?.stock}</p>
+        <button onClick={() => handleAddToCart(product._id)}>
+          افزودن به سبد خرید
+        </button>
       </div>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">
