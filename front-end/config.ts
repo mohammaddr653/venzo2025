@@ -6,6 +6,6 @@ export const DEFAULT_PRODUCT =
   SERVER_URL + "/uploads/images/products/default-product.jpg";
 
 export const DEFAULT_AVATAR =
-  SERVER_URL + "/uploads/images/products/default-avatar.jpg";
+  SERVER_URL + "/uploads/images/avatars/default-avatar.jpg";
 
 export const SITE_KEY = "6LcUFf0qAAAAAORJ8E3ad4CBTA4SD8OPBsTDCbOS";
