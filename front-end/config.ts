@@ -1,3 +1,4 @@
+/// <reference types="vite/types/importMeta.d.ts" />
 const mode = import.meta.env.VITE_NODE_ENV;
 export const SERVER_URL =
   mode === "production"
