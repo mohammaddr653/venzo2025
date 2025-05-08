@@ -4,7 +4,6 @@ export const SERVER_URL =
     ? "https://venzo2025.vercel.app"
     : "http://127.0.0.1:5000";
 
-console.log(SERVER_URL);
 export const SERVER_API = SERVER_URL + "/api";
 
 export const DEFAULT_PRODUCT =

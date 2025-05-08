@@ -22,5 +22,4 @@ require("./startup/logging")();
 app.use("/api", router);
 
 const port = config.get("port") || 3000;
-const host = config.get("host");
-app.listen(port, host, () => debug(`listening on http://${host}:${port}`));
+app.listen(port, () => debug(`listening on port ${port}`));
