@@ -1,7 +1,4 @@
 {
   "name": "venzo2025",
-  "recaptcha": false,
-  "db": {
-    "address": "mongodb://localhost:27017/venzo2025-db"
-  }
+  "recaptcha": true
 }
