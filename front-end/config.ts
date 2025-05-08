@@ -1,6 +1,11 @@
-export const SERVER_API = "http://127.0.0.1:5000/api";
+const mode = import.meta.env.VITE_NODE_ENV;
+export const SERVER_URL =
+  mode === "production"
+    ? "https://venzo2025.vercel.app"
+    : "http://127.0.0.1:5000";
 
-export const SERVER_URL = "http://127.0.0.1:5000";
+console.log(SERVER_URL);
+export const SERVER_API = SERVER_URL + "/api";
 
 export const DEFAULT_PRODUCT =
   SERVER_URL + "/uploads/images/products/default-product.jpg";
