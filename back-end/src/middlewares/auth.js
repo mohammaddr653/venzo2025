@@ -1,6 +1,5 @@
 const User = require("./../models/user");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const serverResponse = require("../helpers/serverResponse");
 const debug = require("debug")("app");
 
@@ -12,7 +11,7 @@ async function setReqUser(req, res, next) {
   }
   if (token) {
     try {
-      const decoded = jwt.verify(token, config.get("jwt_key"));
+      const decoded = jwt.verify(token, process.env.JWT_KEY);
       const user = await User.findById(decoded._id);
       req.user = user;
       next();

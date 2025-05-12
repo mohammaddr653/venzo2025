@@ -1,19 +1,18 @@
 //راه اندازی پکیج nodemailer
-const config = require("config");
 const nodemailer = require("nodemailer");
 
 const sendEmail = (address, content) => {
   const transporter = nodemailer.createTransport({
-    host: config.get("gmail_host"),
+    host: process.env.GMAIL_HOST,
     port: 587,
     secure: false,
     auth: {
-      user: config.get("gmail_user"),
-      pass: config.get("gmail_pass"),
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
     },
   });
   const mailOptions = {
-    from: config.get("gmail_user"),
+    from: process.env.GMAIL_USER,
     to: address,
     subject: "Password Recovery",
     html: content,

@@ -3,7 +3,6 @@ const debug = require("debug")("app");
 const controller = require("./../controller");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const userServices = require("../../services/userServices");
 const validateRecaptcha = require("../../helpers/validateRecaptcha");
 
@@ -25,7 +24,7 @@ module.exports = new (class extends controller {
   async register(req, res) {
     const recaptchaResult = await validateRecaptcha(req);
     //recaptcha wont authorized if environment config 'recaptcha' is false
-    if (!recaptchaResult && config.get("recaptcha")) {
+    if (!recaptchaResult && process.env.RECAPTCHA) {
       return this.response({
         res,
         code: 400,
@@ -52,7 +51,7 @@ module.exports = new (class extends controller {
   async login(req, res) {
     const recaptchaResult = await validateRecaptcha(req);
     //recaptcha wont authorized if environment config 'recaptcha' is false
-    if (!recaptchaResult && config.get("recaptcha")) {
+    if (!recaptchaResult && process.env.RECAPTCHA) {
       return this.response({
         res,
         code: 400,
@@ -75,7 +74,7 @@ module.exports = new (class extends controller {
         message: "ایمیل یا رمز عبور نامعتبر است",
       });
     }
-    const token = jwt.sign({ _id: user.id }, config.get("jwt_key"));
+    const token = jwt.sign({ _id: user.id }, process.env.JWT_KEY);
     //storing jwt token as a httpOnly cookie
     res.cookie("jwt", token, {
       httpOnly: true, // Prevent JavaScript access

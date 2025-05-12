@@ -1,6 +1,5 @@
 require("express-async-errors");
 require("dotenv").config();
-const config = require("config");
 
 const express = require("express");
 const app = express();
@@ -9,7 +8,7 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const cors = require("cors");
-app.use(cors({ origin: config.get("origin_url"), credentials: true }));
+app.use(cors({ origin: process.env.ORIGIN_URL, credentials: true }));
 
 const debug = require("debug")("app");
 
@@ -21,6 +20,6 @@ require("./startup/logging")();
 
 app.use("/api", router);
 
-const port = config.get("port") || 3000;
-const host = config.get("host");
+const port = process.env.PORT || 3000;
+const host = process.env.HOST;
 app.listen(port, host, () => debug(`listening on http://${host}:${port}`));
