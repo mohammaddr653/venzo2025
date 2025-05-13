@@ -1,4 +1,10 @@
-export const SERVER_URL = "http://127.0.0.1:5000";
+/// <reference types="vite/client" />
+const mode = import.meta.env.VITE_NODE_ENV;
+
+export const SERVER_URL =
+  mode === "production"
+    ? "https://venzo2025-backend.vercel.app"
+    : "http://127.0.0.1:5000";
 
 export const SERVER_API = SERVER_URL + "/api";
 

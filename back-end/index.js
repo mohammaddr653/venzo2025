@@ -8,7 +8,13 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const cors = require("cors");
-app.use(cors({ origin: process.env.ORIGIN_URL, credentials: true }));
+app.use(
+  cors({
+    origin: process.env.ORIGIN_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 const debug = require("debug")("app");
 
@@ -18,8 +24,14 @@ require("./startup/config")(app, express);
 require("./startup/db")();
 require("./startup/logging")();
 
-app.use("/api", router);
+app.get("/", (req, res) => {
+  res.send("Welcome to Venzo Backend!");
+});
 
+app.use("/api", router);
+const mode = process.env.NODE_ENV;
 const port = process.env.PORT || 3000;
-const host = process.env.HOST;
-app.listen(port, host, () => debug(`listening on http://${host}:${port}`));
+const host = process.env.HOST || "localhost";
+mode === "production"
+  ? app.listen()
+  : app.listen(port, host, () => debug(`listening on http://${host}:${port}`));

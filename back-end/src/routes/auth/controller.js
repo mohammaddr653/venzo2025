@@ -24,7 +24,7 @@ module.exports = new (class extends controller {
   async register(req, res) {
     const recaptchaResult = await validateRecaptcha(req);
     //recaptcha wont authorized if environment config 'recaptcha' is false
-    if (!recaptchaResult && process.env.RECAPTCHA) {
+    if (!recaptchaResult && process.env.RECAPTCHA === "true") {
       return this.response({
         res,
         code: 400,
@@ -51,7 +51,7 @@ module.exports = new (class extends controller {
   async login(req, res) {
     const recaptchaResult = await validateRecaptcha(req);
     //recaptcha wont authorized if environment config 'recaptcha' is false
-    if (!recaptchaResult && process.env.RECAPTCHA) {
+    if (!recaptchaResult && process.env.RECAPTCHA === "true") {
       return this.response({
         res,
         code: 400,
@@ -76,12 +76,22 @@ module.exports = new (class extends controller {
     }
     const token = jwt.sign({ _id: user.id }, process.env.JWT_KEY);
     //storing jwt token as a httpOnly cookie
-    res.cookie("jwt", token, {
-      httpOnly: true, // Prevent JavaScript access
-      path: "/",
-      sameSite: "Strict", // Helps prevent CSRF attacks
-      maxAge: 3600000, // Expires in 1 hour
-    });
+    if (process.env.NODE_ENV === "production") {
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        path: "/",
+        secure: true,
+        sameSite: "None",
+        maxAge: 3600000,
+      });
+    } else {
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        path: "/",
+        sameSite: "Strict",
+        maxAge: 3600000,
+      });
+    }
     this.response({ res, message: "با موفقیت وارد شدید", data: { token } });
   }
 })();
