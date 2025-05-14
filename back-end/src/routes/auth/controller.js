@@ -76,22 +76,15 @@ module.exports = new (class extends controller {
     }
     const token = jwt.sign({ _id: user.id }, process.env.JWT_KEY);
     //storing jwt token as a httpOnly cookie
-    if (process.env.NODE_ENV === "production") {
-      res.cookie("jwt", token, {
-        httpOnly: true,
-        path: "/",
-        secure: true,
-        sameSite: "None",
-        maxAge: 3600000,
-      });
-    } else {
-      res.cookie("jwt", token, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "Strict",
-        maxAge: 3600000,
-      });
-    }
+    const mode = process.env.NODE_ENV;
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      path: "/",
+      secure: mode === "production" ? true : false,
+      sameSite: mode === "production" ? "None" : "Strict",
+      maxAge: 3600000,
+    });
     this.response({ res, message: "با موفقیت وارد شدید", data: { token } });
   }
 })();

@@ -17,6 +17,7 @@ async function setReqUser(req, res, next) {
       next();
     } catch (ex) {
       req.user = undefined;
+      res.clearCookie("jwt");
       const response = serverResponse("invalid token");
       res.status(400).json(response);
     }
