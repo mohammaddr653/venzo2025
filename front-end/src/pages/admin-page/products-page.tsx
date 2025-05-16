@@ -8,7 +8,7 @@ import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../helpers/useLoadCategories";
 import useLoadProducts from "../../helpers/useLoadProducts";
-
+import { Editor } from "@tinymce/tinymce-react";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -25,6 +25,7 @@ const ProductsPage = () => {
     img: "",
   });
   const fileInputRef = useRef<any>(null);
+  const editorRef = useRef<any>(null);
 
   useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
@@ -40,9 +41,7 @@ const ProductsPage = () => {
       img: "",
     });
     // Reset file input field
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadCategories();
     loadProducts();
   }
@@ -87,7 +86,6 @@ const ProductsPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const dataToSend = new FormData();
-
     // Append all form fields to FormData
     Object.entries(formData).forEach(([key, value]) => {
       dataToSend.append(key, value);
@@ -103,7 +101,7 @@ const ProductsPage = () => {
     <div>
       <h1>مدیریت محصولات</h1>
       <div className="bg-red-300">
-        <form onSubmit={handleSubmit} className="flex">
+        <form onSubmit={handleSubmit} className="flex-column">
           <input
             type="text"
             placeholder="name"
@@ -142,14 +140,45 @@ const ProductsPage = () => {
             {/* dynamic */}
           </select>
 
-          <textarea
-            name="description"
-            placeholder="description"
-            onChange={handleChange}
+          <Editor
+            apiKey="ajfufhhbmu74o5t6nn4o9rj4ba4wwrhp3gxd6lk3k668y54x"
+            onInit={(_evt, editor) => (editorRef.current = editor)}
+            onEditorChange={(content) =>
+              setFormData({ ...formData, description: content })
+            }
             value={formData.description}
-            id="default"
-            className="border"
-          ></textarea>
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+              ],
+              toolbar:
+                "undo redo | blocks | " +
+                "bold italic forecolor | alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
+          />
           <input
             type="file"
             name="img"
