@@ -41,7 +41,7 @@ const SingleShopPage = () => {
         <p>{product?.name}</p>
         <p>{product?.price}</p>
         <p>{product?.stock}</p>
-        <div>{product?.description}</div>
+        <div dangerouslySetInnerHTML={{ __html: product?.description }}></div>
         <button onClick={() => handleAddToCart(product._id)}>
           افزودن به سبد خرید
         </button>
