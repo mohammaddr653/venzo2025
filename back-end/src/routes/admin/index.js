@@ -99,6 +99,34 @@ router.delete(
   controller.deleteProduct.bind(controller)
 );
 
+//properties
+
+router.get("/dashboard/properties", controller.getProperties.bind(controller));
+
+router.get(
+  "/dashboard/properties/:propertyId",
+  controller.seeOneProperty.bind(controller)
+);
+
+router.post(
+  "/dashboard/properties",
+  validator.propertyValidator(),
+  controller.validate.bind(controller),
+  controller.createProperty.bind(controller)
+);
+
+router.put(
+  "/dashboard/properties/:propertyId",
+  validator.updatePropertyValidator(),
+  controller.validate.bind(controller),
+  controller.updateProperty.bind(controller)
+);
+
+router.delete(
+  "/dashboard/properties/:propertyId",
+  controller.deleteProperty.bind(controller)
+);
+
 //blogs
 
 router.get("/dashboard/blogs", controller.getBlogs.bind(controller));

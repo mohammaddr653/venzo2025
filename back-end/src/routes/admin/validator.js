@@ -36,6 +36,13 @@ module.exports = new (class extends validator {
       check("stock", " موجودی انبار باید مقداری عددی باشد").isNumeric(),
     ];
   }
+  propertyValidator() {
+    return [check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty()];
+  }
+  updatePropertyValidator() {
+    return [check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty()];
+  }
+
   blogValidator() {
     return [
       check("title", "لطفا عنوانی برای مقاله انتخاب کنید").notEmpty(),

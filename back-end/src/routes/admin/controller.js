@@ -4,6 +4,7 @@ const deleteFile = require("../../helpers/deleteFile");
 const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
 const productServices = require("../../services/productServices");
+const propertyServices = require("../../services/propertyServices");
 const userServices = require("../../services/userServices");
 const controller = require("./../controller");
 const _ = require("lodash");
@@ -291,6 +292,72 @@ module.exports = new (class extends controller {
       this.response({
         res,
         message: "حذف مقاله ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async getProperties(req, res) {
+    const result = await propertyServices.getAllProperties(req);
+    this.response({
+      res,
+      message: "this is all properties",
+      data: result,
+    });
+  }
+
+  async seeOneProperty(req, res) {
+    const result = await propertyServices.seeOneProperty(req, res);
+    this.response({
+      res,
+      message: "this is property",
+      data: result,
+    });
+  }
+
+  async createProperty(req, res) {
+    const result = await propertyServices.createProperty(req, res);
+    if (result.code === 400) {
+      return this.response({
+        res,
+        message: "یک ویژگی با این نام قبلا ساخته شده است",
+        code: 400,
+      });
+    }
+    this.response({
+      res,
+      message: "ویژگی ساخته شد",
+      data: result.data,
+    });
+  }
+
+  async updateProperty(req, res) {
+    const result = await propertyServices.updateProperty(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "ویژگی با موفقیت بروزرسانی شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "بروزرسانی ویژگی ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async deleteProperty(req, res) {
+    const result = await userServices.deleteUser(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "کاربر با موفقیت حذف شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "حذف کاربر ناموفق بود",
         code: 400,
       });
     }
