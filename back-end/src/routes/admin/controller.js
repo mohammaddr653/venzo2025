@@ -184,6 +184,7 @@ module.exports = new (class extends controller {
       this.response({
         res,
         message: "خطا در ساخت محصول",
+        code: 400,
       });
     }
   }

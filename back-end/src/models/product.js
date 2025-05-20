@@ -1,15 +1,17 @@
-//this model need to be modified , maybe after setup the React for front-end , I want to save the html codes for articles
-
 const mongoose = require("mongoose");
 const domPurifier = require("dompurify");
 const { JSDOM } = require("jsdom");
 const htmlPurify = domPurifier(new JSDOM().window);
 const timestamp = require("mongoose-timestamp");
+const propertyObjSchema = require("./propertyObj");
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   stock: { type: Number, required: true },
+  properties: {
+    type: [propertyObjSchema],
+  },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
