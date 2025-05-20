@@ -48,7 +48,7 @@ class PropertyServices {
     return false;
   }
 
-  //this method needs to be modified . after creating the propertyVal
+  //this method needs to be modified
   async deleteProperty(req, res) {
     //delete user , admin cant delete himself
     if (req.params.userId !== req.user.id) {

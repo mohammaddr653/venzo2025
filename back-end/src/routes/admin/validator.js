@@ -43,6 +43,17 @@ module.exports = new (class extends validator {
     return [check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty()];
   }
 
+  propertyvalValidator() {
+    return [
+      check("value", "لطفا مقدار را وارد کنید").notEmpty(),
+      check("propertyId", "لطفا ویژگی را مشخص کنید").notEmpty(),
+    ];
+  }
+
+  updatePropertyvalValidator() {
+    return [check("value", "لطفا مقدار را وارد کنید").notEmpty()];
+  }
+
   blogValidator() {
     return [
       check("title", "لطفا عنوانی برای مقاله انتخاب کنید").notEmpty(),

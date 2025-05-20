@@ -127,6 +127,37 @@ router.delete(
   controller.deleteProperty.bind(controller)
 );
 
+//propertyvals
+
+router.get(
+  "/dashboard/propertyvals",
+  controller.getPropertyvals.bind(controller)
+);
+
+router.get(
+  "/dashboard/propertyvals/:propertyvalId",
+  controller.seeOnePropertyval.bind(controller)
+);
+
+router.post(
+  "/dashboard/propertyvals",
+  validator.propertyvalValidator(),
+  controller.validate.bind(controller),
+  controller.createPropertyval.bind(controller)
+);
+
+router.put(
+  "/dashboard/propertyvals/:propertyvalId",
+  validator.updatePropertyvalValidator(),
+  controller.validate.bind(controller),
+  controller.updatePropertyval.bind(controller)
+);
+
+router.delete(
+  "/dashboard/propertyvals/:propertyvalId",
+  controller.deletePropertyval.bind(controller)
+);
+
 //blogs
 
 router.get("/dashboard/blogs", controller.getBlogs.bind(controller));

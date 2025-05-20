@@ -5,6 +5,7 @@ const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
 const productServices = require("../../services/productServices");
 const propertyServices = require("../../services/propertyServices");
+const propertyvalServices = require("../../services/propertyvalServices");
 const userServices = require("../../services/userServices");
 const controller = require("./../controller");
 const _ = require("lodash");
@@ -348,6 +349,79 @@ module.exports = new (class extends controller {
   }
 
   async deleteProperty(req, res) {
+    const result = await userServices.deleteUser(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "کاربر با موفقیت حذف شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "حذف کاربر ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async getPropertyvals(req, res) {
+    const result = await propertyvalServices.getAllPropertyvals(req);
+    this.response({
+      res,
+      message: "this is all propertyvals",
+      data: result,
+    });
+  }
+
+  async seeOnePropertyval(req, res) {
+    const result = await propertyvalServices.seeOnePropertyval(req, res);
+    this.response({
+      res,
+      message: "this is propertyval",
+      data: result,
+    });
+  }
+
+  async createPropertyval(req, res) {
+    const result = await propertyvalServices.createPropertyval(req, res);
+    if (result.code === 409) {
+      return this.response({
+        res,
+        message: "این مقدار ویژگی تکراری است",
+        code: 409,
+      });
+    }
+    if (result.code === 400) {
+      return this.response({
+        res,
+        message: "ساخت مقدار ویژگی ناموفق بود",
+        code: 400,
+      });
+    }
+    this.response({
+      res,
+      message: "مقدار ویژگی ساخته شد",
+      data: result.data,
+    });
+  }
+
+  async updatePropertyval(req, res) {
+    const result = await propertyvalServices.updatePropertyval(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "مقدار ویژگی با موفقیت بروزرسانی شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "بروزرسانی مقدار ویژگی ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async deletePropertyval(req, res) {
     const result = await userServices.deleteUser(req, res);
     if (result) {
       this.response({
