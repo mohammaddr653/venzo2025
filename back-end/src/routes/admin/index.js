@@ -135,6 +135,11 @@ router.get(
 );
 
 router.get(
+  "/dashboard/propertyvals/filter/:propertyId",
+  controller.getPropertyvalsById.bind(controller)
+);
+
+router.get(
   "/dashboard/propertyvals/:propertyvalId",
   controller.seeOnePropertyval.bind(controller)
 );

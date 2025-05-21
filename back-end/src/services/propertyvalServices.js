@@ -14,6 +14,13 @@ class PropertyvalServices {
     return PropertyVal.find({});
   }
 
+  async getPropertyvalsById(req) {
+    //reading all propertyvals by id
+    return PropertyVal.find({
+      propertyId: req.params.propertyId,
+    });
+  }
+
   async seeOnePropertyval(req, res) {
     // reading one propertyval from database
     return PropertyVal.findById(req.params.propertyvalId);

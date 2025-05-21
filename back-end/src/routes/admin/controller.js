@@ -374,6 +374,15 @@ module.exports = new (class extends controller {
     });
   }
 
+  async getPropertyvalsById(req, res) {
+    const result = await propertyvalServices.getPropertyvalsById(req);
+    this.response({
+      res,
+      message: "this is all propertyvals by id",
+      data: result,
+    });
+  }
+
   async seeOnePropertyval(req, res) {
     const result = await propertyvalServices.seeOnePropertyval(req, res);
     this.response({

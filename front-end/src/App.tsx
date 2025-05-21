@@ -32,6 +32,10 @@ import PassRestorePage from "./pages/passRestore-page";
 import PassRestoreRoute from "./components/private-route-components/passRestoreRoute";
 import PassRestoreFormPage from "./pages/passRestoreForm-page";
 import useLoadUser from "./helpers/useLoadUser";
+import PropertiesPage from "./pages/admin-page/properties-page";
+import OnePropertyPage from "./pages/admin-page/oneProperty-page";
+import PropertyvalsPage from "./pages/admin-page/propertyvals-page";
+import OnePropertyvalPage from "./pages/admin-page/onePropertyval-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -64,6 +68,13 @@ function App() {
           />
         </Route>
         <Route element={<AdminRoute user={user} />}>
+          <Route path="/admin/properties" element={<PropertiesPage />} />
+          <Route path="/admin/update-property" element={<OnePropertyPage />} />
+          <Route path="/admin/propertyvals" element={<PropertyvalsPage />} />
+          <Route
+            path="/admin/update-propertyval"
+            element={<OnePropertyvalPage />}
+          />
           <Route path="/admin/blogs" element={<BlogsPage />} />
           <Route path="/admin/products" element={<ProductsPage />} />
           <Route path="/admin/update-product" element={<OneProductPage />} />
