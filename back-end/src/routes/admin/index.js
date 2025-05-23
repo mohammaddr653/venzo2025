@@ -103,6 +103,8 @@ router.delete(
 
 router.get("/dashboard/properties", controller.getProperties.bind(controller));
 
+router.get("/dashboard/properties/withvals", controller.getPropertiesWithVals.bind(controller));
+
 router.get(
   "/dashboard/properties/:propertyId",
   controller.seeOneProperty.bind(controller)

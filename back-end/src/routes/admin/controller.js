@@ -308,6 +308,15 @@ module.exports = new (class extends controller {
     });
   }
 
+  async getPropertiesWithVals(req, res) {
+    const result = await propertyServices.getPropertiesWithVals(req);
+    this.response({
+      res,
+      message: "this is all properties with vals",
+      data: result,
+    });
+  }
+
   async seeOneProperty(req, res) {
     const result = await propertyServices.seeOneProperty(req, res);
     this.response({

@@ -9,19 +9,25 @@ import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../helpers/useLoadCategories";
 import useLoadProducts from "../../helpers/useLoadProducts";
 import { Editor } from "@tinymce/tinymce-react";
+import PropertiesManager from "../../components/common/propertiesManager";
+import useLoadPropertiesAndVals from "../../helpers/useLoadPropertiesAndVals";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
+  const { propertiesAndVals, loadPropertiesAndVals } =
+    useLoadPropertiesAndVals();
   const { products, loadProducts } = useLoadProducts();
   const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+
+  const [formData, setFormData] = useState<any>({
     name: "",
     price: "",
     stock: "",
     categoryId: "",
     description: "",
+    properties: [],
     img: "",
   });
   const fileInputRef = useRef<any>(null);
@@ -38,12 +44,14 @@ const ProductsPage = () => {
       stock: "",
       categoryId: "",
       description: "",
+      properties: [],
       img: "",
     });
     // Reset file input field
     fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadCategories();
     loadProducts();
+    loadPropertiesAndVals();
   }
 
   useEffect(() => {
@@ -87,7 +95,7 @@ const ProductsPage = () => {
     e.preventDefault();
     const dataToSend = new FormData();
     // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]) => {
+    Object.entries(formData).forEach(([key, value]: any) => {
       dataToSend.append(key, value);
     });
     const response = await call(
@@ -190,6 +198,11 @@ const ProductsPage = () => {
           <br />
           <LoadingButton loading={loading}>افزودن محصول</LoadingButton>
         </form>
+        <PropertiesManager
+          formData={formData}
+          setFormData={setFormData}
+          propertiesAndVals={propertiesAndVals}
+        ></PropertiesManager>
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>

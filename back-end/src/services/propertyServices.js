@@ -5,11 +5,31 @@ const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
+const PropertyVal = require("../models/propertyVal");
 
 class PropertyServices {
   async getAllProperties(req) {
     //reading all properties
     return Property.find({});
+  }
+
+  async getPropertiesWithVals(req) {
+    //reading all properties with values
+    const result = [];
+    const properties = await Property.find({});
+    for (const property of properties) {
+      const data = {
+        propertyId: property._id,
+        name: property.name,
+        values: [],
+      };
+      data.values = await PropertyVal.find(
+        { propertyId: property._id },
+        { _id: 1, value: 1 }
+      );
+      result.push(data);
+    }
+    return result;
   }
 
   async seeOneProperty(req, res) {
