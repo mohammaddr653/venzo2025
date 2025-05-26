@@ -1,147 +1,198 @@
-import { useEffect, useRef, useState } from "react";
+import { FocusEvent, useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../store";
-import { useNavigate } from "react-router-dom";
-import callManager from "../../helpers/callManager";
-import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
-import axios from "axios";
-import LoadingButton from "../../components/common/loadingButton";
 import {
   PropertiesObj,
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
 
+interface PropertiesManagerProps {
+  properties: PropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  propertiesAndVals: any;
+}
+
+interface propertyObj {
+  name: string;
+  suggestions: string[];
+}
+
+interface propertyvalObj {
+  value: string;
+  suggestions: string[];
+}
+
 const PropertiesManager = ({
-  formData,
-  setFormData,
+  properties,
+  setProperties,
   propertiesAndVals,
-}: any) => {
-  const { call, loading } = callManager();
+}: PropertiesManagerProps) => {
   const { user } = useUserStore();
-  const navigate = useNavigate();
 
-  const [property, setProperty] = useState<any>("");
-  const [propertyFocus, setPropertyFocus] = useState<any>(false);
-  const [propertiesSuggest, setPropertiesSuggest] = useState<any>([]);
+  const [property, setProperty] = useState<propertyObj>({
+    name: "",
+    suggestions: [],
+  });
 
-  const [propertyval, setPropertyval] = useState<any>("");
-  const [propertyvalFocus, setPropertyvalFocus] = useState<any>(null);
-  const [propertyvalsSuggest, setPropertyvalsSuggest] = useState<any>([]);
+  const [propertyval, setPropertyval] = useState<propertyvalObj>({
+    value: "",
+    suggestions: [],
+  });
 
-  // const [propertyvalsArr, setPropertyvalsArr] = useState<PropertyvalsObj[]>([]);
-  const [properties, setProperties] = useState<PropertiesObj[]>([]);
-
-  useEffect(() => {
-    console.log("property:", property);
-  }, [property]);
-
-  useEffect(() => {
-    console.log("properties:", properties);
-  }, [properties]);
-
-  const addProperty = () => {
-    console.log("add property");
-    let propertyObj: PropertiesObj = {
-      name: property,
-      values: [],
-    };
-    setProperties((prev) => {
-      const exist = prev.find((item) => item.name === property);
-      if (!exist) {
-        return [...prev, propertyObj];
-      } else {
-        return [...prev];
-      }
-    });
-    setProperty("");
-    setPropertiesSuggest([]);
-  };
-  const addPropertyval = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("add propertyval", e.target);
-    let propertyvalue: PropertyvalsObj = {
-      value: propertyval,
-    };
-    setProperties((prev) => {
-      const exist = prev.find((item) => item.name === property);
-      console.log("prev:", prev);
-      if (exist) {
-        return prev.map((item) =>
-          item.name === property
-            ? { ...item, values: [...item.values, propertyvalue] }
-            : item
-        );
-      } else {
-        console.log("here");
-        return [...prev];
-      }
-    });
-    setPropertyval("");
-  };
+  const [selectedProperty, setSelectedProperty] = useState<any>("");
 
   const handleproperty = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setProperty(e.target.value);
+    if (e.target.value) {
+      const matches = propertiesAndVals.filter((obj: any) =>
+        obj.name.startsWith(e.target.value)
+      );
+      setProperty({ name: e.target.value, suggestions: matches });
+    } else {
+      setProperty({ name: "", suggestions: [] });
+    }
   };
 
   useEffect(() => {
-    if (property) {
-      const matches = propertiesAndVals.filter((obj: any) =>
-        obj.name.startsWith(property)
-      );
-      setPropertiesSuggest(matches);
-    } else {
-      setPropertiesSuggest([]);
-    }
+    console.log("this is property:", property);
   }, [property]);
+
+  const addProperty = () => {
+    console.log("add property");
+    let propertyObj: PropertiesObj = {
+      name: property.name,
+      values: [],
+    };
+    setProperties((prev) => {
+      const exist = prev.find((item) => item.name === property.name);
+      if (!exist) {
+        return [...prev, propertyObj];
+      } else {
+        return [...prev];
+      }
+    });
+    setProperty({ name: "", suggestions: [] });
+  };
 
   const handlepropertyval = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setPropertyval(e.target.value);
+    if (e.target.value) {
+      const matchedProperty = propertiesAndVals.find(
+        (obj: any) => obj.name === selectedProperty
+      );
+      if (matchedProperty && matchedProperty.values.length) {
+        const matches = matchedProperty.values.filter((obj: any) =>
+          obj.value.startsWith(e.target.value)
+        );
+        setPropertyval({ value: e.target.value, suggestions: matches });
+      } else {
+        setPropertyval({ value: e.target.value, suggestions: [] });
+      }
+    } else {
+      setPropertyval({ value: e.target.value, suggestions: [] });
+    }
   };
 
   useEffect(() => {
-    if (propertyval) {
-      const matchedProperty = propertiesAndVals.find(
-        (obj: any) => obj.name === propertyvalFocus
-      );
-      if (matchedProperty && matchedProperty.values.length) {
-        console.log("this is value array:", matchedProperty.values);
-        const matches = matchedProperty.values.filter((obj: any) =>
-          obj.value.startsWith(propertyval)
-        );
-        setPropertyvalsSuggest(matches);
-      }
-    } else {
-      setPropertyvalsSuggest([]);
-    }
+    console.log("this is propertyval:", propertyval);
   }, [propertyval]);
+
+  const addPropertyval = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let propertyvalue: PropertyvalsObj = {
+      value: propertyval.value,
+    };
+    setProperties((prev) => {
+      const exist = prev.find((item) => item.name === selectedProperty);
+      if (exist) {
+        const existingVal = exist.values.find(
+          (item) => item.value === propertyval.value
+        );
+        if (!existingVal) {
+          return prev.map((item) =>
+            item.name === selectedProperty
+              ? { ...item, values: [...item.values, propertyvalue] }
+              : item
+          );
+        } else {
+          return [...prev];
+        }
+      } else {
+        return [...prev];
+      }
+    });
+    setPropertyval({ value: "", suggestions: [] });
+  };
+
+  const handleClickOut = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    console.log("this is target :", target);
+    if (target.className !== selectedProperty && target.className !== "ss") {
+      setSelectedProperty("");
+      console.log("this is event : ", event.target);
+    }
+  };
+
+  useEffect(() => {
+    console.log("selectedProperty:", typeof selectedProperty);
+    setPropertyval({ value: "", suggestions: [] });
+
+    if (selectedProperty) {
+      document.addEventListener("click", handleClickOut);
+    }
+    return () => {
+      document.removeEventListener("click", handleClickOut);
+    };
+  }, [selectedProperty]);
+
+  // const addClickOutEvent = (handler: FocusEvent<HTMLInputElement>) => {
+  //   const handleClickOut = (event: MouseEvent) => {
+  //     if (handler.target !== event.target) {
+  //       if (handler.target.name === "property") {
+  //         console.log("property suggestion reset");
+  //         setPropertiesSuggest([]);
+  //       }
+  //       if (handler.target.name === "propertyval") {
+  //         console.log("property val suggestion reset");
+  //         setPropertyvalsSuggest([]);
+  //       }
+  //       document.removeEventListener("click", handleClickOut);
+  //     }
+  //   };
+
+  //   document.addEventListener("click", handleClickOut);
+  // };
 
   return (
     <div>
       <h1>مدیریت ویژگی ها</h1>
-      <form onSubmit={(e) => e.preventDefault()} className="flex-column">
+      <form className="flex-column">
         <div className="bg-green-500">
           <input
             type="text"
             placeholder="ویژگی"
             name="property"
-            onFocus={() => setPropertyFocus(true)}
-            onBlur={() => setPropertyFocus(false)}
-            value={property}
+            onFocus={undefined}
+            value={property.name}
             className="border"
             onChange={handleproperty}
           />
-          {propertiesSuggest.length && propertyFocus ? (
+          {property.suggestions.length ? (
             <ul className="border bg-amber-400">
-              {propertiesSuggest.map((suggest: any, index: any) => {
+              {property.suggestions.map((suggest: any, index: any) => {
                 return (
-                  <li key={index} onMouseDown={() => setProperty(suggest.name)}>
+                  <li
+                    key={index}
+                    onClick={() =>
+                      setProperty({ name: suggest.name, suggestions: [] })
+                    }
+                  >
                     {suggest.name}
                   </li>
                 );
@@ -149,9 +200,9 @@ const PropertiesManager = ({
             </ul>
           ) : null}
           <button
-            type="submit"
+            type="button"
             onMouseDown={addProperty}
-            disabled={property ? false : true}
+            disabled={property.name ? false : true}
           >
             افزودن ویژگی
           </button>
@@ -170,28 +221,40 @@ const PropertiesManager = ({
                     type="text"
                     placeholder="مقدار ویژگی"
                     name="propertyval"
-                    onFocus={() => setPropertyvalFocus(propertyObj.name)}
-                    onBlur={() => {
-                      setPropertyvalFocus(null);
-                      setPropertyvalsSuggest([]);
+                    onFocus={(handler) => {
+                      // addClickOutEvent(handler);
+                      setSelectedProperty(propertyObj.name);
                     }}
-                    className="border"
+                    value={
+                      selectedProperty === propertyObj.name
+                        ? propertyval.value
+                        : ""
+                    }
+                    className={propertyObj.name}
                     onChange={handlepropertyval}
                     disabled={propertyObj.name ? false : true}
                   />
-                  {propertyvalsSuggest.length &&
-                  propertyvalFocus === propertyObj.name ? (
+                  {propertyval.suggestions.length &&
+                  selectedProperty === propertyObj.name ? (
                     <ul className="border bg-amber-400">
-                      {propertyvalsSuggest.map((suggest: any, index: any) => {
-                        return (
-                          <li
-                            key={index}
-                            onMouseDown={() => setPropertyval(suggest.value)}
-                          >
-                            {suggest.value}
-                          </li>
-                        );
-                      })}
+                      {propertyval.suggestions.map(
+                        (suggest: any, index: any) => {
+                          return (
+                            <li
+                              key={index}
+                              className="ss"
+                              onClick={() => {
+                                setPropertyval({
+                                  value: suggest.value,
+                                  suggestions: [],
+                                });
+                              }}
+                            >
+                              {suggest.value}
+                            </li>
+                          );
+                        }
+                      )}
                     </ul>
                   ) : null}
                   <button
@@ -199,8 +262,8 @@ const PropertiesManager = ({
                     onMouseDown={addPropertyval}
                     disabled={
                       propertyObj.name &&
-                      propertyval &&
-                      propertyvalFocus === propertyObj.name
+                      propertyval.value &&
+                      selectedProperty === propertyObj.name
                         ? false
                         : true
                     }

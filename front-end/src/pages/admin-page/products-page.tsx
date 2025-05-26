@@ -11,6 +11,8 @@ import useLoadProducts from "../../helpers/useLoadProducts";
 import { Editor } from "@tinymce/tinymce-react";
 import PropertiesManager from "../../components/common/propertiesManager";
 import useLoadPropertiesAndVals from "../../helpers/useLoadPropertiesAndVals";
+import { NewProductFormData } from "../../types/objects/newProductFormData";
+import { PropertiesObj } from "../../types/objects/propertiesObj";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -21,7 +23,7 @@ const ProductsPage = () => {
   const selectionList = useRef<HTMLSelectElement>(null);
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<NewProductFormData>({
     name: "",
     price: "",
     stock: "",
@@ -30,8 +32,17 @@ const ProductsPage = () => {
     properties: [],
     img: "",
   });
+  const [properties, setProperties] = useState<PropertiesObj[]>([]);
+
   const fileInputRef = useRef<any>(null);
   const editorRef = useRef<any>(null);
+
+  useEffect(() => {
+    console.log("properties:", properties);
+    setFormData((prev) => {
+      return { ...prev, properties: [...properties] };
+    });
+  }, [properties]);
 
   useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
@@ -104,6 +115,10 @@ const ProductsPage = () => {
     );
     loadProductsAndCats();
   };
+
+  useEffect(() => {
+    console.log("this is form data:", formData);
+  }, [formData]);
 
   return (
     <div>
@@ -199,8 +214,8 @@ const ProductsPage = () => {
           <LoadingButton loading={loading}>افزودن محصول</LoadingButton>
         </form>
         <PropertiesManager
-          formData={formData}
-          setFormData={setFormData}
+          properties={properties}
+          setProperties={setProperties}
           propertiesAndVals={propertiesAndVals}
         ></PropertiesManager>
       </div>
