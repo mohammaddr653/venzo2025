@@ -55,12 +55,8 @@ const PropertiesManager = ({
     }
   };
 
-  useEffect(() => {
-    console.log("this is property:", property);
-  }, [property]);
-
-  const addProperty = () => {
-    console.log("add property");
+  const addProperty = (e: React.FormEvent) => {
+    e.preventDefault();
     let propertyObj: PropertiesObj = {
       name: property.name,
       values: [],
@@ -98,10 +94,6 @@ const PropertiesManager = ({
     }
   };
 
-  useEffect(() => {
-    console.log("this is propertyval:", propertyval);
-  }, [propertyval]);
-
   const addPropertyval = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -130,55 +122,48 @@ const PropertiesManager = ({
     setPropertyval({ value: "", suggestions: [] });
   };
 
-  const handleClickOut = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    console.log("this is target :", target);
-    if (target.className !== selectedProperty && target.className !== "ss") {
-      setSelectedProperty("");
-      console.log("this is event : ", event.target);
-    }
-  };
-
   useEffect(() => {
-    console.log("selectedProperty:", typeof selectedProperty);
     setPropertyval({ value: "", suggestions: [] });
-
-    if (selectedProperty) {
-      document.addEventListener("click", handleClickOut);
-    }
-    return () => {
-      document.removeEventListener("click", handleClickOut);
-    };
   }, [selectedProperty]);
 
-  // const addClickOutEvent = (handler: FocusEvent<HTMLInputElement>) => {
-  //   const handleClickOut = (event: MouseEvent) => {
-  //     if (handler.target !== event.target) {
-  //       if (handler.target.name === "property") {
-  //         console.log("property suggestion reset");
-  //         setPropertiesSuggest([]);
-  //       }
-  //       if (handler.target.name === "propertyval") {
-  //         console.log("property val suggestion reset");
-  //         setPropertyvalsSuggest([]);
-  //       }
-  //       document.removeEventListener("click", handleClickOut);
-  //     }
-  //   };
+  const handleDeletePropertyval = (name: string, value: string) => {
+    const property = properties.find((property) => property.name === name);
+    const filteredVals = property?.values.filter(
+      (propertyval) => propertyval.value !== value
+    );
+    setProperties((prev) => {
+      return prev.map((item) =>
+        item.name === name
+          ? { ...item, values: filteredVals ? filteredVals : [] }
+          : item
+      );
+    });
+  };
 
-  //   document.addEventListener("click", handleClickOut);
-  // };
+  const handleDeleteProperty = (name: string) => {
+    const filteredProperties = properties?.filter(
+      (property) => property.name !== name
+    );
+    setProperties([...filteredProperties]);
+  };
 
   return (
     <div>
       <h1>مدیریت ویژگی ها</h1>
-      <form className="flex-column">
+      <form onSubmit={addProperty} className="flex-column">
         <div className="bg-green-500">
           <input
             type="text"
             placeholder="ویژگی"
             name="property"
-            onFocus={undefined}
+            onBlur={(e) => {
+              console.log(e.currentTarget);
+              setTimeout(() => {
+                setProperty((prev) => {
+                  return { ...prev, suggestions: [] };
+                });
+              }, 1000);
+            }}
             value={property.name}
             className="border"
             onChange={handleproperty}
@@ -199,11 +184,7 @@ const PropertiesManager = ({
               })}
             </ul>
           ) : null}
-          <button
-            type="button"
-            onMouseDown={addProperty}
-            disabled={property.name ? false : true}
-          >
+          <button type="submit" disabled={property.name ? false : true}>
             افزودن ویژگی
           </button>
         </div>
@@ -212,25 +193,33 @@ const PropertiesManager = ({
         ? properties.map((propertyObj: PropertiesObj, index: any) => {
             return (
               <div className="bg-amber-500 p-5" key={index}>
-                <h3>{propertyObj.name}</h3>
-                <form
-                  onSubmit={(e) => e.preventDefault()}
-                  className="flex-column"
+                <button
+                  className="bg-red-500"
+                  onClick={() => handleDeleteProperty(propertyObj.name)}
                 >
+                  حذف ویژگی
+                </button>
+                <h3>{propertyObj.name}</h3>
+                <form onSubmit={addPropertyval} className="flex-column">
                   <input
                     type="text"
                     placeholder="مقدار ویژگی"
                     name="propertyval"
-                    onFocus={(handler) => {
-                      // addClickOutEvent(handler);
+                    onFocus={() => {
                       setSelectedProperty(propertyObj.name);
+                    }}
+                    onBlur={() => {
+                      setTimeout(() => {
+                        setPropertyval((prev) => {
+                          return { ...prev, suggestions: [] };
+                        });
+                      }, 1000);
                     }}
                     value={
                       selectedProperty === propertyObj.name
                         ? propertyval.value
                         : ""
                     }
-                    className={propertyObj.name}
                     onChange={handlepropertyval}
                     disabled={propertyObj.name ? false : true}
                   />
@@ -242,7 +231,6 @@ const PropertiesManager = ({
                           return (
                             <li
                               key={index}
-                              className="ss"
                               onClick={() => {
                                 setPropertyval({
                                   value: suggest.value,
@@ -259,7 +247,6 @@ const PropertiesManager = ({
                   ) : null}
                   <button
                     type="submit"
-                    onMouseDown={addPropertyval}
                     disabled={
                       propertyObj.name &&
                       propertyval.value &&
@@ -275,7 +262,22 @@ const PropertiesManager = ({
                   <ul>
                     {propertyObj.values.map(
                       (propertyvalObj: PropertyvalsObj, index: any) => {
-                        return <li key={index}>{propertyvalObj.value}</li>;
+                        return (
+                          <li key={index}>
+                            <button
+                              className="bg-red-600"
+                              onClick={() =>
+                                handleDeletePropertyval(
+                                  propertyObj.name,
+                                  propertyvalObj.value
+                                )
+                              }
+                            >
+                              x
+                            </button>
+                            {propertyvalObj.value}
+                          </li>
+                        );
                       }
                     )}
                   </ul>
