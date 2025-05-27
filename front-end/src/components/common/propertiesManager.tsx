@@ -4,11 +4,15 @@ import {
   PropertiesObj,
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
+import callManager from "../../helpers/callManager";
+import { SERVER_API } from "../../../config";
+import axios from "axios";
 
 interface PropertiesManagerProps {
   properties: PropertiesObj[];
   setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
   propertiesAndVals: any;
+  loadPropertiesAndVals: any;
 }
 
 interface propertyObj {
@@ -25,9 +29,10 @@ const PropertiesManager = ({
   properties,
   setProperties,
   propertiesAndVals,
+  loadPropertiesAndVals,
 }: PropertiesManagerProps) => {
   const { user } = useUserStore();
-
+  const { call, loading } = callManager();
   const [property, setProperty] = useState<propertyObj>({
     name: "",
     suggestions: [],
@@ -55,8 +60,31 @@ const PropertiesManager = ({
     }
   };
 
-  const addProperty = (e: React.FormEvent) => {
+  const handleSubmitProperty = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const matches = propertiesAndVals.find(
+      (obj: any) => obj.name === property.name
+    );
+
+    if (matches) {
+      addProperty();
+    } else {
+      let formData = {
+        name: property.name,
+      };
+      const response = await call(
+        axios.post(SERVER_API + "/admin/dashboard/properties", formData),
+        true
+      );
+      if (response.status === 200) {
+        addProperty();
+        loadPropertiesAndVals();
+      }
+    }
+  };
+
+  const addProperty = () => {
     let propertyObj: PropertiesObj = {
       name: property.name,
       values: [],
@@ -94,9 +122,36 @@ const PropertiesManager = ({
     }
   };
 
-  const addPropertyval = async (e: React.FormEvent) => {
+  const handleSubmitPropertyval = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const matchedProperty = propertiesAndVals.find(
+      (obj: any) => obj.name === selectedProperty
+    );
+    if (matchedProperty) {
+      const matches = matchedProperty.values.find(
+        (obj: any) => obj.value === propertyval.value
+      );
+      if (matches) {
+        addPropertyval();
+      } else {
+        const formData = {
+          propertyId: matchedProperty.propertyId,
+          value: propertyval.value,
+        };
+        const response = await call(
+          axios.post(SERVER_API + "/admin/dashboard/propertyvals", formData),
+          true
+        );
+        if (response.status === 200) {
+          addPropertyval();
+          loadPropertiesAndVals();
+        }
+      }
+    }
+  };
+
+  const addPropertyval = () => {
     let propertyvalue: PropertyvalsObj = {
       value: propertyval.value,
     };
@@ -150,14 +205,13 @@ const PropertiesManager = ({
   return (
     <div>
       <h1>مدیریت ویژگی ها</h1>
-      <form onSubmit={addProperty} className="flex-column">
+      <form onSubmit={handleSubmitProperty} className="flex-column">
         <div className="bg-green-500">
           <input
             type="text"
             placeholder="ویژگی"
             name="property"
-            onBlur={(e) => {
-              console.log(e.currentTarget);
+            onBlur={() => {
               setTimeout(() => {
                 setProperty((prev) => {
                   return { ...prev, suggestions: [] };
@@ -167,6 +221,7 @@ const PropertiesManager = ({
             value={property.name}
             className="border"
             onChange={handleproperty}
+            autoComplete="off"
           />
           {property.suggestions.length ? (
             <ul className="border bg-amber-400">
@@ -200,7 +255,10 @@ const PropertiesManager = ({
                   حذف ویژگی
                 </button>
                 <h3>{propertyObj.name}</h3>
-                <form onSubmit={addPropertyval} className="flex-column">
+                <form
+                  onSubmit={handleSubmitPropertyval}
+                  className="flex-column"
+                >
                   <input
                     type="text"
                     placeholder="مقدار ویژگی"
@@ -222,6 +280,7 @@ const PropertiesManager = ({
                     }
                     onChange={handlepropertyval}
                     disabled={propertyObj.name ? false : true}
+                    autoComplete="off"
                   />
                   {propertyval.suggestions.length &&
                   selectedProperty === propertyObj.name ? (

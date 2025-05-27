@@ -217,6 +217,7 @@ const ProductsPage = () => {
           properties={properties}
           setProperties={setProperties}
           propertiesAndVals={propertiesAndVals}
+          loadPropertiesAndVals={loadPropertiesAndVals}
         ></PropertiesManager>
       </div>
       <div className="bg-blue-300">
