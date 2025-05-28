@@ -6,6 +6,7 @@ const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
 const PropertyVal = require("../models/propertyval");
+const Product = require("../models/product");
 
 class PropertyServices {
   async getAllProperties(req) {
@@ -72,24 +73,29 @@ class PropertyServices {
     return false;
   }
 
-  //this method needs to be modified
+  //checks if this property is not used in any product then allow it to delete
   async deleteProperty(req, res) {
-    //delete user , admin cant delete himself
-    if (req.params.userId !== req.user.id) {
-      const user = await this.seeOneUser(req, res);
-      const deleteUserOp = await User.deleteOne({ _id: req.params.userId });
-      const deleteCartOp = await Cart.deleteOne({
-        userId: req.params.userId,
-      });
-      deleteFile("public" + user.avatar, "public" + user.avatar);
-      if (
-        deleteUserOp.deletedCount.valueOf() > 0 &&
-        deleteCartOp.deletedCount.valueOf() > 0
-      ) {
-        return true;
-      }
+    const property = await this.seeOneProperty(req, res);
+    let productsInUse = await Product.find(
+      {
+        properties: { $elemMatch: { name: property._id } },
+      },
+      { name: 1, _id: 0 }
+    );
+    if (productsInUse && productsInUse.length) {
+      productsInUse = await Promise.all(
+        productsInUse.map((item) => {
+          return item.name;
+        })
+      );
+      return { code: 403, productsInUse: productsInUse };
     }
-    return false;
+    const deleteOp = await Property.deleteOne({ _id: req.params.propertyId });
+
+    if (deleteOp.deletedCount.valueOf() > 0) {
+      return { code: 200 };
+    }
+    return { code: 400 };
   }
 }
 module.exports = new PropertyServices();
