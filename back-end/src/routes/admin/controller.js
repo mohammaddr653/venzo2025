@@ -364,7 +364,7 @@ module.exports = new (class extends controller {
       this.response({
         res,
         message: `این ویژگی در محصولات زیر استفاده می شود ${result.productsInUse}`,
-        code: 400,
+        code: 403,
       });
     } else if (result.code === 200) {
       this.response({
@@ -447,16 +447,22 @@ module.exports = new (class extends controller {
   }
 
   async deletePropertyval(req, res) {
-    const result = await userServices.deleteUser(req, res);
-    if (result) {
+    const result = await propertyvalServices.deletePropertyval(req, res);
+    if (result.code === 403) {
       this.response({
         res,
-        message: "کاربر با موفقیت حذف شد",
+        message: `این مقدار ویژگی در محصولات زیر استفاده می شود ${result.productsInUse}`,
+        code: 403,
+      });
+    } else if (result.code === 200) {
+      this.response({
+        res,
+        message: "مقدار ویژگی با موفقیت حذف شد",
       });
     } else {
       this.response({
         res,
-        message: "حذف کاربر ناموفق بود",
+        message: "حذف مقدار ویژگی ناموفق بود",
         code: 400,
       });
     }

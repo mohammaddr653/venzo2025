@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
-const PropertyVal = require("../models/propertyval");
+const Propertyval = require("../models/propertyval");
 const Product = require("../models/product");
 
 class PropertyServices {
@@ -25,7 +25,7 @@ class PropertyServices {
         specifiedVals: property.specifiedVals,
         values: [],
       };
-      data.values = await PropertyVal.find(
+      data.values = await Propertyval.find(
         { propertyId: property._id },
         { _id: 1, value: 1 }
       );

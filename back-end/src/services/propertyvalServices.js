@@ -5,33 +5,34 @@ const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
-const PropertyVal = require("../models/propertyval");
+const Propertyval = require("../models/propertyval");
 const { default: mongoose } = require("mongoose");
+const Product = require("../models/product");
 
 class PropertyvalServices {
   async getAllPropertyvals(req) {
     //reading all propertyvals
-    return PropertyVal.find({});
+    return Propertyval.find({});
   }
 
   async getPropertyvalsById(req) {
     //reading all propertyvals by id
-    return PropertyVal.find({
+    return Propertyval.find({
       propertyId: req.params.propertyId,
     });
   }
 
   async seeOnePropertyval(req, res) {
     // reading one propertyval from database
-    return PropertyVal.findById(req.params.propertyvalId);
+    return Propertyval.findById(req.params.propertyvalId);
   }
 
   async createPropertyval(req, res) {
     // create propertyval
-    const propertyval = new PropertyVal({
+    const propertyval = new Propertyval({
       value: req.body.value,
     });
-    const repeatedValue = await PropertyVal.find({
+    const repeatedValue = await Propertyval.find({
       propertyId: req.body.propertyId,
       value: req.body.value,
     });
@@ -50,7 +51,7 @@ class PropertyvalServices {
     let data = {
       value: req.body.value,
     };
-    const updateOp = await PropertyVal.updateOne(
+    const updateOp = await Propertyval.updateOne(
       { _id: req.params.propertyvalId },
       { $set: data }
     );
@@ -60,24 +61,36 @@ class PropertyvalServices {
     return false;
   }
 
-  //this method needs to be modified
+  //checks if this propertyval is not used in any product then allow it to delete
   async deletePropertyval(req, res) {
-    //delete user , admin cant delete himself
-    if (req.params.userId !== req.user.id) {
-      const user = await this.seeOneUser(req, res);
-      const deleteUserOp = await User.deleteOne({ _id: req.params.userId });
-      const deleteCartOp = await Cart.deleteOne({
-        userId: req.params.userId,
-      });
-      deleteFile("public" + user.avatar, "public" + user.avatar);
-      if (
-        deleteUserOp.deletedCount.valueOf() > 0 &&
-        deleteCartOp.deletedCount.valueOf() > 0
-      ) {
-        return true;
-      }
+    const propertyval = await this.seeOnePropertyval(req, res);
+    let productsInUse = await Product.find(
+      {
+        properties: {
+          $elemMatch: {
+            name: propertyval.propertyId,
+            values: { $elemMatch: { value: propertyval._id } },
+          },
+        },
+      },
+      { name: 1, _id: 0 }
+    );
+    if (productsInUse && productsInUse.length) {
+      productsInUse = await Promise.all(
+        productsInUse.map((item) => {
+          return item.name;
+        })
+      );
+      return { code: 403, productsInUse: productsInUse };
     }
-    return false;
+    const deleteOp = await propertyval.deleteOne({
+      _id: req.params.propertyvalId,
+    });
+
+    if (deleteOp.deletedCount.valueOf() > 0) {
+      return { code: 200 };
+    }
+    return { code: 400 };
   }
 }
 module.exports = new PropertyvalServices();
