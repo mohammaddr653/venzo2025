@@ -20,14 +20,12 @@ const manageNewProductProperties = (properties) => {
             if (property.specifiedVals) {
               let newValue = {
                 value: null,
-                valueString: null,
               };
               const propertyvalue = await propertyval.findOne({
                 value: value.value,
               });
               if (propertyvalue) {
                 newValue.value = propertyvalue._id;
-                newValue.valueString = propertyvalue.value;
                 newProperty.values.push(newValue);
               } else {
                 return false;

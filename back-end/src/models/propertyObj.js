@@ -10,8 +10,6 @@ const propertyvalObjSchema = new mongoose.Schema(
     },
     valueString: {
       type: String,
-      required: true,
-      ref: "Propertyval",
     },
   },
   { _id: false }
