@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
-const PropertyVal = require("../models/propertyVal");
+const PropertyVal = require("../models/propertyval");
 const { default: mongoose } = require("mongoose");
 
 class PropertyvalServices {

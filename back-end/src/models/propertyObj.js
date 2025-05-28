@@ -9,6 +9,11 @@ const propertyvalObjSchema = new mongoose.Schema(
       required: true,
       ref: "Propertyval",
     },
+    valueString: {
+      type: String,
+      required: true,
+      ref: "Propertyval",
+    },
   },
   { _id: false }
 );
@@ -17,6 +22,11 @@ const propertyObjSchema = new mongoose.Schema(
   {
     name: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Property",
+    },
+    nameString: {
+      type: String,
       required: true,
       ref: "Property",
     },

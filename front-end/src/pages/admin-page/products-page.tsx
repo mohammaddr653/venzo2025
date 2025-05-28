@@ -105,9 +105,14 @@ const ProductsPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const dataToSend = new FormData();
+
     // Append all form fields to FormData
     Object.entries(formData).forEach(([key, value]: any) => {
-      dataToSend.append(key, value);
+      if (key === "properties") {
+        dataToSend.append("properties", JSON.stringify(value));
+      } else {
+        dataToSend.append(key, value);
+      }
     });
     const response = await call(
       axios.post(SERVER_API + "/admin/dashboard/products", dataToSend),

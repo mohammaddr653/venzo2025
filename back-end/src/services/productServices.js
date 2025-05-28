@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
+const manageNewProductProperties = require("../helpers/manageNewProductProperties");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -44,8 +45,12 @@ class ProductServices {
       newProduct.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
     if (req.body.properties) {
-      req.body.properties = JSON.parse(req.body.properties);
-      newProduct.properties = req.body.properties;
+      const properties = await manageNewProductProperties(req.body.properties);
+      if (properties) {
+        newProduct.properties = properties;
+      } else {
+        return false;
+      }
     } else {
       newProduct.properties = [];
     }
