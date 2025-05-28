@@ -18,7 +18,7 @@ const SingleShopPage = () => {
 
   async function load() {
     const response = await call(
-      axios.get(SERVER_API + `/single-shop/${productId}`),
+      axios.get(SERVER_API + `/single-shop/withProperties/${productId}`),
       false
     );
     setProduct(response.data.data);

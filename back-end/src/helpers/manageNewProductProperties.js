@@ -1,7 +1,7 @@
 //this function is for managing the given properties from fron-end for a product
 
 const Property = require("../models/property");
-const propertyval = require("../models/propertyval");
+const Propertyval = require("../models/propertyval");
 
 const manageNewProductProperties = (properties) => {
   return Promise.all(
@@ -21,7 +21,7 @@ const manageNewProductProperties = (properties) => {
               let newValue = {
                 value: null,
               };
-              const propertyvalue = await propertyval.findOne({
+              const propertyvalue = await Propertyval.findOne({
                 value: value.value,
               });
               if (propertyvalue) {
