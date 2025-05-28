@@ -13,11 +13,13 @@ const PropertiesPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
+    specifiedVals: "true",
   });
 
   async function loadProperties() {
     setFormData({
       name: "",
+      specifiedVals: "true",
     });
     const response = await call(
       axios.get(SERVER_API + "/admin/dashboard/properties"),
@@ -91,6 +93,28 @@ const PropertiesPage = () => {
             onChange={handleChange}
           />
           <br />
+          <label>
+            <input
+              type="radio"
+              name="specifiedVals"
+              value="true"
+              checked={formData.specifiedVals === "true" ? true : false}
+              onChange={handleChange}
+            />
+            مقادیر مشخص
+          </label>
+          <br />
+          <label>
+            <input
+              type="radio"
+              name="specifiedVals"
+              value="false"
+              checked={formData.specifiedVals === "false" ? true : false}
+              onChange={handleChange}
+            />
+            مقادیر متغیر
+          </label>
+          <br />
           <LoadingButton loading={loading}>افزودن ویژگی</LoadingButton>
         </form>
       </div>
@@ -127,13 +151,15 @@ const PropertiesPage = () => {
                     </button>
                   </td>
                   <td className="border">
-                    <button
-                      onClick={(e, propertyId = property._id) => {
-                        handleManagment(e, propertyId, property.name);
-                      }}
-                    >
-                      مدیریت پیکره بندی
-                    </button>
+                    {property.specifiedVals ? (
+                      <button
+                        onClick={(e, propertyId = property._id) => {
+                          handleManagment(e, propertyId, property.name);
+                        }}
+                      >
+                        مدیریت پیکره بندی
+                      </button>
+                    ) : null}
                   </td>
                 </tr>
               );

@@ -21,6 +21,7 @@ class PropertyServices {
       const data = {
         propertyId: property._id,
         name: property.name,
+        specifiedVals: property.specifiedVals,
         values: [],
       };
       data.values = await PropertyVal.find(
@@ -43,9 +44,12 @@ class PropertyServices {
     if (property) {
       return { code: 400 };
     }
-    property = new Property(_.pick(req.body, ["name"]));
+    property = new Property(_.pick(req.body, ["name", "specifiedVals"]));
     await property.save();
-    return { code: 200, data: _.pick(property, ["_id", "name"]) };
+    return {
+      code: 200,
+      data: _.pick(property, ["_id", "name", "specifiedVals"]),
+    };
   }
 
   async updateProperty(req, res) {

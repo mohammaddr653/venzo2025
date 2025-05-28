@@ -45,11 +45,10 @@ class ProductServices {
       newProduct.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
     if (req.body.properties) {
-      const properties = await manageNewProductProperties(req.body.properties);
-      if (properties) {
+      let properties = await manageNewProductProperties(req.body.properties);
+      if (properties && properties.length) {
+        properties = properties.filter((property) => property);
         newProduct.properties = properties;
-      } else {
-        return false;
       }
     } else {
       newProduct.properties = [];

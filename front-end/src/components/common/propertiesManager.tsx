@@ -109,7 +109,11 @@ const PropertiesManager = ({
       const matchedProperty = propertiesAndVals.find(
         (obj: any) => obj.name === selectedProperty
       );
-      if (matchedProperty && matchedProperty.values.length) {
+      if (
+        matchedProperty &&
+        matchedProperty.specifiedVals &&
+        matchedProperty.values.length
+      ) {
         const matches = matchedProperty.values.filter((obj: any) =>
           obj.value.startsWith(e.target.value)
         );
@@ -128,7 +132,7 @@ const PropertiesManager = ({
     const matchedProperty = propertiesAndVals.find(
       (obj: any) => obj.name === selectedProperty
     );
-    if (matchedProperty) {
+    if (matchedProperty && matchedProperty.specifiedVals) {
       const matches = matchedProperty.values.find(
         (obj: any) => obj.value === propertyval.value
       );
@@ -148,6 +152,8 @@ const PropertiesManager = ({
           loadPropertiesAndVals();
         }
       }
+    } else if (matchedProperty && !matchedProperty.specifiedVals) {
+      addPropertyval();
     }
   };
 

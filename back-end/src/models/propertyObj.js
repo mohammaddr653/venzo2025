@@ -6,7 +6,6 @@ const propertyvalObjSchema = new mongoose.Schema(
   {
     value: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "Propertyval",
     },
     valueString: {
