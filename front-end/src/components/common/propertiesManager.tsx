@@ -352,10 +352,6 @@ const PropertiesManager = ({
           })
         : null}
 
-      <div className="bg-sky-600">this is tailwind</div>
-      <div className="bg-sky-300">
-        this is zustand , hello{user ? user.name : " product"}
-      </div>
     </div>
   );
 };

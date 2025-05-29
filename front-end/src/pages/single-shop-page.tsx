@@ -42,6 +42,22 @@ const SingleShopPage = () => {
         <p>{product?.price}</p>
         <p>{product?.stock}</p>
         <div dangerouslySetInnerHTML={{ __html: product?.description }}></div>
+        {product?.properties.length ? (
+          <ul>
+            {product.properties.map((property: any, index: any) => {
+              return (
+                <li key={index} className="flex flex-row gap-4">
+                  <span>{property.nameString}</span>
+                  <div className="flex flex-row gap-1">
+                    {property.values.map((propertyval: any, index: any) => {
+                      return <span key={index}>{propertyval.valueString}</span>;
+                    })}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
         <button onClick={() => handleAddToCart(product._id)}>
           افزودن به سبد خرید
         </button>

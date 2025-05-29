@@ -129,7 +129,7 @@ const ProductsPage = () => {
     <div>
       <h1>مدیریت محصولات</h1>
       <div className="bg-red-300">
-        <form onSubmit={handleSubmit} className="flex-column">
+        <form id="newProduct" onSubmit={handleSubmit} className="flex-column">
           <input
             type="text"
             placeholder="name"
@@ -215,8 +215,6 @@ const ProductsPage = () => {
             onChange={handleFileChange}
             ref={fileInputRef}
           />
-          <br />
-          <LoadingButton loading={loading}>افزودن محصول</LoadingButton>
         </form>
         <PropertiesManager
           properties={properties}
@@ -224,6 +222,10 @@ const ProductsPage = () => {
           propertiesAndVals={propertiesAndVals}
           loadPropertiesAndVals={loadPropertiesAndVals}
         ></PropertiesManager>
+        <br />
+        <LoadingButton loading={loading} form={"newProduct"}>
+          افزودن محصول
+        </LoadingButton>
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>
