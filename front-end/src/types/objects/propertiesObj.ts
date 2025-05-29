@@ -5,5 +5,6 @@ export interface PropertyvalsObj {
 }
 export interface PropertiesObj {
   name: string;
+  selective: "true" | "false";
   values: PropertyvalsObj[];
 }

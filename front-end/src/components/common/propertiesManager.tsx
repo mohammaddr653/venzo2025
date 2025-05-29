@@ -1,4 +1,11 @@
-import { FocusEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FocusEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useUserStore } from "../../store";
 import {
   PropertiesObj,
@@ -15,8 +22,13 @@ interface PropertiesManagerProps {
   loadPropertiesAndVals: any;
 }
 
+enum SelectiveEnums {
+  true = "true",
+  false = "false",
+}
 interface propertyObj {
   name: string;
+  selective: SelectiveEnums;
   suggestions: string[];
 }
 
@@ -35,6 +47,7 @@ const PropertiesManager = ({
   const { call, loading } = callManager();
   const [property, setProperty] = useState<propertyObj>({
     name: "",
+    selective: SelectiveEnums.false,
     suggestions: [],
   });
 
@@ -54,9 +67,25 @@ const PropertiesManager = ({
       const matches = propertiesAndVals.filter((obj: any) =>
         obj.name.startsWith(e.target.value)
       );
-      setProperty({ name: e.target.value, suggestions: matches });
+      setProperty({ ...property, name: e.target.value, suggestions: matches });
     } else {
-      setProperty({ name: "", suggestions: [] });
+      setProperty({ ...property, name: "", suggestions: [] });
+    }
+  };
+
+  const handleSelectiveCheck = (e: ChangeEvent<HTMLInputElement>) => {
+    const existAlready = properties.find((item) => item.selective);
+    if (existAlready) {
+      alert(
+        `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.name}`
+      );
+    } else {
+      setProperty({
+        ...property,
+        selective: e.target.checked
+          ? SelectiveEnums.true
+          : SelectiveEnums.false,
+      });
     }
   };
 
@@ -87,6 +116,7 @@ const PropertiesManager = ({
   const addProperty = () => {
     let propertyObj: PropertiesObj = {
       name: property.name,
+      selective: property.selective,
       values: [],
     };
     setProperties((prev) => {
@@ -97,7 +127,7 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setProperty({ name: "", suggestions: [] });
+    setProperty({ name: "", selective: SelectiveEnums.false, suggestions: [] });
   };
 
   const handlepropertyval = (
@@ -187,6 +217,10 @@ const PropertiesManager = ({
     setPropertyval({ value: "", suggestions: [] });
   }, [selectedProperty]);
 
+  useEffect(() => {
+    console.log("property changed : ", property);
+  }, [property]);
+
   const handleDeletePropertyval = (name: string, value: string) => {
     const property = properties.find((property) => property.name === name);
     const filteredVals = property?.values.filter(
@@ -229,6 +263,18 @@ const PropertiesManager = ({
             onChange={handleproperty}
             autoComplete="off"
           />
+          <label>
+            <input
+              type="checkbox"
+              name="selective"
+              value={"true"}
+              checked={
+                property.selective === SelectiveEnums.true ? true : false
+              }
+              onChange={handleSelectiveCheck}
+            />
+            ویژگی انتخابی
+          </label>
           {property.suggestions.length ? (
             <ul className="border bg-amber-400">
               {property.suggestions.map((suggest: any, index: any) => {
@@ -236,7 +282,11 @@ const PropertiesManager = ({
                   <li
                     key={index}
                     onClick={() =>
-                      setProperty({ name: suggest.name, suggestions: [] })
+                      setProperty({
+                        ...property,
+                        name: suggest.name,
+                        suggestions: [],
+                      })
                     }
                   >
                     {suggest.name}
@@ -245,6 +295,7 @@ const PropertiesManager = ({
               })}
             </ul>
           ) : null}
+          <br />
           <button type="submit" disabled={property.name ? false : true}>
             افزودن ویژگی
           </button>
@@ -351,7 +402,6 @@ const PropertiesManager = ({
             );
           })
         : null}
-
     </div>
   );
 };
