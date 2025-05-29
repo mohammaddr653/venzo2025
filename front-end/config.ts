@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 const mode = import.meta.env.VITE_NODE_ENV;
+const site_key = import.meta.env.VITE_SITE_KEY;
 
 export const SERVER_URL =
   mode === "production"
@@ -17,4 +18,4 @@ export const DEFAULT_BLOG =
 export const DEFAULT_AVATAR =
   SERVER_URL + "/uploads/images/avatars/default-avatar.jpg";
 
-export const SITE_KEY = "6LcUFf0qAAAAAORJ8E3ad4CBTA4SD8OPBsTDCbOS";
+export const SITE_KEY = site_key;
