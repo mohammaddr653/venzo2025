@@ -11,6 +11,9 @@ const propertyvalObjSchema = new mongoose.Schema(
     valueString: {
       type: String,
     },
+    price: {
+      type: Number,
+    },
   },
   { _id: false }
 );
@@ -24,9 +27,9 @@ const propertyObjSchema = new mongoose.Schema(
     },
     nameString: {
       type: String,
-      required: true,
       ref: "Property",
     },
+    selective: { type: Boolean, required: true },
     values: [propertyvalObjSchema],
   },
   { _id: false }

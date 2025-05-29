@@ -9,18 +9,18 @@ const manageNewProductProperties = (properties) => {
       if (item.name && item.values.length) {
         let newProperty = {
           name: null,
-          nameString: null,
           values: [],
         };
+        newProperty.selective = item.selective === "true" ? true : false;
         const property = await Property.findOne({ name: item.name });
         if (property) {
           newProperty.name = property._id;
-          newProperty.nameString = property.name;
           for (let value of item.values) {
             if (property.specifiedVals) {
               let newValue = {
                 value: null,
               };
+              value.price ? (newValue.price = value.price) : null;
               const propertyvalue = await Propertyval.findOne({
                 value: value.value,
               });
@@ -34,6 +34,7 @@ const manageNewProductProperties = (properties) => {
               let newValue = {
                 valueString: null,
               };
+              value.price ? (newValue.price = value.price) : null;
               newValue.valueString = value.value;
               newProperty.values.push(newValue);
             }

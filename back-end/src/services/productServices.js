@@ -22,7 +22,8 @@ class ProductServices {
         product.properties.map(async (item) => {
           let newProperty = {
             name: item.name,
-            nameString: item.nameString,
+            nameString: "",
+            selective: item.selective,
             values: [],
           };
           const property = await Property.findOne({ _id: item.name });
@@ -33,6 +34,7 @@ class ProductServices {
                 value: value.value,
                 valueString: null,
               };
+              value.price ? (newValue.price = value.price) : null;
               const propertyvalue = await Propertyval.findOne({
                 _id: value.value,
               });
@@ -42,6 +44,7 @@ class ProductServices {
               let newValue = {
                 valueString: value.valueString,
               };
+              value.price ? (newValue.price = value.price) : null;
               newProperty.values.push(newValue);
             }
           }

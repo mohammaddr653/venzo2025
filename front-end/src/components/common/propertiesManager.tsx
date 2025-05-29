@@ -34,6 +34,7 @@ interface propertyObj {
 
 interface propertyvalObj {
   value: string;
+  price: string | "";
   suggestions: string[];
 }
 
@@ -53,6 +54,7 @@ const PropertiesManager = ({
 
   const [propertyval, setPropertyval] = useState<propertyvalObj>({
     value: "",
+    price: "",
     suggestions: [],
   });
 
@@ -74,7 +76,7 @@ const PropertiesManager = ({
   };
 
   const handleSelectiveCheck = (e: ChangeEvent<HTMLInputElement>) => {
-    const existAlready = properties.find((item) => item.selective);
+    const existAlready = properties.find((item) => item.selective === "true");
     if (existAlready) {
       alert(
         `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.name}`
@@ -87,6 +89,17 @@ const PropertiesManager = ({
           : SelectiveEnums.false,
       });
     }
+  };
+
+  const handleSelectivePrice = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setPropertyval({
+      ...propertyval,
+      price: e.target.value,
+    });
   };
 
   const handleSubmitProperty = async (e: React.FormEvent) => {
@@ -147,12 +160,24 @@ const PropertiesManager = ({
         const matches = matchedProperty.values.filter((obj: any) =>
           obj.value.startsWith(e.target.value)
         );
-        setPropertyval({ value: e.target.value, suggestions: matches });
+        setPropertyval({
+          ...propertyval,
+          value: e.target.value,
+          suggestions: matches,
+        });
       } else {
-        setPropertyval({ value: e.target.value, suggestions: [] });
+        setPropertyval({
+          ...propertyval,
+          value: e.target.value,
+          suggestions: [],
+        });
       }
     } else {
-      setPropertyval({ value: e.target.value, suggestions: [] });
+      setPropertyval({
+        ...propertyval,
+        value: e.target.value,
+        suggestions: [],
+      });
     }
   };
 
@@ -191,6 +216,8 @@ const PropertiesManager = ({
     let propertyvalue: PropertyvalsObj = {
       value: propertyval.value,
     };
+    const price = parseInt(propertyval.price);
+    price ? (propertyvalue.price = price) : null;
     setProperties((prev) => {
       const exist = prev.find((item) => item.name === selectedProperty);
       if (exist) {
@@ -210,16 +237,20 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setPropertyval({ value: "", suggestions: [] });
+    setPropertyval({ value: "", price: "", suggestions: [] });
   };
 
   useEffect(() => {
-    setPropertyval({ value: "", suggestions: [] });
+    setPropertyval({ value: "", price: "", suggestions: [] });
   }, [selectedProperty]);
 
   useEffect(() => {
     console.log("property changed : ", property);
   }, [property]);
+
+  useEffect(() => {
+    console.log("propertyval changed : ", propertyval);
+  }, [propertyval]);
 
   const handleDeletePropertyval = (name: string, value: string) => {
     const property = properties.find((property) => property.name === name);
@@ -337,8 +368,28 @@ const PropertiesManager = ({
                     }
                     onChange={handlepropertyval}
                     disabled={propertyObj.name ? false : true}
+                    className="border"
                     autoComplete="off"
                   />
+                  {propertyObj.selective === "true" ? (
+                    <input
+                      type="text"
+                      placeholder="قیمت"
+                      name="selectivePrice"
+                      onFocus={() => {
+                        setSelectedProperty(propertyObj.name);
+                      }}
+                      value={
+                        selectedProperty === propertyObj.name
+                          ? propertyval.price
+                          : ""
+                      }
+                      onChange={handleSelectivePrice}
+                      disabled={propertyObj.name ? false : true}
+                      className="border"
+                      autoComplete="off"
+                    />
+                  ) : null}
                   {propertyval.suggestions.length &&
                   selectedProperty === propertyObj.name ? (
                     <ul className="border bg-amber-400">
@@ -349,6 +400,7 @@ const PropertiesManager = ({
                               key={index}
                               onClick={() => {
                                 setPropertyval({
+                                  ...propertyval,
                                   value: suggest.value,
                                   suggestions: [],
                                 });
@@ -361,37 +413,63 @@ const PropertiesManager = ({
                       )}
                     </ul>
                   ) : null}
-                  <button
-                    type="submit"
-                    disabled={
-                      propertyObj.name &&
-                      propertyval.value &&
-                      selectedProperty === propertyObj.name
-                        ? false
-                        : true
-                    }
-                  >
-                    افزودن مقدار ویژگی
-                  </button>
+                  {propertyObj.selective === "true" ? (
+                    <button
+                      type="submit"
+                      disabled={
+                        propertyObj.name &&
+                        propertyval.value &&
+                        propertyval.price &&
+                        selectedProperty === propertyObj.name
+                          ? false
+                          : true
+                      }
+                    >
+                      افزودن مقدار ویژگی
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={
+                        propertyObj.name &&
+                        propertyval.value &&
+                        selectedProperty === propertyObj.name
+                          ? false
+                          : true
+                      }
+                    >
+                      افزودن مقدار ویژگی
+                    </button>
+                  )}
                 </form>
                 {propertyObj.values.length ? (
                   <ul>
                     {propertyObj.values.map(
                       (propertyvalObj: PropertyvalsObj, index: any) => {
                         return (
-                          <li key={index}>
-                            <button
-                              className="bg-red-600"
-                              onClick={() =>
-                                handleDeletePropertyval(
-                                  propertyObj.name,
-                                  propertyvalObj.value
-                                )
-                              }
-                            >
-                              x
-                            </button>
-                            {propertyvalObj.value}
+                          <li
+                            key={index}
+                            className="flex flex-row justify-between"
+                          >
+                            <div>
+                              <button
+                                className="bg-red-600"
+                                onClick={() =>
+                                  handleDeletePropertyval(
+                                    propertyObj.name,
+                                    propertyvalObj.value
+                                  )
+                                }
+                              >
+                                x
+                              </button>
+                              {propertyvalObj.value}
+                            </div>
+                            {propertyObj.selective === "true" ? (
+                              <div className="bg-amber-300">
+                                تومان {propertyvalObj.price}
+                              </div>
+                            ) : null}
                           </li>
                         );
                       }
