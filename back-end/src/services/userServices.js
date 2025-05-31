@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
+const withTransaction = require("../helpers/withTransaction");
 
 class UserServices {
   async getAllUsers(req) {
@@ -25,12 +26,15 @@ class UserServices {
     user = new User(_.pick(req.body, ["name", "email", "password"]));
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
-    await user.save();
-    const newCart = new Cart({
-      userId: user.id,
+    const transactionResult = await withTransaction(async (session) => {
+      await user.save({ session });
+      const newCart = new Cart({
+        userId: user.id,
+      });
+      await newCart.save({ session });
+      return { code: 200, data: _.pick(user, ["_id", "name", "email"]) };
     });
-    await newCart.save();
-    return { code: 200, data: _.pick(user, ["_id", "name", "email"]) };
+    return transactionResult;
   }
 
   async updateUser(req, res) {
