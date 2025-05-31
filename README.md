@@ -1,62 +1,72 @@
-# ⚠ Venzo2025 (I am still developing this project...)🛠
-This is my first MernStack project .
-### What I used in this project :
-"MongoDB | Express | React | Nodejs | TypeScript | TailwindCSS | Zustand | SASS"
+# Venzo2025 🛠 working 🔨
 
 # Back-end Setup Guide
 
 ## Prerequisites
+
 This server works with a MongoDB database, so make sure MongoDB is installed on your system.
 
 ## Installation Steps
 
 ### Clone the Repository
+
 ```sh
 git clone <repository-url>
 ```
 
 ### Navigate to the Back-End Folder
+
 Open a terminal and move to the `back-end` directory:
+
 ```sh
 cd back-end
 ```
 
 ### Install Dependencies
+
 Run the following command to install the necessary dependencies and create the `node_modules` folder:
+
 ```sh
 npm i
 ```
 
-### Create a `.env` File
-- Create a `.env` file in the root of the `back-end` directory.
-- Add the following configurations:
-  ```env
-  PORT=5000
-  DEBUG=app
-  JWT_KEY=<random-string-of-numbers-and-letters>
-  ```
+Run the following command to install the nodemon npm package :
 
-### Create a Log File
-- Create a file named `logfile.log` in the root of the `back-end` directory. This will store application errors.
+```sh
+npm i nodemon
+```
 
-### Set Up Upload Directories
-create the following paths in the root of the `back-end` directory . these paths are for storing uploaded files:
-```
-public/uploads/images/avatars
-public/uploads/images/blogs
-public/uploads/images/products
-```
+## 🔧 Environment Variables
+
+1. Copy the `.env.example` file and rename it to `.env`.
+
+2. Fill in the required environment variables as described in the comments.
+
+3. Set a strong `JWT_KEY`:
+
+   - Must be a random string of letters and numbers.
+   - Minimum **32 characters**.
+   - Example:
+     ```
+     f9J$kL#2!bVtY*eQ@z1X^aW6%UjN&p3R
+     ```
+
+4. Obtain your `SECRET_KEY` from [Google reCAPTCHA](https://developers.google.com/recaptcha).
+
+5. To disable reCAPTCHA (e.g., in local development), set the following in your `.env` file:
+   ```env
+   RECAPTCHA=false
+   ```
 
 ## Running the Server
+
 Once everything is set up, start the server using:
+
 ```sh
 npm start
 ```
 
 ## Additional Notes
+
 - Ensure MongoDB is running before starting the server.
 - Review the logs in `logfile.log` for debugging any errors.
-
-## venzo2025 postman workspace :
-After setting up the server, you can test all the APIs of this project in Postman using this link :
-https://www.postman.com/mohammaddr653/workspace/venzo2025/collection/34024160-41655f65-50fb-4ecd-a119-aff96815e89c?action=share&creator=34024160
