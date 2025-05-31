@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
 const manageNewProductProperties = require("../helpers/manageNewProductProperties");
-const Property = require("../models/property");
-const Propertyval = require("../models/propertyval");
+const getProperties = require("../helpers/getProperties");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -18,39 +17,7 @@ class ProductServices {
   async getSingleShopWithProperties(req, res) {
     const product = await this.seeOneProduct(req, res);
     if (product && product.properties.length) {
-      product.properties = await Promise.all(
-        product.properties.map(async (item) => {
-          let newProperty = {
-            name: item.name,
-            nameString: "",
-            selective: item.selective,
-            values: [],
-          };
-          const property = await Property.findOne({ _id: item.name });
-          newProperty.nameString = property.name;
-          for (let value of item.values) {
-            if (property.specifiedVals) {
-              let newValue = {
-                value: value.value,
-                valueString: null,
-              };
-              value.price ? (newValue.price = value.price) : null;
-              const propertyvalue = await Propertyval.findOne({
-                _id: value.value,
-              });
-              newValue.valueString = propertyvalue.value;
-              newProperty.values.push(newValue);
-            } else {
-              let newValue = {
-                valueString: value.valueString,
-              };
-              value.price ? (newValue.price = value.price) : null;
-              newProperty.values.push(newValue);
-            }
-          }
-          return newProperty;
-        })
-      );
+      product.properties = await getProperties(product.properties);
     }
     return product;
   }
@@ -68,6 +35,9 @@ class ProductServices {
           array.push(product);
         }
       });
+    }
+    for (let product of array) {
+      product.properties = await getProperties(product.properties);
     }
     return array;
   }
