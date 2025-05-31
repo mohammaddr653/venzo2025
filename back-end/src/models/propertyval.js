@@ -7,7 +7,7 @@ const propertyvalSchema = new mongoose.Schema({
     ref: "Property",
     required: true,
   },
-  value: { type: String, required: true },
+  value: { type: String, required: true, trim: true, unique: true },
 });
 propertyvalSchema.plugin(timestamp);
 module.exports = mongoose.model("Propertyval", propertyvalSchema);
