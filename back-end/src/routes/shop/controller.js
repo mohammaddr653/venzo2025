@@ -17,15 +17,15 @@ module.exports = new (class extends controller {
 
   async getShopByCategory(req, res) {
     const string = await categoriesServices.createString(req, res); //رشته دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
-    const result = await productServices.getProductsByCategoryString(
-      string,
-      req,
-      res
-    ); //دریافت محصولات مطابق با رشته دسته بندی
+    const { array, filters } =
+      await productServices.getProductsByCategoryString(string, req, res); //دریافت محصولات مطابق با رشته دسته بندی
     this.response({
       res,
       message: "this is shop , products of specific category",
-      data: result,
+      data: {
+        products: array,
+        filters,
+      },
     });
   }
 })();

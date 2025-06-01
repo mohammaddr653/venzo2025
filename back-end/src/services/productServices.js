@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
 const manageNewProductProperties = require("../helpers/manageNewProductProperties");
-const getProperties = require("../helpers/getProperties");
+const getPropertiesAndFilters = require("../helpers/getProperties&filters");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -17,7 +17,9 @@ class ProductServices {
   async getSingleShopWithProperties(req, res) {
     const product = await this.seeOneProduct(req, res);
     if (product && product.properties.length) {
-      product.properties = await getProperties(product.properties);
+      product.properties = (
+        await getPropertiesAndFilters(product.properties)
+      ).propertiesArr;
     }
     return product;
   }
@@ -25,6 +27,7 @@ class ProductServices {
   async getProductsByCategoryString(string, req, res) {
     //خواندن محصولات مخصوص دسته بندی انتخاب شده از دیتابیس
     let array = [];
+    let filters = [];
     const products = await this.getAllProducts(req, res);
     if (products) {
       products.forEach((product) => {
@@ -37,9 +40,15 @@ class ProductServices {
       });
     }
     for (let product of array) {
-      product.properties = await getProperties(product.properties);
+      let { propertiesArr, updatedFilters } = await getPropertiesAndFilters(
+        product.properties,
+        filters
+      );
+      filters = [...updatedFilters];
+      product.properties = propertiesArr;
     }
-    return array;
+    console.log(filters);
+    return { array, filters };
   }
 
   async createProduct(req, res) {

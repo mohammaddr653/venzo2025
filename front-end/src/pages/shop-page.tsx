@@ -11,14 +11,23 @@ const ShopPage = () => {
   const { user } = useUserStore();
   const { call, loading } = callManager();
   const [products, setProducts] = useState<any[]>([]);
+  const [filters, setFilters] = useState<any[]>([]);
 
   async function load() {
     const response = await call(
       axios.get(SERVER_API + `/shop/${categoryId}`),
       false
     );
-    setProducts([...response.data.data]);
+    setProducts([...response.data.data.products]);
+    setFilters([...response.data.data.filters]);
   }
+
+  useEffect(() => {
+    console.log("this is products : ", products);
+  }, [products]);
+  useEffect(() => {
+    console.log("this is filters : ", filters);
+  }, [filters]);
 
   useEffect(() => {
     load();
