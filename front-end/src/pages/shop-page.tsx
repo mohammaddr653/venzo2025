@@ -1,7 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import Header from "../components/common/header";
 import { useUserStore } from "../store";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import callManager from "../helpers/callManager";
 import { DEFAULT_PRODUCT, SERVER_API, SERVER_URL } from "../../config";
 import axios from "axios";
@@ -12,6 +12,8 @@ const ShopPage = () => {
   const { call, loading } = callManager();
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<any[]>([]);
+  const [allParams, setAllParams] = useSearchParams();
+  const [appliedFilters, setAppliedFilters] = useState<any>({});
 
   async function load() {
     const response = await call(
@@ -23,6 +25,21 @@ const ShopPage = () => {
   }
 
   useEffect(() => {
+    let filtersObj: any = {};
+    for (const [key, value] of allParams.entries()) {
+      if (filtersObj[key] && !filtersObj[key].includes(value)) {
+        filtersObj[key] = [...filtersObj[key], value];
+      }
+      if (!filtersObj[key]) {
+        filtersObj[key] = [value];
+      }
+    }
+    setAppliedFilters({ ...filtersObj });
+  }, [allParams]);
+  useEffect(() => {
+    console.log("this is appliedFilters : ", appliedFilters);
+  }, [appliedFilters]);
+  useEffect(() => {
     console.log("this is products : ", products);
   }, [products]);
   useEffect(() => {
@@ -32,10 +49,61 @@ const ShopPage = () => {
   useEffect(() => {
     load();
   }, [categoryId]);
+
+  const handleFilterCheck = (
+    e: ChangeEvent<HTMLInputElement>,
+    name: any,
+    value: any
+  ) => {
+    let currentParams = new URLSearchParams(allParams);
+    if (e.target.checked) {
+      currentParams.append(name, value);
+    } else {
+      currentParams.delete(name, value);
+    }
+    setAllParams(currentParams);
+  };
   return (
     <div>
       <Header></Header>
       <h1>shop page</h1>
+      <div className="bg-amber-700 p-5 flex flex-row gap-3">
+        {filters?.map((item: any, index) => {
+          return (
+            <form className="border flex flex-col gap-1" key={index}>
+              <h4>{item.nameString}</h4>
+              {item.values.length
+                ? item.values.map((val: any, index: any) => {
+                    return (
+                      <label key={index}>
+                        <input
+                          type="checkbox"
+                          name="selective"
+                          value={"true"}
+                          checked={
+                            appliedFilters[item.nameString]?.includes(
+                              val.valueString
+                            )
+                              ? true
+                              : false
+                          }
+                          onChange={(e) =>
+                            handleFilterCheck(
+                              e,
+                              item.nameString,
+                              val.valueString
+                            )
+                          }
+                        />
+                        {val.valueString}
+                      </label>
+                    );
+                  })
+                : null}
+            </form>
+          );
+        })}
+      </div>
       <div className="bg-amber-700 p-5 flex flex-row gap-3">
         {products?.map((item: any, index) => {
           return (
