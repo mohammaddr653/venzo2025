@@ -13,15 +13,15 @@ const ShopPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<any[]>([]);
   const [allParams, setAllParams] = useSearchParams();
-  const [appliedFilters, setAppliedFilters] = useState<any>({});
+  const [appliedFilters, setAppliedFilters] = useState<any>();
 
   async function load() {
     const response = await call(
-      axios.get(SERVER_API + `/shop/${categoryId}`),
+      axios.get(SERVER_API + `/shop/${categoryId}?${allParams}`),
       false
     );
-    setProducts([...response.data.data.products]);
-    setFilters([...response.data.data.filters]);
+    setProducts([...response?.data.data.products]);
+    setFilters([...response?.data.data.filters]);
   }
 
   useEffect(() => {
@@ -36,19 +36,12 @@ const ShopPage = () => {
     }
     setAppliedFilters({ ...filtersObj });
   }, [allParams]);
-  useEffect(() => {
-    console.log("this is appliedFilters : ", appliedFilters);
-  }, [appliedFilters]);
-  useEffect(() => {
-    console.log("this is products : ", products);
-  }, [products]);
-  useEffect(() => {
-    console.log("this is filters : ", filters);
-  }, [filters]);
 
   useEffect(() => {
-    load();
-  }, [categoryId]);
+    if (categoryId && appliedFilters) {
+      load();
+    }
+  }, [appliedFilters, categoryId]);
 
   const handleFilterCheck = (
     e: ChangeEvent<HTMLInputElement>,
@@ -68,7 +61,7 @@ const ShopPage = () => {
       <Header></Header>
       <h1>shop page</h1>
       <div className="bg-amber-700 p-5 flex flex-row gap-3">
-        {filters?.map((item: any, index) => {
+        {filters?.map((item: any, index: any) => {
           return (
             <form className="border flex flex-col gap-1" key={index}>
               <h4>{item.nameString}</h4>

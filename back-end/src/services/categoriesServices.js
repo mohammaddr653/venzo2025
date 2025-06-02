@@ -33,7 +33,10 @@ class CategoriesServices {
     if (category) {
       let data = {
         name: req.body.name,
-        motherId: req.body.motherId ==="root"?req.body.motherId:new mongoose.Types.ObjectId(req.body.motherId),
+        motherId:
+          req.body.motherId === "root"
+            ? req.body.motherId
+            : new mongoose.Types.ObjectId(req.body.motherId),
         path: req.body.path,
       };
       if (req.body.motherId !== category.id) {

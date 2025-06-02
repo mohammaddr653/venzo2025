@@ -3,6 +3,7 @@ const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
 const manageNewProductProperties = require("../helpers/manageNewProductProperties");
 const getPropertiesAndFilters = require("../helpers/getProperties&filters");
+const applyFilters = require("../helpers/applyFilters");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -47,7 +48,9 @@ class ProductServices {
       filters = [...updatedFilters];
       product.properties = propertiesArr;
     }
-    console.log(filters);
+    if (Object.keys(req.query).length) {
+      array = applyFilters(req, array);
+    }
     return { array, filters };
   }
 
