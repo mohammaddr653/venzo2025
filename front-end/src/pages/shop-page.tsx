@@ -43,16 +43,12 @@ const ShopPage = () => {
     }
   }, [appliedFilters, categoryId]);
 
-  const handleFilterCheck = (
-    e: ChangeEvent<HTMLInputElement>,
-    name: any,
-    value: any
-  ) => {
+  const handleFilterCheck = (e: ChangeEvent<HTMLInputElement>, name: any) => {
     let currentParams = new URLSearchParams(allParams);
     if (e.target.checked) {
-      currentParams.append(name, value);
+      currentParams.append(name, e.target.value);
     } else {
-      currentParams.delete(name, value);
+      currentParams.delete(name, e.target.value);
     }
     setAllParams(currentParams);
   };
@@ -72,7 +68,7 @@ const ShopPage = () => {
                         <input
                           type="checkbox"
                           name="selective"
-                          value={"true"}
+                          value={val.valueString}
                           checked={
                             appliedFilters[item.nameString]?.includes(
                               val.valueString
@@ -81,11 +77,7 @@ const ShopPage = () => {
                               : false
                           }
                           onChange={(e) =>
-                            handleFilterCheck(
-                              e,
-                              item.nameString,
-                              val.valueString
-                            )
+                            handleFilterCheck(e, item.nameString)
                           }
                         />
                         {val.valueString}

@@ -64,6 +64,10 @@ class CartServices {
       productId: new mongoose.Types.ObjectId(req.params.productId),
       count: 1,
     };
+    if (req.body.selectedPropertyvalString) {
+      reservedProduct.selectedPropertyvalString =
+        req.body.selectedPropertyvalString;
+    }
     //returns cart before update , or null
     return await Cart.findOneAndUpdate(
       { userId: req.user.id },
