@@ -163,6 +163,7 @@ class ProductServices {
     const products = await Product.find({ _id: { $in: productIds } });
     const productsWithCounts = products.map((product) => {
       const productInfo = cart.reservedProducts.find(
+        //note:equals
         (p) => p.productId.toString() === product._id.toString()
       );
       return {

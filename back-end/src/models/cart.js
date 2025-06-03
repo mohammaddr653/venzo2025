@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
+const reservedProduct = require("./reservedProduct");
 
-const cartSchima = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
-  reservedProducts: { type: Array, default: [] },
+  reservedProducts: { type: [reservedProduct], default: [] },
 });
-cartSchima.plugin(timestamp);
-module.exports = mongoose.model("Cart", cartSchima);
+cartSchema.plugin(timestamp);
+module.exports = mongoose.model("Cart", cartSchema);

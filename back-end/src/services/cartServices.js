@@ -60,15 +60,15 @@ class CartServices {
   }
   async addToCart(req, res) {
     //افزودن به سبد خرید
-    const selectedProduct = new reservedProduct(
-      new mongoose.Types.ObjectId(req.params.productId),
-      1
-    );
+    const reservedProduct = {
+      productId: new mongoose.Types.ObjectId(req.params.productId),
+      count: 1,
+    };
     //returns cart before update , or null
     return await Cart.findOneAndUpdate(
       { userId: req.user.id },
       {
-        $push: { reservedProducts: selectedProduct },
+        $push: { reservedProducts: reservedProduct },
       }
     );
   }
