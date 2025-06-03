@@ -4,6 +4,8 @@ const Product = require("../models/product");
 const manageNewProductProperties = require("../helpers/manageNewProductProperties");
 const getPropertiesAndFilters = require("../helpers/getProperties&filters");
 const applyFilters = require("../helpers/applyFilters");
+const withTransaction = require("../helpers/withTransaction");
+const Cart = require("../models/cart");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -122,14 +124,23 @@ class ProductServices {
   }
 
   async deleteProduct(req, res) {
-    //حذف محصول
+    //حذف محصول . محصول را همچنین از سبد خرید تمام کاربرانی که آن را دارند حذف میکند . تست شده برای یک سبد خرید . هنوز مطمئن نیستم اگر در چند سبد خرید این محصول موجود باشه چه نتیجه ای میده
     const product = await this.seeOneProduct(req, res);
     if (product) {
       deleteFile("public" + product.img, "public" + product.img);
-      const deleteOp = await Product.deleteOne({ _id: req.params.productId });
-      if (deleteOp.deletedCount.valueOf() > 0) {
+
+      const transactionResult = await withTransaction(async (session) => {
+        await Product.deleteOne({ _id: req.params.productId }, { session });
+        await Cart.updateMany(
+          {
+            reservedProducts: { $elemMatch: { productId: product._id } },
+          },
+          { $pull: { reservedProducts: { productId: product._id } } },
+          { session }
+        );
         return true;
-      }
+      });
+      return transactionResult;
     }
     return false;
   }
