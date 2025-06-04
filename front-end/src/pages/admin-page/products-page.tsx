@@ -38,7 +38,6 @@ const ProductsPage = () => {
   const editorRef = useRef<any>(null);
 
   useEffect(() => {
-    console.log("properties:", properties);
     setFormData((prev) => {
       return { ...prev, properties: [...properties] };
     });
@@ -58,6 +57,7 @@ const ProductsPage = () => {
       properties: [],
       img: "",
     });
+    setProperties([]);
     // Reset file input field
     fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadCategories();
@@ -120,10 +120,6 @@ const ProductsPage = () => {
     );
     loadProductsAndCats();
   };
-
-  useEffect(() => {
-    console.log("this is form data:", formData);
-  }, [formData]);
 
   return (
     <div>

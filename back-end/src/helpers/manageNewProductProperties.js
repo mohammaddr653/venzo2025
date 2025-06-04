@@ -6,13 +6,13 @@ const Propertyval = require("../models/propertyval");
 const manageNewProductProperties = (properties) => {
   return Promise.all(
     JSON.parse(properties).map(async (item) => {
-      if (item.name && item.values.length) {
+      if (item.nameString && item.values.length) {
         let newProperty = {
           name: null,
+          selective: item.selective,
           values: [],
         };
-        newProperty.selective = item.selective === "true" ? true : false;
-        const property = await Property.findOne({ name: item.name });
+        const property = await Property.findOne({ name: item.nameString });
         if (property) {
           newProperty.name = property._id;
           for (let value of item.values) {
@@ -23,7 +23,7 @@ const manageNewProductProperties = (properties) => {
               value.price ? (newValue.price = value.price) : null;
               value.stock ? (newValue.stock = value.stock) : null;
               const propertyvalue = await Propertyval.findOne({
-                value: value.value,
+                value: value.valueString,
               });
               if (propertyvalue) {
                 newValue.value = propertyvalue._id;
@@ -37,7 +37,7 @@ const manageNewProductProperties = (properties) => {
               };
               value.price ? (newValue.price = value.price) : null;
               value.stock ? (newValue.stock = value.stock) : null;
-              newValue.valueString = value.value;
+              newValue.valueString = value.valueString;
               newProperty.values.push(newValue);
             }
           }

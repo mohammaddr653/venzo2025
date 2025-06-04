@@ -1,6 +1,7 @@
 //controller
 const debug = require("debug")("app");
 const deleteFile = require("../../helpers/deleteFile");
+const getPropertiesAndFilters = require("../../helpers/getProperties&filters");
 const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
 const productServices = require("../../services/productServices");
@@ -161,6 +162,11 @@ module.exports = new (class extends controller {
 
   async seeOneProduct(req, res) {
     const result = await productServices.seeOneProduct(req, res);
+    if (result && result.properties.length) {
+      result.properties = (
+        await getPropertiesAndFilters(result.properties)
+      ).propertiesArr;
+    }
     this.response({
       res,
       message: "نمایش یک محصول",

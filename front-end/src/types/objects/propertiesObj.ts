@@ -1,10 +1,10 @@
 export interface PropertyvalsObj {
-  value: string;
+  valueString: string;
   price?: number;
   stock?: number;
 }
 export interface PropertiesObj {
-  name: string;
-  selective: "true" | "false";
+  nameString: string;
+  selective: boolean;
   values: PropertyvalsObj[];
 }

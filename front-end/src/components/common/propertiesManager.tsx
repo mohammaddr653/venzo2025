@@ -22,18 +22,14 @@ interface PropertiesManagerProps {
   loadPropertiesAndVals: any;
 }
 
-enum SelectiveEnums {
-  true = "true",
-  false = "false",
-}
 interface propertyObj {
-  name: string;
-  selective: SelectiveEnums;
+  nameString: string;
+  selective: boolean;
   suggestions: string[];
 }
 
 interface propertyvalObj {
-  value: string;
+  valueString: string;
   price: string | "";
   stock: string | "";
   suggestions: string[];
@@ -48,13 +44,13 @@ const PropertiesManager = ({
   const { user } = useUserStore();
   const { call, loading } = callManager();
   const [property, setProperty] = useState<propertyObj>({
-    name: "",
-    selective: SelectiveEnums.false,
+    nameString: "",
+    selective: false,
     suggestions: [],
   });
 
   const [propertyval, setPropertyval] = useState<propertyvalObj>({
-    value: "",
+    valueString: "",
     price: "",
     stock: "",
     suggestions: [],
@@ -71,24 +67,26 @@ const PropertiesManager = ({
       const matches = propertiesAndVals.filter((obj: any) =>
         obj.name.startsWith(e.target.value)
       );
-      setProperty({ ...property, name: e.target.value, suggestions: matches });
+      setProperty({
+        ...property,
+        nameString: e.target.value,
+        suggestions: matches,
+      });
     } else {
-      setProperty({ ...property, name: "", suggestions: [] });
+      setProperty({ ...property, nameString: "", suggestions: [] });
     }
   };
 
   const handleSelectiveCheck = (e: ChangeEvent<HTMLInputElement>) => {
-    const existAlready = properties.find((item) => item.selective === "true");
+    const existAlready = properties.find((item) => item.selective);
     if (existAlready) {
       alert(
-        `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.name}`
+        `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.nameString}`
       );
     } else {
       setProperty({
         ...property,
-        selective: e.target.checked
-          ? SelectiveEnums.true
-          : SelectiveEnums.false,
+        selective: e.target.checked ? true : false,
       });
     }
   };
@@ -119,14 +117,14 @@ const PropertiesManager = ({
     e.preventDefault();
 
     const matches = propertiesAndVals.find(
-      (obj: any) => obj.name === property.name
+      (obj: any) => obj.name === property.nameString
     );
 
     if (matches) {
       addProperty();
     } else {
       let formData = {
-        name: property.name,
+        name: property.nameString,
       };
       const response = await call(
         axios.post(SERVER_API + "/admin/dashboard/properties", formData),
@@ -141,19 +139,21 @@ const PropertiesManager = ({
 
   const addProperty = () => {
     let propertyObj: PropertiesObj = {
-      name: property.name,
+      nameString: property.nameString,
       selective: property.selective,
       values: [],
     };
     setProperties((prev) => {
-      const exist = prev.find((item) => item.name === property.name);
+      const exist = prev.find(
+        (item) => item.nameString === property.nameString
+      );
       if (!exist) {
         return [...prev, propertyObj];
       } else {
         return [...prev];
       }
     });
-    setProperty({ name: "", selective: SelectiveEnums.false, suggestions: [] });
+    setProperty({ nameString: "", selective: false, suggestions: [] });
   };
 
   const handlepropertyval = (
@@ -175,20 +175,20 @@ const PropertiesManager = ({
         );
         setPropertyval({
           ...propertyval,
-          value: e.target.value,
+          valueString: e.target.value,
           suggestions: matches,
         });
       } else {
         setPropertyval({
           ...propertyval,
-          value: e.target.value,
+          valueString: e.target.value,
           suggestions: [],
         });
       }
     } else {
       setPropertyval({
         ...propertyval,
-        value: e.target.value,
+        valueString: e.target.value,
         suggestions: [],
       });
     }
@@ -202,14 +202,14 @@ const PropertiesManager = ({
     );
     if (matchedProperty && matchedProperty.specifiedVals) {
       const matches = matchedProperty.values.find(
-        (obj: any) => obj.value === propertyval.value
+        (obj: any) => obj.value === propertyval.valueString
       );
       if (matches) {
         addPropertyval();
       } else {
         const formData = {
           propertyId: matchedProperty.propertyId,
-          value: propertyval.value,
+          value: propertyval.valueString,
         };
         const response = await call(
           axios.post(SERVER_API + "/admin/dashboard/propertyvals", formData),
@@ -227,7 +227,7 @@ const PropertiesManager = ({
 
   const addPropertyval = () => {
     let propertyvalue: PropertyvalsObj = {
-      value: propertyval.value,
+      valueString: propertyval.valueString,
     };
     const price = parseInt(propertyval.price);
     const stock = parseInt(propertyval.stock);
@@ -236,14 +236,14 @@ const PropertiesManager = ({
     stock ? (propertyvalue.stock = stock) : null;
 
     setProperties((prev) => {
-      const exist = prev.find((item) => item.name === selectedProperty);
+      const exist = prev.find((item) => item.nameString === selectedProperty);
       if (exist) {
         const existingVal = exist.values.find(
-          (item) => item.value === propertyval.value
+          (item) => item.valueString === propertyval.valueString
         );
         if (!existingVal) {
           return prev.map((item) =>
-            item.name === selectedProperty
+            item.nameString === selectedProperty
               ? { ...item, values: [...item.values, propertyvalue] }
               : item
           );
@@ -254,29 +254,23 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setPropertyval({ value: "", price: "", stock: "", suggestions: [] });
+    setPropertyval({ valueString: "", price: "", stock: "", suggestions: [] });
   };
 
   useEffect(() => {
-    setPropertyval({ value: "", price: "", stock: "", suggestions: [] });
+    setPropertyval({ valueString: "", price: "", stock: "", suggestions: [] });
   }, [selectedProperty]);
 
-  useEffect(() => {
-    console.log("property changed : ", property);
-  }, [property]);
-
-  useEffect(() => {
-    console.log("propertyval changed : ", propertyval);
-  }, [propertyval]);
-
   const handleDeletePropertyval = (name: string, value: string) => {
-    const property = properties.find((property) => property.name === name);
+    const property = properties.find(
+      (property) => property.nameString === name
+    );
     const filteredVals = property?.values.filter(
-      (propertyval) => propertyval.value !== value
+      (propertyval) => propertyval.valueString !== value
     );
     setProperties((prev) => {
       return prev.map((item) =>
-        item.name === name
+        item.nameString === name
           ? { ...item, values: filteredVals ? filteredVals : [] }
           : item
       );
@@ -285,7 +279,7 @@ const PropertiesManager = ({
 
   const handleDeleteProperty = (name: string) => {
     const filteredProperties = properties?.filter(
-      (property) => property.name !== name
+      (property) => property.nameString !== name
     );
     setProperties([...filteredProperties]);
   };
@@ -306,7 +300,7 @@ const PropertiesManager = ({
                 });
               }, 1000);
             }}
-            value={property.name}
+            value={property.nameString}
             className="border"
             onChange={handleproperty}
             autoComplete="off"
@@ -315,10 +309,7 @@ const PropertiesManager = ({
             <input
               type="checkbox"
               name="selective"
-              value={"true"}
-              checked={
-                property.selective === SelectiveEnums.true ? true : false
-              }
+              checked={property.selective ? true : false}
               onChange={handleSelectiveCheck}
             />
             ویژگی انتخابی
@@ -332,7 +323,7 @@ const PropertiesManager = ({
                     onClick={() =>
                       setProperty({
                         ...property,
-                        name: suggest.name,
+                        nameString: suggest.name,
                         suggestions: [],
                       })
                     }
@@ -344,7 +335,7 @@ const PropertiesManager = ({
             </ul>
           ) : null}
           <br />
-          <button type="submit" disabled={property.name ? false : true}>
+          <button type="submit" disabled={property.nameString ? false : true}>
             افزودن ویژگی
           </button>
         </div>
@@ -355,11 +346,11 @@ const PropertiesManager = ({
               <div className="bg-amber-500 p-5" key={index}>
                 <button
                   className="bg-red-500"
-                  onClick={() => handleDeleteProperty(propertyObj.name)}
+                  onClick={() => handleDeleteProperty(propertyObj.nameString)}
                 >
                   حذف ویژگی
                 </button>
-                <h3>{propertyObj.name}</h3>
+                <h3>{propertyObj.nameString}</h3>
                 <form
                   onSubmit={handleSubmitPropertyval}
                   className="flex-column"
@@ -369,7 +360,7 @@ const PropertiesManager = ({
                     placeholder="مقدار ویژگی"
                     name="propertyval"
                     onFocus={() => {
-                      setSelectedProperty(propertyObj.name);
+                      setSelectedProperty(propertyObj.nameString);
                     }}
                     onBlur={() => {
                       setTimeout(() => {
@@ -379,31 +370,31 @@ const PropertiesManager = ({
                       }, 1000);
                     }}
                     value={
-                      selectedProperty === propertyObj.name
-                        ? propertyval.value
+                      selectedProperty === propertyObj.nameString
+                        ? propertyval.valueString
                         : ""
                     }
                     onChange={handlepropertyval}
-                    disabled={propertyObj.name ? false : true}
+                    disabled={propertyObj.nameString ? false : true}
                     className="border"
                     autoComplete="off"
                   />
-                  {propertyObj.selective === "true" ? (
+                  {propertyObj.selective ? (
                     <>
                       <input
                         type="text"
                         placeholder="قیمت"
                         name="selectivePrice"
                         onFocus={() => {
-                          setSelectedProperty(propertyObj.name);
+                          setSelectedProperty(propertyObj.nameString);
                         }}
                         value={
-                          selectedProperty === propertyObj.name
+                          selectedProperty === propertyObj.nameString
                             ? propertyval.price
                             : ""
                         }
                         onChange={handleSelectivePrice}
-                        disabled={propertyObj.name ? false : true}
+                        disabled={propertyObj.nameString ? false : true}
                         className="border"
                         autoComplete="off"
                       />
@@ -412,22 +403,22 @@ const PropertiesManager = ({
                         placeholder="موجودی انبار"
                         name="selectiveStock"
                         onFocus={() => {
-                          setSelectedProperty(propertyObj.name);
+                          setSelectedProperty(propertyObj.nameString);
                         }}
                         value={
-                          selectedProperty === propertyObj.name
+                          selectedProperty === propertyObj.nameString
                             ? propertyval.stock
                             : ""
                         }
                         onChange={handleSelectiveStock}
-                        disabled={propertyObj.name ? false : true}
+                        disabled={propertyObj.nameString ? false : true}
                         className="border"
                         autoComplete="off"
                       />
                     </>
                   ) : null}
                   {propertyval.suggestions.length &&
-                  selectedProperty === propertyObj.name ? (
+                  selectedProperty === propertyObj.nameString ? (
                     <ul className="border bg-amber-400">
                       {propertyval.suggestions.map(
                         (suggest: any, index: any) => {
@@ -437,7 +428,7 @@ const PropertiesManager = ({
                               onClick={() => {
                                 setPropertyval({
                                   ...propertyval,
-                                  value: suggest.value,
+                                  valueString: suggest.value,
                                   suggestions: [],
                                 });
                               }}
@@ -449,15 +440,15 @@ const PropertiesManager = ({
                       )}
                     </ul>
                   ) : null}
-                  {propertyObj.selective === "true" ? (
+                  {propertyObj.selective ? (
                     <button
                       type="submit"
                       disabled={
-                        propertyObj.name &&
-                        propertyval.value &&
+                        propertyObj.nameString &&
+                        propertyval.valueString &&
                         propertyval.price &&
                         propertyval.stock &&
-                        selectedProperty === propertyObj.name
+                        selectedProperty === propertyObj.nameString
                           ? false
                           : true
                       }
@@ -468,9 +459,9 @@ const PropertiesManager = ({
                     <button
                       type="submit"
                       disabled={
-                        propertyObj.name &&
-                        propertyval.value &&
-                        selectedProperty === propertyObj.name
+                        propertyObj.nameString &&
+                        propertyval.valueString &&
+                        selectedProperty === propertyObj.nameString
                           ? false
                           : true
                       }
@@ -493,16 +484,16 @@ const PropertiesManager = ({
                                 className="bg-red-600"
                                 onClick={() =>
                                   handleDeletePropertyval(
-                                    propertyObj.name,
-                                    propertyvalObj.value
+                                    propertyObj.nameString,
+                                    propertyvalObj.valueString
                                   )
                                 }
                               >
                                 x
                               </button>
-                              {propertyvalObj.value}
+                              {propertyvalObj.valueString}
                             </div>
-                            {propertyObj.selective === "true" ? (
+                            {propertyObj.selective ? (
                               <div className="flex flex-row gap-2">
                                 <span className="bg-amber-300">
                                   تومان {propertyvalObj.price}

@@ -7,20 +7,27 @@ import callManager from "../../helpers/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../helpers/useLoadCategories";
+import { PropertiesObj } from "../../types/objects/propertiesObj";
+import PropertiesManager from "../../components/common/propertiesManager";
+import useLoadPropertiesAndVals from "../../helpers/useLoadPropertiesAndVals";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const selectionList = useRef<HTMLSelectElement>(null);
   const { categories, loadCategories } = useLoadCategories();
+  const { propertiesAndVals, loadPropertiesAndVals } =
+    useLoadPropertiesAndVals();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     stock: "",
     categoryId: "",
     description: "",
+    properties: [],
     img: "",
   });
+  const [properties, setProperties] = useState<PropertiesObj[]>([]);
   const fileInputRef = useRef<any>(null);
   const { state } = useLocation();
   const { productId } = state || null;
@@ -38,8 +45,10 @@ const OneProductPage = () => {
       stock: matchedProduct.stock,
       categoryId: matchedProduct.categoryId ? matchedProduct.categoryId : "",
       description: matchedProduct.description,
+      properties: matchedProduct.properties,
       img: matchedProduct.img,
     });
+    setProperties([...matchedProduct.properties]);
   }
 
   function refresh() {
@@ -51,12 +60,21 @@ const OneProductPage = () => {
   }
 
   useEffect(() => {
+    setFormData((prev: any) => {
+      return { ...prev, properties: [...properties] };
+    });
+  }, [properties]);
+
+  useEffect(() => {
     refresh();
   }, []);
 
   useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
-    loadOneProduct();
+    if (categories.length) {
+      loadOneProduct();
+      loadPropertiesAndVals();
+    }
   }, [categories]);
 
   const handleFileChange = (event: any) => {
@@ -77,8 +95,12 @@ const OneProductPage = () => {
     const dataToSend = new FormData();
 
     // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]) => {
-      dataToSend.append(key, value);
+    Object.entries(formData).forEach(([key, value]: any) => {
+      if (key === "properties") {
+        dataToSend.append("properties", JSON.stringify(value));
+      } else {
+        dataToSend.append(key, value);
+      }
     });
 
     const response = await call(
@@ -149,9 +171,16 @@ const OneProductPage = () => {
             onChange={handleFileChange}
             ref={fileInputRef}
           />
+          <br />
 
           <LoadingButton loading={loading}>بروزرسانی</LoadingButton>
         </form>
+        <PropertiesManager
+          properties={properties}
+          setProperties={setProperties}
+          propertiesAndVals={propertiesAndVals}
+          loadPropertiesAndVals={loadPropertiesAndVals}
+        ></PropertiesManager>
       </div>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">

@@ -103,6 +103,15 @@ class ProductServices {
       deleteFile("public" + product.img, "public" + product.img);
       data.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
+    if (req.body.properties) {
+      let properties = await manageNewProductProperties(req.body.properties);
+      if (properties && properties.length) {
+        properties = properties.filter((property) => property);
+        data.properties = properties;
+      }
+    } else {
+      data.properties = [];
+    }
     const updateOp = await Product.updateOne(
       { _id: product.id },
       { $set: data }
