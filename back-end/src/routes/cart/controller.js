@@ -44,12 +44,13 @@ module.exports = new (class extends controller {
   }
 
   async addToCart(req, res) {
-    const stock = await productServices.stockCheck(req, res); //تعداد در انبار
-    if (stock >= 1) {
+    const cart = await cartServices.seeOneCart(req, res);
+    const stock = await productServices.stockCheck(req, res, cart); //تعداد در انبار
+    if (stock && stock >= 1) {
       //تعدادی که از این محصول در سبد خرید موجود داریم
-      const existingRecordCount = await cartServices.existOrNot(req, res);
-      if (existingRecordCount === 0) {
-        const result = await cartServices.addToCart(req, res);
+      const existing = await cartServices.existOrNot(req, res, cart);
+      if (!existing) {
+        const result = await cartServices.addToCart(req, res, cart);
         if (result) {
           this.response({
             res,
@@ -79,13 +80,14 @@ module.exports = new (class extends controller {
   }
 
   async plusCount(req, res) {
-    const stock = await productServices.stockCheck(req, res); //تعداد در انبار
-    if (stock >= 1) {
+    const cart = await cartServices.seeOneCart(req, res);
+    const stock = await productServices.stockCheck(req, res, cart); //تعداد در انبار
+    if (stock && stock >= 1) {
       //تعدادی که از این محصول در سبد خرید موجود داریم
-      const existingRecordCount = await cartServices.existOrNot(req, res);
-      if (existingRecordCount >= 1) {
-        if (existingRecordCount + 1 <= stock) {
-          const result = await cartServices.plusCount(req, res);
+      const existing = await cartServices.existOrNot(req, res, cart);
+      if (existing && existing.count >= 1) {
+        if (existing.count + 1 <= stock) {
+          const result = await cartServices.plusCount(req, res, cart);
           if (result) {
             this.response({
               res,
@@ -122,12 +124,14 @@ module.exports = new (class extends controller {
   }
 
   async minusCount(req, res) {
+    const cart = await cartServices.seeOneCart(req, res);
     //تعدادی که از این محصول در سبد خرید موجود داریم
-    const existingRecordCount = await cartServices.existOrNot(req, res);
-    if (existingRecordCount >= 1) {
-      if (existingRecordCount - 1 <= 0) {
+    const existing = await cartServices.existOrNot(req, res, cart);
+    if (existing && existing.count >= 1) {
+      if (existing.count - 1 <= 0) {
         await cartServices.deleteReservedProduct(
-          [new mongoose.Types.ObjectId(req.params.productId)],
+          [req.params.productId],
+          cart,
           req,
           res
         );
@@ -136,7 +140,7 @@ module.exports = new (class extends controller {
           message: "محصول از سبد خرید حذف شد",
         });
       } else {
-        const result = await cartServices.minusCount(req, res);
+        const result = await cartServices.minusCount(req, res, cart);
         if (result) {
           this.response({
             res,
@@ -151,13 +155,19 @@ module.exports = new (class extends controller {
         }
       }
     } else {
-      req.flash("errors", "خطایی رخ داد");
+      this.response({
+        res,
+        message: "خطایی رخ داد",
+        code: 400,
+      });
     }
   }
 
   async deleteReservedProduct(req, res) {
+    const cart = await cartServices.seeOneCart(req, res);
     await cartServices.deleteReservedProduct(
-      [new mongoose.Types.ObjectId(req.params.productId)],
+      [req.params.productId],
+      cart,
       req,
       res
     );

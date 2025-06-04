@@ -7,6 +7,7 @@ const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
 const getPriceAndStock = require("../helpers/getPriceAndStock");
+const cartServices = require("./cartServices");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -146,14 +147,24 @@ class ProductServices {
     return false;
   }
 
-  async stockCheck(req, res) {
+  async stockCheck(req, res, cart) {
     //چک کردن موجودی محصول
-    let count = 0;
+    //اگر محصول ویژگی انتخابی داشت باید انبار همان ویژگی خوانده شود
     const product = await this.seeOneProduct(req, res);
     if (product) {
-      count = product.stock;
+      const existing = await cartServices.existOrNot(req, res, cart);
+      if (existing) {
+        const selectedPropertyvalString = existing.selectedPropertyvalString;
+        const stock = getPriceAndStock(
+          selectedPropertyvalString,
+          product
+        ).stock;
+        return stock;
+      }
+      return product.stock;
+    } else {
+      return false;
     }
-    return count;
   }
 
   async getProductsOfCart(cart, req, res) {

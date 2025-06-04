@@ -11,7 +11,10 @@ const SingleShopPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const [product, setProduct] = useState<any>();
-  const [price, setPrice] = useState();
+  const [priceAndStock, setPriceAndStock] = useState({
+    price: null,
+    stock: null,
+  });
   const [defaultSelectiveProperty, setDefaultSelectiveProperty] =
     useState<string>();
   const [formData, setFormData] = useState<any>({
@@ -29,7 +32,7 @@ const SingleShopPage = () => {
     setDefaultSelectiveProperty(selectiveProperty?.values[0].value.toString());
   }
 
-  function handlePrice() {
+  function handlePriceAndStock() {
     const selectiveProperty = product.properties.find(
       (property: any) => property.selective
     );
@@ -39,16 +42,19 @@ const SingleShopPage = () => {
           propertyval.value.toString()
         )
     );
-    setPrice(selectedPropertyval.price);
+    setPriceAndStock({
+      price: selectedPropertyval.price,
+      stock: selectedPropertyval.stock,
+    });
   }
 
   useEffect(() => {
     if (product) {
       if (formData.selectedPropertyvalString === "") {
-        setPrice(product.price);
+        setPriceAndStock({ price: product.price, stock: product.stock });
         setDefault();
       } else {
-        handlePrice();
+        handlePriceAndStock();
       }
     }
   }, [product, formData]);
@@ -90,8 +96,8 @@ const SingleShopPage = () => {
           width={100}
         />
         <p>{product?.name}</p>
-        <p>{price}</p>
-        <p>{product?.stock}</p>
+        <p>{priceAndStock.price}</p>
+        <p>{priceAndStock.stock}</p>
         {product?.properties.length
           ? product.properties.map((property: any, index: any) => {
               if (property.selective) {

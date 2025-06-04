@@ -35,6 +35,7 @@ interface propertyObj {
 interface propertyvalObj {
   value: string;
   price: string | "";
+  stock: string | "";
   suggestions: string[];
 }
 
@@ -55,6 +56,7 @@ const PropertiesManager = ({
   const [propertyval, setPropertyval] = useState<propertyvalObj>({
     value: "",
     price: "",
+    stock: "",
     suggestions: [],
   });
 
@@ -99,6 +101,17 @@ const PropertiesManager = ({
     setPropertyval({
       ...propertyval,
       price: e.target.value,
+    });
+  };
+
+  const handleSelectiveStock = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setPropertyval({
+      ...propertyval,
+      stock: e.target.value,
     });
   };
 
@@ -217,7 +230,11 @@ const PropertiesManager = ({
       value: propertyval.value,
     };
     const price = parseInt(propertyval.price);
+    const stock = parseInt(propertyval.stock);
+
     price ? (propertyvalue.price = price) : null;
+    stock ? (propertyvalue.stock = stock) : null;
+
     setProperties((prev) => {
       const exist = prev.find((item) => item.name === selectedProperty);
       if (exist) {
@@ -237,11 +254,11 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setPropertyval({ value: "", price: "", suggestions: [] });
+    setPropertyval({ value: "", price: "", stock: "", suggestions: [] });
   };
 
   useEffect(() => {
-    setPropertyval({ value: "", price: "", suggestions: [] });
+    setPropertyval({ value: "", price: "", stock: "", suggestions: [] });
   }, [selectedProperty]);
 
   useEffect(() => {
@@ -372,23 +389,42 @@ const PropertiesManager = ({
                     autoComplete="off"
                   />
                   {propertyObj.selective === "true" ? (
-                    <input
-                      type="text"
-                      placeholder="قیمت"
-                      name="selectivePrice"
-                      onFocus={() => {
-                        setSelectedProperty(propertyObj.name);
-                      }}
-                      value={
-                        selectedProperty === propertyObj.name
-                          ? propertyval.price
-                          : ""
-                      }
-                      onChange={handleSelectivePrice}
-                      disabled={propertyObj.name ? false : true}
-                      className="border"
-                      autoComplete="off"
-                    />
+                    <>
+                      <input
+                        type="text"
+                        placeholder="قیمت"
+                        name="selectivePrice"
+                        onFocus={() => {
+                          setSelectedProperty(propertyObj.name);
+                        }}
+                        value={
+                          selectedProperty === propertyObj.name
+                            ? propertyval.price
+                            : ""
+                        }
+                        onChange={handleSelectivePrice}
+                        disabled={propertyObj.name ? false : true}
+                        className="border"
+                        autoComplete="off"
+                      />
+                      <input
+                        type="text"
+                        placeholder="موجودی انبار"
+                        name="selectiveStock"
+                        onFocus={() => {
+                          setSelectedProperty(propertyObj.name);
+                        }}
+                        value={
+                          selectedProperty === propertyObj.name
+                            ? propertyval.stock
+                            : ""
+                        }
+                        onChange={handleSelectiveStock}
+                        disabled={propertyObj.name ? false : true}
+                        className="border"
+                        autoComplete="off"
+                      />
+                    </>
                   ) : null}
                   {propertyval.suggestions.length &&
                   selectedProperty === propertyObj.name ? (
@@ -420,6 +456,7 @@ const PropertiesManager = ({
                         propertyObj.name &&
                         propertyval.value &&
                         propertyval.price &&
+                        propertyval.stock &&
                         selectedProperty === propertyObj.name
                           ? false
                           : true
@@ -466,8 +503,13 @@ const PropertiesManager = ({
                               {propertyvalObj.value}
                             </div>
                             {propertyObj.selective === "true" ? (
-                              <div className="bg-amber-300">
-                                تومان {propertyvalObj.price}
+                              <div className="flex flex-row gap-2">
+                                <span className="bg-amber-300">
+                                  تومان {propertyvalObj.price}
+                                </span>
+                                <span className="bg-amber-300">
+                                  عدد {propertyvalObj.stock}
+                                </span>
                               </div>
                             ) : null}
                           </li>

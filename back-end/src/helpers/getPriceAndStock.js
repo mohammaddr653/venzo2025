@@ -15,6 +15,7 @@ const getPriceAndStock = (selectedPropertyvalString, product) => {
     if (!selectedPropertyval) return;
     selectionString = selectedPropertyval.valueString;
     price = selectedPropertyval.price;
+    stock = selectedPropertyval.stock;
   }
 
   return { price, stock, selectionString };

@@ -21,6 +21,7 @@ const manageNewProductProperties = (properties) => {
                 value: null,
               };
               value.price ? (newValue.price = value.price) : null;
+              value.stock ? (newValue.stock = value.stock) : null;
               const propertyvalue = await Propertyval.findOne({
                 value: value.value,
               });
@@ -35,6 +36,7 @@ const manageNewProductProperties = (properties) => {
                 valueString: null,
               };
               value.price ? (newValue.price = value.price) : null;
+              value.stock ? (newValue.stock = value.stock) : null;
               newValue.valueString = value.value;
               newProperty.values.push(newValue);
             }

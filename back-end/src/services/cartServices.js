@@ -14,24 +14,19 @@ class CartServices {
     });
     if (failedProductIds.length > 0) {
       // اگر آیدی برای حذف کردن وجود دارداز دیتابیس سبد خرید حذفش کن
-      await this.deleteReservedProduct(failedProductIds, req, res);
+      const cart = await this.seeOneCart(req, res);
+      await this.deleteReservedProduct(failedProductIds, cart, req, res);
       return false;
     }
     return true;
   }
 
-  async deleteReservedProduct(failedProductIds, req, res) {
+  async deleteReservedProduct(failedProductIds, cart, req, res) {
     // حذف محصول رزرو شده از سبد خرید ، یک آرایه از آیدی محصولاتی که قصد حذف آنها از سبد خرید را دارید میگیرد
-    await Cart.updateOne(
-      { userId: req.user.id },
-      {
-        $pull: {
-          reservedProducts: {
-            productId: { $in: failedProductIds },
-          },
-        },
-      }
+    cart.reservedProducts = cart.reservedProducts.filter(
+      (reserved) => !failedProductIds.includes(reserved.productId.toString())
     );
+    await cart.save();
   }
 
   async seeOneCart(req, res) {
@@ -40,25 +35,16 @@ class CartServices {
     //yes , you are right...in Cart schima , userId is an ObjectId type & req.user.id returns a string of id . but mongoose is smart enough to handle this.
   }
 
-  async existOrNot(req, res) {
-    // تعداد فعلی کالا در سبد خرید را برمیگردونه ، اگر صفر برگشت یعنی باید یک آیتم جدید اضافه شود . اما اگر بزرگتر از صفر برگشت یعنی در سبد موجود است و فقط باید به تعداد آن اضافه شود
-    let existingRecordCount = 0;
-    const cart = await Cart.findOne(
-      { userId: req.user.id },
-      {
-        reservedProducts: {
-          $elemMatch: {
-            productId: new mongoose.Types.ObjectId(req.params.productId),
-          },
-        },
-      } // Fetch only the matching product in the array
+  async existOrNot(req, res, cart) {
+    // اگر کالا در حال حاضر در سبد موجود باشه اون رو بر می گرداند وگرنه مقدار تعریف نشده برمیگردونه
+    const existing = cart.reservedProducts.find((reserved) =>
+      reserved.productId.equals(
+        new mongoose.Types.ObjectId(req.params.productId)
+      )
     );
-    if (cart.reservedProducts.length > 0) {
-      existingRecordCount = cart.reservedProducts[0].count;
-    }
-    return existingRecordCount;
+    return existing;
   }
-  async addToCart(req, res) {
+  async addToCart(req, res, cart) {
     //افزودن به سبد خرید
     const reservedProduct = {
       productId: new mongoose.Types.ObjectId(req.params.productId),
@@ -68,44 +54,36 @@ class CartServices {
       reservedProduct.selectedPropertyvalString =
         req.body.selectedPropertyvalString;
     }
-    //returns cart before update , or null
-    return await Cart.findOneAndUpdate(
-      { userId: req.user.id },
-      {
-        $push: { reservedProducts: reservedProduct },
-      }
-    );
+    cart.reservedProducts.push(reservedProduct);
+    await cart.save();
+    return true;
   }
 
-  async plusCount(req, res) {
+  async plusCount(req, res, cart) {
     //افزودن به تعداد محصول
-    const updateOp = await Cart.updateOne(
-      {
-        userId: req.user.id,
-        "reservedProducts.productId": new mongoose.Types.ObjectId(
-          req.params.productId
-        ),
-      },
-      { $inc: { "reservedProducts.$.count": 1 } }
+    const existing = await cart.reservedProducts.find((reserved) =>
+      reserved.productId.equals(
+        new mongoose.Types.ObjectId(req.params.productId)
+      )
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
+    if (existing) {
+      existing.count += 1;
+      await cart.save();
       return true;
     }
     return false;
   }
 
-  async minusCount(req, res) {
+  async minusCount(req, res, cart) {
     //کم کردن از تعداد محصول
-    const updateOp = await Cart.updateOne(
-      {
-        userId: req.user.id,
-        "reservedProducts.productId": new mongoose.Types.ObjectId(
-          req.params.productId
-        ),
-      },
-      { $inc: { "reservedProducts.$.count": -1 } }
+    const existing = await cart.reservedProducts.find((reserved) =>
+      reserved.productId.equals(
+        new mongoose.Types.ObjectId(req.params.productId)
+      )
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
+    if (existing) {
+      existing.count -= 1;
+      await cart.save();
       return true;
     }
     return false;

@@ -75,6 +75,7 @@ const getPropertiesAndFilters = async (properties, filters) => {
             valueString: null,
           };
           value.price ? (newValue.price = value.price) : null;
+          value.stock ? (newValue.stock = value.stock) : null;
           const propertyvalue = await Propertyval.findOne({
             _id: value.value,
           });
@@ -91,6 +92,7 @@ const getPropertiesAndFilters = async (properties, filters) => {
             valueString: value.valueString,
           };
           value.price ? (newValue.price = value.price) : null;
+          value.stock ? (newValue.stock = value.stock) : null;
           newProperty.values.push(newValue);
         }
       }
