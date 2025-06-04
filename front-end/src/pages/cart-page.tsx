@@ -65,7 +65,15 @@ const CartPage = () => {
             {reservedProducts?.map((product: any, index: any) => {
               return (
                 <tr key={index}>
-                  <td>{product.name}</td>
+                  <td>
+                    {product.name}
+                    {product.selectionString ? (
+                      <>
+                        <br />
+                        <span className="bg-amber-500 text-black">{product.selectionString}</span>
+                      </>
+                    ) : null}
+                  </td>
                   <td>{product.price * product.count}</td>
                   <td className="flex flex-row">
                     <span className="p-2 bg-red-500 text-amber-50 border border-b-black">

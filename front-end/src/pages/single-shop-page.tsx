@@ -11,6 +11,7 @@ const SingleShopPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const [product, setProduct] = useState<any>();
+  const [price, setPrice] = useState();
   const [defaultSelectiveProperty, setDefaultSelectiveProperty] =
     useState<string>();
   const [formData, setFormData] = useState<any>({
@@ -28,9 +29,30 @@ const SingleShopPage = () => {
     setDefaultSelectiveProperty(selectiveProperty?.values[0].value.toString());
   }
 
+  function handlePrice() {
+    const selectiveProperty = product.properties.find(
+      (property: any) => property.selective
+    );
+    const selectedPropertyval = selectiveProperty.values.find(
+      (propertyval: any) =>
+        formData.selectedPropertyvalString.includes(
+          propertyval.value.toString()
+        )
+    );
+    setPrice(selectedPropertyval.price);
+  }
+
   useEffect(() => {
-    if (product) setDefault();
-  }, [product]);
+    if (product) {
+      if (formData.selectedPropertyvalString === "") {
+        setPrice(product.price);
+        setDefault();
+      } else {
+        handlePrice();
+      }
+    }
+  }, [product, formData]);
+
   useEffect(() => {
     if (defaultSelectiveProperty)
       setFormData({ selectedPropertyvalString: defaultSelectiveProperty });
@@ -43,9 +65,6 @@ const SingleShopPage = () => {
     );
     setProduct(response.data.data);
   }
-  useEffect(() => {
-    console.log("this is formData : ", formData);
-  }, [formData]);
 
   async function handleAddToCart(id: string) {
     const response = await call(
@@ -71,7 +90,7 @@ const SingleShopPage = () => {
           width={100}
         />
         <p>{product?.name}</p>
-        <p>{product?.price}</p>
+        <p>{price}</p>
         <p>{product?.stock}</p>
         {product?.properties.length
           ? product.properties.map((property: any, index: any) => {

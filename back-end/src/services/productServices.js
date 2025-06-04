@@ -6,6 +6,7 @@ const getPropertiesAndFilters = require("../helpers/getProperties&filters");
 const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
+const getPriceAndStock = require("../helpers/getPriceAndStock");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -161,15 +162,28 @@ class ProductServices {
       item.productId.toString()
     );
     const products = await Product.find({ _id: { $in: productIds } });
-    const productsWithCounts = products.map((product) => {
-      const productInfo = cart.reservedProducts.find(
-        (p) => p.productId.equals(product._id)
-      );
-      return {
-        ...product.toObject(),
-        count: productInfo ? productInfo.count : 0,
-      };
-    });
+
+    const productsWithCounts = Promise.all(
+      products.map(async (product) => {
+        const productInfo = cart.reservedProducts.find((p) =>
+          p.productId.equals(product._id)
+        );
+        product.properties = (
+          await getPropertiesAndFilters(product.properties)
+        ).propertiesArr;
+        const { price, stock, selectionString } = getPriceAndStock(
+          productInfo.selectedPropertyvalString,
+          product
+        );
+        return {
+          ...product.toObject(),
+          price: price,
+          stock: stock,
+          selectionString: selectionString,
+          count: productInfo ? productInfo.count : 0,
+        };
+      })
+    );
     return productsWithCounts;
   }
 
