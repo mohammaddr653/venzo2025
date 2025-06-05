@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* شخصی سازی های تیلویند */
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-sm: 768px;
+  --breakpoint-sm: 976px;
+
+  --color-primary: #cc9b6d;
+  --color-secondary: #87805e;
+
+  --color-neutral-600: #faf7f0;
+  --color-neutral-700: #d8d2c2;
+  --color-neutral-800: #bbbbbb;
+  --color-neutral-900: #4a4947;
+
+  --font-iransans: "iransans";
+  --font-weight-weight400: 400;
+  --font-weight-weight300: 300;
+  --font-weight-weight200: 200;
+  --font-weight-weight100: 100;
+
+  --text-size24: 24px;
+  --text-size16: 16px;
+  --text-size13: 13px;
+}
+
 @font-face {
   font-family: "iransans";
   font-style: normal;
@@ -29,8 +54,26 @@
     url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_UltraLight.woff2");
 }
 
-span,h1,h2,h3,h4,h5,h6,p,a,div,button{
+body {
+  background-color: red;
+}
+div#root {
+  background-color: #faf7f0;
+  max-width: 1616px;
+  margin: 0 auto;
+  border: 2px solid black;
+}
+
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+div,
+button {
   font-family: "iransans";
-  font-weight: 200;
-  font-size: 16px;
 }
