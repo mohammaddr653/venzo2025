@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import LoadingButton from "./loadingButton";
-import callManager from "../../helpers/callManager";
+import callManager from "../../hooks/callManager";
 import axios from "axios";
 import { SERVER_API, SITE_KEY } from "../../../config";
 // @ts-ignore

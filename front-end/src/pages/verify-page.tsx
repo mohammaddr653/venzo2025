@@ -1,10 +1,10 @@
 import axios from "axios";
 import { SERVER_API } from "../../config";
-import callManager from "../helpers/callManager";
+import callManager from "../hooks/callManager";
 import { useEffect, useState } from "react";
 import LoadingButton from "../components/common/loadingButton";
 import { useNavigate } from "react-router-dom";
-import useLoadUser from "../helpers/useLoadUser";
+import useLoadUser from "../hooks/useLoadUser";
 
 const VerifyPage = () => {
   const navigate = useNavigate();

@@ -11,7 +11,7 @@ import {
   PropertiesObj,
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
-import callManager from "../../helpers/callManager";
+import callManager from "../../hooks/callManager";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
 

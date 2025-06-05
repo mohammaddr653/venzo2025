@@ -3,13 +3,13 @@ import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
-import callManager from "../../helpers/callManager";
+import callManager from "../../hooks/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
-import useLoadCategories from "../../helpers/useLoadCategories";
+import useLoadCategories from "../../hooks/useLoadCategories";
 import { PropertiesObj } from "../../types/objects/propertiesObj";
 import PropertiesManager from "../../components/common/propertiesManager";
-import useLoadPropertiesAndVals from "../../helpers/useLoadPropertiesAndVals";
+import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();

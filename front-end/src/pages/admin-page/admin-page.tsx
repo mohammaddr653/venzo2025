@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import LoadingButton from "../../components/common/loadingButton";
 import { DEFAULT_AVATAR, SERVER_API, SERVER_URL } from "../../../config";
-import callManager from "../../helpers/callManager";
-import useLoadUser from "../../helpers/useLoadUser";
+import callManager from "../../hooks/callManager";
+import useLoadUser from "../../hooks/useLoadUser";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 

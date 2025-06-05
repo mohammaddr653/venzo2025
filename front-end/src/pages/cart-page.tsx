@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/common/header";
 import { useUserStore } from "../store";
-import callManager from "../helpers/callManager";
+import callManager from "../hooks/callManager";
 import { SERVER_API } from "../../config";
 import axios from "axios";
 
@@ -70,7 +70,9 @@ const CartPage = () => {
                     {product.selectionString ? (
                       <>
                         <br />
-                        <span className="bg-amber-500 text-black">{product.selectionString}</span>
+                        <span className="bg-amber-500 text-black">
+                          {product.selectionString}
+                        </span>
                       </>
                     ) : null}
                   </td>

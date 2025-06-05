@@ -1,12 +1,12 @@
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
-import callManager from "../../helpers/callManager";
+import callManager from "../../hooks/callManager";
 import { useUserStore } from "../../store";
 import { SERVER_API } from "../../../config";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
-import useLoadCategories from "../../helpers/useLoadCategories";
+import useLoadCategories from "../../hooks/useLoadCategories";
 import { buildList } from "../../helpers/buildList";
 
 const CategoriesPage = () => {

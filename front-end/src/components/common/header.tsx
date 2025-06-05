@@ -1,38 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useUserStore } from "../../store";
-import { SERVER_API } from "../../../config";
-import axios from "axios";
-import callManager from "../../helpers/callManager";
-import useLoadCategories from "../../helpers/useLoadCategories";
-import { useEffect, useRef } from "react";
-import { buildList } from "../../helpers/buildList";
+import { Link } from "react-router-dom";
+import useHeaderLog from "../../hooks/logics/useHeaderLog";
 
 const Header = () => {
-  const { call, loading } = callManager();
-  const navigate = useNavigate();
-  const { user } = useUserStore();
-  const { categories, loadCategories } = useLoadCategories();
-  const list = useRef<HTMLUListElement>(null);
-
-  async function userLogout() {
-    const response = await call(
-      axios.get(SERVER_API + "/token/logout"),
-      false,
-      "/"
-    ); //deletes the token cookie
-  }
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  useEffect(() => {
-    buildList(list, categories, null, null, true, handleLink);
-  }, [categories]);
-
-  function handleLink(origin: string, categoryId: string) {
-    navigate(`/${origin}/${categoryId}`);
-  }
-
+  const { user, list, userLogout } = useHeaderLog();
   return (
     <div className="bg-pink-300">
       <h1>hello {user?.name} this is header</h1>

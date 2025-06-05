@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import callManager from "../helpers/callManager";
+import callManager from "../hooks/callManager";
 import { DEFAULT_AVATAR, SERVER_API, SERVER_URL } from "../../config";
 import axios from "axios";
 import LoadingButton from "../components/common/loadingButton";
-import useLoadUser from "../helpers/useLoadUser";
+import useLoadUser from "../hooks/useLoadUser";
 
 const UserPage = () => {
   const { call, loading } = callManager();

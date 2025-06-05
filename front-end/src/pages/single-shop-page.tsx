@@ -4,7 +4,7 @@ import { useUserStore } from "../store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { DEFAULT_PRODUCT, SERVER_API, SERVER_URL } from "../../config";
 import axios from "axios";
-import callManager from "../helpers/callManager";
+import callManager from "../hooks/callManager";
 
 const SingleShopPage = () => {
   const { productId } = useParams();
