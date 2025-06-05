@@ -121,6 +121,10 @@ const PropertiesManager = ({
     );
 
     if (matches) {
+      if (!matches.specifiedVals && property.selective)
+        return alert(
+          "تنها ویژگی های با مقادیر مشخص می توانند ویژگی انتخابی باشند"
+        );
       addProperty();
     } else {
       let formData = {
