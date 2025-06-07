@@ -21,14 +21,14 @@ export const buildList = (
     const newLi = document.createElement("li");
 
     const liHead = document.createElement("div");
-    liHead.classList.add(
-      "border",
-      "p-2",
-      "my-1",
-      "flex",
-      "justify-between",
-      "gap-4"
-    );
+    // liHead.classList.add(
+    //   "border",
+    //   "p-2",
+    //   "my-1",
+    //   "flex",
+    //   "justify-between",
+    //   "gap-4"
+    // );
 
     const title = document.createElement("h4");
     if (menu && handleLink) {

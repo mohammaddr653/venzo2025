@@ -18,4 +18,6 @@ export const DEFAULT_BLOG =
 export const DEFAULT_AVATAR =
   SERVER_URL + "/uploads/images/avatars/default-avatar.jpg";
 
+export const Logo = SERVER_URL + "/uploads/images/logo/icons8-hulu-64.png";
+
 export const SITE_KEY = site_key;

@@ -1,4 +1,35 @@
-@import "tailwindcss";
+/* وقتی تیلویند رو اینجور اضافه کنی دستت بازتره */
+/* installed tailwind using vite method exepct the next 4 lines */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@layer base {
+  body {
+  background-color: red;
+  }
+  div#root {
+    background-color: white;
+    max-width: 1616px;
+    margin: 0 auto;
+    border: 2px solid black;
+  }
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  div,
+  button {
+    font-family: "iransans";
+  }
+
+}
 
 /* شخصی سازی های تیلویند */
 @theme {
@@ -6,13 +37,17 @@
   --breakpoint-sm: 768px;
   --breakpoint-sm: 976px;
 
-  --color-primary: #cc9b6d;
-  --color-secondary: #87805e;
+  --color-primary: #AB3E16;
+  --color-secondary: #EFAA52;
 
-  --color-neutral-600: #faf7f0;
-  --color-neutral-700: #d8d2c2;
-  --color-neutral-800: #bbbbbb;
-  --color-neutral-900: #4a4947;
+  --color-cu-neutral-400: #F8F3E6;
+  --color-cu-neutral-500: #E7CC8F
+  --color-cu-neutral-600: #d8d2c2;
+  --color-cu-neutral-700: #bbbbbb;
+  --color-cu-neutral-800: #4a4947;
+  --color-cu-neutral-900: #333;
+
+  --shadow-b-lean-300: 0 .5px 10px rgba(0, 0, 0, 0.1);
 
   --font-iransans: "iransans";
   --font-weight-weight400: 400;
@@ -22,6 +57,8 @@
 
   --text-size24: 24px;
   --text-size16: 16px;
+  --text-size15: 15px;
+  --text-size14: 14px;
   --text-size13: 13px;
 }
 
@@ -54,26 +91,3 @@
     url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_UltraLight.woff2");
 }
 
-body {
-  background-color: red;
-}
-div#root {
-  background-color: #faf7f0;
-  max-width: 1616px;
-  margin: 0 auto;
-  border: 2px solid black;
-}
-
-span,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-a,
-div,
-button {
-  font-family: "iransans";
-}
