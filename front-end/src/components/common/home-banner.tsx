@@ -1,6 +1,12 @@
 import { SERVER_URL } from "../../../config";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
 import "../../assets/css/home-banner.css";
 
 import "swiper/css";
@@ -22,8 +28,17 @@ const HomeBanner = () => {
   return (
     <div className="home-banner-container relative rounded-xl overflow-hidden">
       <Swiper
-        modules={[Pagination, Scrollbar, A11y]}
+        modules={[Autoplay, Pagination, Navigation, Scrollbar, A11y]}
         initialSlide={0}
+        pagination={{
+          clickable: true,
+        }}
+        loop={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
         breakpoints={{
           0: {
             slidesPerView: 1,

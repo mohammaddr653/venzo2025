@@ -59,9 +59,10 @@ const Login = () => {
           onChange={handleCaptchaChange}
         />
         <LoadingButton loading={loading}>ورود</LoadingButton>
-        <br />
-        <Link to="/pass-restore">بازیابی رمز عبور</Link>
       </form>
+      <Link to="/pass-restore">بازیابی رمز عبور</Link>
+      <br />
+      <Link to={"/auth/register"}>حساب کاربری ندارید ؟ ثبت نام کنید .</Link>
     </div>
   );
 };

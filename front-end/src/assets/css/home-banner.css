@@ -30,3 +30,7 @@ div.home-banner-container button i {
   font-size: 25px;
   text-shadow: 2px 2px 4px black;
 }
+div.home-banner-container div.swiper-pagination span{
+  background-color: white;
+  box-shadow: 0 0 5px 1px black;
+}

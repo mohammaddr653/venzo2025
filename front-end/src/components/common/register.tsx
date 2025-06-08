@@ -5,6 +5,7 @@ import { SERVER_API, SITE_KEY } from "../../../config";
 import callManager from "../../hooks/callManager";
 // @ts-ignore
 import ReCAPTCHA from "react-google-recaptcha";
+import { Link } from "react-router-dom";
 
 interface RegisterArguments {
   isAdmin?: boolean;
@@ -79,6 +80,8 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
         )}
         <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>
+      <br />
+      <Link to={"/auth/login"}>قبلا ثبت نام کرده اید ؟ وارد شوید .</Link>
     </div>
   );
 };
