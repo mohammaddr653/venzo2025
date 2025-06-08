@@ -3,17 +3,15 @@ const express = require("express");
 const router = express.Router();
 const controller = require("./controller");
 const validator = require("./validator");
-const uploadProductImg = require("../../../upload/uploadProductImg");
-const uploadBlogImg = require("../../../upload/uploadBlogImg");
-const uploadAccountAvatar = require("../../../upload/uploadAccountAvatar");
 const avatarFileToReqBody = require("../../middlewares/avatarFileToReqBody");
 const productFileToReqBody = require("../../middlewares/productFileToReqBody");
 const blogFileToReqBody = require("../../middlewares/blogFileToReqBody");
+const uploadHandler = require("../../helpers/uploadHandler");
 
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
-  uploadAccountAvatar.single("avatar"),
+  uploadHandler("./public/uploads/images/avatars", "avatar"),
   avatarFileToReqBody,
   validator.updateProfileCheck(),
   controller.validate.bind(controller),
@@ -78,7 +76,7 @@ router.get(
 
 router.post(
   "/dashboard/products",
-  uploadProductImg.single("img"),
+  uploadHandler("./public/uploads/images/products", "img"),
   productFileToReqBody,
   validator.productValidator(),
   controller.validate.bind(controller),
@@ -87,7 +85,7 @@ router.post(
 
 router.put(
   "/dashboard/products/:productId",
-  uploadProductImg.single("img"),
+  uploadHandler("./public/uploads/images/products", "img"),
   productFileToReqBody,
   validator.updateProductValidator(),
   controller.validate.bind(controller),
@@ -103,7 +101,10 @@ router.delete(
 
 router.get("/dashboard/properties", controller.getProperties.bind(controller));
 
-router.get("/dashboard/properties/withvals", controller.getPropertiesWithVals.bind(controller));
+router.get(
+  "/dashboard/properties/withvals",
+  controller.getPropertiesWithVals.bind(controller)
+);
 
 router.get(
   "/dashboard/properties/:propertyId",
@@ -173,7 +174,7 @@ router.get("/dashboard/blogs/:blogId", controller.seeOneBlog.bind(controller));
 
 router.post(
   "/dashboard/blogs",
-  uploadBlogImg.single("img"),
+  uploadHandler("./public/uploads/images/blogs", "img"),
   blogFileToReqBody,
   validator.blogValidator(),
   controller.validate.bind(controller),
@@ -182,7 +183,7 @@ router.post(
 
 router.put(
   "/dashboard/blogs/:blogId",
-  uploadBlogImg.single("img"),
+  uploadHandler("./public/uploads/images/blogs", "img"),
   blogFileToReqBody,
   validator.updateBlogValidator(),
   controller.validate.bind(controller),
