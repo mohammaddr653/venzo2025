@@ -3,6 +3,7 @@ import useHeaderLog from "../../hooks/logics/useHeaderLog";
 import { Logo } from "../../../config";
 import "../../assets/css/header.css";
 import { useEffect, useState } from "react";
+import SearchBar from "./search-bar";
 
 const Header = () => {
   const { user, list, userLogout } = useHeaderLog();
@@ -49,11 +50,7 @@ const Header = () => {
             </nav>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <input
-              type="text"
-              className="border rounded-xl border-cu-neutral-700 py-1 px-3 text-size14"
-              placeholder="جستجو..."
-            />
+            <SearchBar></SearchBar>
             {!user ? (
               <>
                 <Link to={"/auth/login"}>
