@@ -62,6 +62,8 @@
   --text-size15: 15px;
   --text-size14: 14px;
   --text-size13: 13px;
+
+  --aspect-1353/555: 1353/555; 
 }
 
 @font-face {

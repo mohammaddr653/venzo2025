@@ -36,6 +36,7 @@ import PropertiesPage from "./pages/admin-page/properties-page";
 import OnePropertyPage from "./pages/admin-page/oneProperty-page";
 import PropertyvalsPage from "./pages/admin-page/propertyvals-page";
 import OnePropertyvalPage from "./pages/admin-page/onePropertyval-page";
+import BannersPage from "./pages/admin-page/banners-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -68,6 +69,7 @@ function App() {
           />
         </Route>
         <Route element={<AdminRoute user={user} />}>
+          <Route path="/admin/page/banners" element={<BannersPage />} />
           <Route path="/admin/properties" element={<PropertiesPage />} />
           <Route path="/admin/update-property" element={<OnePropertyPage />} />
           <Route path="/admin/propertyvals" element={<PropertyvalsPage />} />

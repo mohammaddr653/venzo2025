@@ -30,11 +30,8 @@ class BannerServices {
   async updateBanner(req, res) {
     const banner = await this.seeOneBanner(req, res);
     let data = {
-      show: banner.show,
+      show: req.body.show,
     };
-    if (req.body.show) {
-      data.show = req.body.show;
-    }
     const updateOp = await Banner.updateOne({ _id: banner.id }, { $set: data });
     if (updateOp.modifiedCount.valueOf() > 0) {
       return true;

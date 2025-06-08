@@ -11,8 +11,14 @@ import "swiper/css/scrollbar";
 import { useEffect } from "react";
 import SwiperButtonPrev from "./swiper-button-prev";
 import SwiperButtonNext from "./swiper-button-next";
+import useLoadBanners from "../../hooks/useLoadBanners";
 
 const HomeBanner = () => {
+  const { banners, loadBanners } = useLoadBanners();
+
+  useEffect(() => {
+    loadBanners();
+  }, []);
   return (
     <div className="home-banner-container relative rounded-xl overflow-hidden">
       <Swiper
@@ -35,26 +41,19 @@ const HomeBanner = () => {
       >
         <SwiperButtonPrev></SwiperButtonPrev>
         <SwiperButtonNext></SwiperButtonNext>
-        <SwiperSlide>
-          <img
-            src={
-              SERVER_URL +
-              "/uploads/images/banners/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
-            }
-            alt=""
-            className="w-full"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src={
-              SERVER_URL +
-              "/uploads/images/banners/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
-            }
-            alt=""
-            className="w-full"
-          />
-        </SwiperSlide>
+        {banners.length
+          ? banners.map((banner: any, index: any) => {
+              return banner.show ? (
+                <SwiperSlide>
+                  <img
+                    src={SERVER_URL + banner.image}
+                    alt="banner-image"
+                    className="w-full aspect-1353/555 object-cover object-center"
+                  />
+                </SwiperSlide>
+              ) : null;
+            })
+          : null}
       </Swiper>
     </div>
   );
