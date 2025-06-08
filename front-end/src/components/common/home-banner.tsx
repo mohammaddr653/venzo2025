@@ -39,7 +39,7 @@ const HomeBanner = () => {
           <img
             src={
               SERVER_URL +
-              "/uploads/images/banner/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
+              "/uploads/images/banners/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
             }
             alt=""
             className="w-full"
@@ -49,7 +49,7 @@ const HomeBanner = () => {
           <img
             src={
               SERVER_URL +
-              "/uploads/images/banner/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
+              "/uploads/images/banners/living-room-1920x1080-autumn-vibe-fireplace-267841.jpg"
             }
             alt=""
             className="w-full"

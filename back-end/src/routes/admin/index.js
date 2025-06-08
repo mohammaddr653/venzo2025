@@ -3,16 +3,15 @@ const express = require("express");
 const router = express.Router();
 const controller = require("./controller");
 const validator = require("./validator");
-const avatarFileToReqBody = require("../../middlewares/avatarFileToReqBody");
-const productFileToReqBody = require("../../middlewares/productFileToReqBody");
-const blogFileToReqBody = require("../../middlewares/blogFileToReqBody");
 const uploadHandler = require("../../helpers/uploadHandler");
+const pageRouter = require("./page");
+const fileToReqBodyHandler = require("../../middlewares/fileToReqBody");
 
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
   uploadHandler("./public/uploads/images/avatars", "avatar"),
-  avatarFileToReqBody,
+  fileToReqBodyHandler("avatar"),
   validator.updateProfileCheck(),
   controller.validate.bind(controller),
   controller.updateProfile.bind(controller)
@@ -77,7 +76,7 @@ router.get(
 router.post(
   "/dashboard/products",
   uploadHandler("./public/uploads/images/products", "img"),
-  productFileToReqBody,
+  fileToReqBodyHandler("img"),
   validator.productValidator(),
   controller.validate.bind(controller),
   controller.createProduct.bind(controller)
@@ -86,7 +85,7 @@ router.post(
 router.put(
   "/dashboard/products/:productId",
   uploadHandler("./public/uploads/images/products", "img"),
-  productFileToReqBody,
+  fileToReqBodyHandler("img"),
   validator.updateProductValidator(),
   controller.validate.bind(controller),
   controller.updateProduct.bind(controller)
@@ -175,7 +174,7 @@ router.get("/dashboard/blogs/:blogId", controller.seeOneBlog.bind(controller));
 router.post(
   "/dashboard/blogs",
   uploadHandler("./public/uploads/images/blogs", "img"),
-  blogFileToReqBody,
+  fileToReqBodyHandler("img"),
   validator.blogValidator(),
   controller.validate.bind(controller),
   controller.createBlog.bind(controller)
@@ -184,7 +183,7 @@ router.post(
 router.put(
   "/dashboard/blogs/:blogId",
   uploadHandler("./public/uploads/images/blogs", "img"),
-  blogFileToReqBody,
+  fileToReqBodyHandler("img"),
   validator.updateBlogValidator(),
   controller.validate.bind(controller),
   controller.updateBlog.bind(controller)
@@ -194,5 +193,9 @@ router.delete(
   "/dashboard/blogs/:blogId",
   controller.deleteBlog.bind(controller)
 );
+
+//page
+
+router.use("/dashboard/page", pageRouter);
 
 module.exports = router;
