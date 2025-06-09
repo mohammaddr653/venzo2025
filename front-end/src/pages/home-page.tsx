@@ -8,7 +8,7 @@ const HomePage = () => {
     <>
       <Header></Header>
       <main className="pt-17">
-        <div className="px-20">
+        <div className="px-5 md:px-20">
           <HomeBanner></HomeBanner>
         </div>
         <div className="p-1"></div>

@@ -9,6 +9,7 @@ import AccountButtons from "./account-buttons";
 const Header = () => {
   const { user, list, userLogout } = useHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
+  const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
 
   function handleScroll() {
     let lastScrollTop = 0;
@@ -33,30 +34,70 @@ const Header = () => {
       <header className="fixed">
         <div
           id="header-container"
-          className={`flex flex-row justify-between items-center px-20 ${
+          className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 ${
             isScrolled
               ? "bg-white/80 backdrop-blur-2xl shadow-b-lean-300"
               : "bg-transparent"
           }`}
         >
-          <div className="flex flex-row gap-15 items-center">
-            <Link to={"/"}>
-              <img src={Logo} className="" alt="logo" width={60} />
-            </Link>
+          <Link to={"/"}>
+            <img src={Logo} className="" alt="logo" width={60} />
+          </Link>
+          <img
+            src="/images/icons/icons8-menu-48.png"
+            width={30}
+            alt="hambergur-icon"
+            className="md:hidden cursor-pointer"
+            onClick={() => setMobileMenuShow(true)}
+          />
+          {mobileMenuShow ? (
+            <div
+              className="mobileMenu-overlay"
+              onClick={() => setMobileMenuShow(false)}
+            ></div>
+          ) : null}
+          <div
+            className={`hideMenu md:desktopMenu ${
+              mobileMenuShow ? "showMenu" : null
+            }`}
+          >
             <nav>
               <ul
                 ref={list}
-                className="flex flex-row gap-5 font-weight300 text-cu-neutral-900"
+                className="flex px-4 md:px-0 flex-col md:flex-row gap-5 font-weight300 text-cu-neutral-900"
               ></ul>
             </nav>
-          </div>
-          <div className="flex flex-row gap-2 items-center">
-            <AccountButtons
-              user={user}
-              userLogout={userLogout}
-            ></AccountButtons>
-            <span className="bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
-            <SearchBar></SearchBar>
+            <div className="flex flex-col-reverse md:flex-row gap-4 md:gap-2 items-start md:items-center">
+              <div className="hidden md:block">
+                <AccountButtons
+                  user={user}
+                  userLogout={userLogout}
+                  mode={"desktop"}
+                ></AccountButtons>
+              </div>
+              <div className="block md:hidden px-4 w-full">
+                <AccountButtons
+                  user={user}
+                  userLogout={userLogout}
+                  mode={"mobile"}
+                ></AccountButtons>
+              </div>
+              <span className="hidden md:block bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
+              <div className="w-full px-4 md:px-0">
+                <SearchBar className={"w-full md:w-auto"}></SearchBar>
+              </div>
+            </div>
+            <div className="block md:hidden flex flex-row justify-between items-center px-4">
+              <Link to={"/"}>
+                <img src={Logo} alt="logo" width={60} />
+              </Link>
+              <img
+                src="/images/icons/icons8-cross-48.png"
+                alt="close-icon"
+                width={30}
+                onClick={() => setMobileMenuShow(false)}
+              />
+            </div>
           </div>
         </div>
       </header>

@@ -7,3 +7,15 @@ header {
 div#header-container nav ul li div h4 {
   cursor: pointer;
 }
+/* some utilities used from index.css */
+div#header-container div.showMenu {
+  transform: translateX(0);
+}
+div#header-container div.mobileMenu-overlay {
+  background-color: var(--color-glass-shadow);
+  position: absolute;
+  width: 100%;
+  right: 0;
+  top: 0;
+  height: 100dvh;
+}

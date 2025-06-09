@@ -6,40 +6,115 @@ const AccountButtons = (props: any) => {
   return (
     <>
       {!props.user ? (
+        props.mode === "desktop" ? (
+          <>
+            <Link to={"/auth/login"}>
+              <img
+                src="/images/icons/icons8-user-default-64 (1).png"
+                width={40}
+                alt="user-icon"
+              />
+            </Link>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-row gap-2 text-cu-neutral-900">
+              <Link to={"/auth/login"}>ورود </Link>|
+              <Link to={"/auth/register"}>ثبت نام </Link>
+            </div>
+          </>
+        )
+      ) : props.mode === "desktop" ? (
         <>
-          <Link to={"/auth/login"}>
+          <div className="account-hover relative shadow-sm shadow-cu-neutral-900 rounded-full flex justify-center items-center">
             <img
-              src="/images/icons/icons8-user-default-64 (1).png"
+              src={
+                props.user?.avatar
+                  ? SERVER_URL + props.user.avatar
+                  : DEFAULT_AVATAR
+              }
               width={40}
-              alt="user-icon"
+              className="rounded-full aspect-square object-cover"
+              alt="user-avatar"
             />
-          </Link>
+            <div className="hidden-div py-3 absolute flex flex-column gap-2 rounded-xl bg-white shadow-sm shadow-cu-neutral-900 top-full left-full">
+              {props.user?.isadmin ? (
+                <>
+                  <Link to={"/admin"}>پنل ادمین</Link> <hr />
+                </>
+              ) : null}
+              <Link to={"/user"}>حساب کاربری</Link>
+              <hr />
+              <Link to={"/cart"}>سبد خرید</Link>
+              <hr />
+              <button className="cursor-pointer" onClick={props.userLogout}>
+                خروج از حساب
+              </button>
+            </div>
+          </div>
         </>
       ) : (
-        <div className="account-hover relative shadow-sm shadow-cu-neutral-900 rounded-full flex justify-center items-center">
-          <img
-            src={
-              props.user?.avatar
-                ? SERVER_URL + props.user.avatar
-                : DEFAULT_AVATAR
-            }
-            width={40}
-            className="rounded-full aspect-square object-cover"
-            alt="user-avatar"
-          />
-          <div className="hidden-div py-3 absolute flex flex-column gap-2 rounded-xl bg-white shadow-sm shadow-cu-neutral-900 top-full left-full">
+        <>
+          <div className=" rounded-full flex flex-col gap-3 justify-center items-start">
+            <Link
+              to={"/user"}
+              className="flex flex-row w-full gap-2 justify-between items-center"
+            >
+              <div className="flex flex-row gap-2 items-center">
+                <img
+                  src={
+                    props.user?.avatar
+                      ? SERVER_URL + props.user.avatar
+                      : DEFAULT_AVATAR
+                  }
+                  width={40}
+                  className="rounded-full aspect-square object-cover"
+                  alt="user-avatar"
+                />
+                <h4>{props.user?.name}</h4>
+              </div>
+              <p className="text-size13 text-cu-neutral-800 font-weight300">
+                حساب کاربری
+              </p>
+            </Link>
             {props.user?.isadmin ? (
               <>
-                <Link to={"/admin"}>پنل ادمین</Link> <hr />
+                <Link
+                  to={"/admin"}
+                  className="flex flex-row w-full gap-2 justify-between items-center"
+                >
+                  <div className="flex flex-row gap-2 items-center">
+                    <img
+                      src={
+                        props.user?.avatar
+                          ? SERVER_URL + props.user.avatar
+                          : DEFAULT_AVATAR
+                      }
+                      width={40}
+                      className="rounded-full aspect-square object-cover"
+                      alt="admin-avatar"
+                    />
+                    <h4>{props.user?.name}</h4>
+                  </div>
+                  <p className="text-size13 text-cu-neutral-800 font-weight300">
+                    پنل ادمین
+                  </p>
+                </Link>
               </>
             ) : null}
-            <Link to={"/user"}>حساب کاربری</Link>
-            <hr />
-            <Link to={"/cart"}>سبد خرید</Link>
-            <hr />
-            <button onClick={props.userLogout}>خروج از حساب</button>
+            <button
+              onClick={props.userLogout}
+              className="cursor-pointer font-weight300 text-red-600 text-size14 flex flex-row gap-2 items-center"
+            >
+              <img
+                src="/images/icons/icons8-exit-50.png"
+                alt="exit-icon"
+                width={40}
+              />
+              خروج از حساب
+            </button>
           </div>
-        </div>
+        </>
       )}
     </>
   );
