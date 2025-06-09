@@ -27,49 +27,50 @@ const HomeBanner = () => {
   }, []);
   return (
     <div className="home-banner-container relative rounded-xl overflow-hidden">
-      <Swiper
-        modules={[Autoplay, Pagination, Navigation, Scrollbar, A11y]}
-        initialSlide={0}
-        pagination={{
-          clickable: true,
-        }}
-        loop={true}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-          },
-          576: {
-            slidesPerView: 1,
-          },
-          768: {
-            slidesPerView: 1,
-          },
-          992: {
-            slidesPerView: 1,
-          },
-        }}
-      >
-        <SwiperButtonPrev></SwiperButtonPrev>
-        <SwiperButtonNext></SwiperButtonNext>
-        {banners.length
-          ? banners.map((banner: any, index: any) => {
-              return banner.show ? (
-                <SwiperSlide>
-                  <img
-                    src={SERVER_URL + banner.image}
-                    alt="banner-image"
-                    className="w-full aspect-1353/555 object-cover object-center"
-                  />
-                </SwiperSlide>
-              ) : null;
-            })
-          : null}
-      </Swiper>
+      {banners.length ? (
+        <Swiper
+          modules={[Autoplay, Pagination, Navigation, Scrollbar, A11y]}
+          initialSlide={0}
+          pagination={{
+            clickable: true,
+          }}
+          loop={true}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          breakpoints={{
+            0: {
+              slidesPerView: 1,
+            },
+            576: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 1,
+            },
+            992: {
+              slidesPerView: 1,
+            },
+          }}
+        >
+          <SwiperButtonPrev></SwiperButtonPrev>
+          <SwiperButtonNext></SwiperButtonNext>
+
+          {banners.map((banner: any, index: any) => {
+            return banner.show ? (
+              <SwiperSlide>
+                <img
+                  src={SERVER_URL + banner.image}
+                  alt="banner-image"
+                  className="w-full aspect-1353/555 object-cover object-center"
+                />
+              </SwiperSlide>
+            ) : null;
+          })}
+        </Swiper>
+      ) : null}
     </div>
   );
 };

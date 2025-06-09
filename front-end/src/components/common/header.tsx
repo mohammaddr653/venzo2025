@@ -4,6 +4,7 @@ import { Logo } from "../../../config";
 import "../../assets/css/header.css";
 import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
+import AccountButtons from "./account-buttons";
 
 const Header = () => {
   const { user, list, userLogout } = useHeaderLog();
@@ -50,25 +51,12 @@ const Header = () => {
             </nav>
           </div>
           <div className="flex flex-row gap-2 items-center">
+            <AccountButtons
+              user={user}
+              userLogout={userLogout}
+            ></AccountButtons>
+            <span className="bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
             <SearchBar></SearchBar>
-            {!user ? (
-              <>
-                <Link to={"/auth/login"}>
-                  <img
-                    src="/images/icons/icons8-user-default-64 (1).png"
-                    width={40}
-                    alt="user-icon"
-                  />
-                </Link>
-              </>
-            ) : (
-              <div className="flex flex-row gap-2">
-                {user?.isadmin ? <Link to={"/admin"}>پنل ادمین</Link> : null}
-                <Link to={"/user"}>حساب کاربری</Link>
-                <Link to={"/cart"}>سبد خرید</Link>
-                <button onClick={userLogout}>خروج از حساب</button>
-              </div>
-            )}
           </div>
         </div>
       </header>

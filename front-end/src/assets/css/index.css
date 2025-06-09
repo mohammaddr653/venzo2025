@@ -50,6 +50,10 @@
   --color-cu-neutral-900: #333;
 
   --shadow-b-lean-300: 0 .5px 10px rgba(0, 0, 0, 0.1);
+  --shadow-full-ring: 0 0 3px 2px #AB3E16;
+
+  --spacing-1px: 1px;
+  --spacing-2px: 2px;
 
   --font-iransans: "iransans";
   --font-weight-weight400: 400;
