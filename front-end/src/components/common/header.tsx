@@ -5,6 +5,7 @@ import "../../assets/css/header.css";
 import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
 import AccountButtons from "./account-buttons";
+import CartCounter from "./cart-counter";
 
 const Header = () => {
   const { user, list, userLogout } = useHeaderLog();
@@ -67,7 +68,14 @@ const Header = () => {
                 className="flex px-4 md:px-0 flex-col md:flex-row gap-5 font-weight300 text-cu-neutral-900"
               ></ul>
             </nav>
-            <div className="flex flex-col-reverse md:flex-row gap-4 md:gap-2 items-start md:items-center">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-2 items-start md:items-center">
+              <div className="w-full px-4 md:px-0">
+                <SearchBar className={"w-full md:w-auto"}></SearchBar>
+              </div>
+              <span className="hidden md:block bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
+              <div className="hidden md:block">
+                <CartCounter user={user}></CartCounter>
+              </div>
               <div className="hidden md:block">
                 <AccountButtons
                   user={user}
@@ -82,10 +90,6 @@ const Header = () => {
                   mode={"mobile"}
                 ></AccountButtons>
               </div>
-              <span className="hidden md:block bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
-              <div className="w-full px-4 md:px-0">
-                <SearchBar className={"w-full md:w-auto"}></SearchBar>
-              </div>
             </div>
             <div className="block md:hidden flex flex-row justify-between items-center px-4">
               <Link to={"/"}>
@@ -95,6 +99,7 @@ const Header = () => {
                 src="/images/icons/icons8-cross-48.png"
                 alt="close-icon"
                 width={30}
+                className="cursor-pointer"
                 onClick={() => setMobileMenuShow(false)}
               />
             </div>
