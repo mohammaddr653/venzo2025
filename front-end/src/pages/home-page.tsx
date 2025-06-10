@@ -1,5 +1,6 @@
 import Header from "../components/common/header";
 import HomeBanner from "../components/common/home-banner";
+import TrustBar from "../components/common/trust-bar";
 import { useUserStore } from "../store";
 
 const HomePage = () => {
@@ -10,6 +11,9 @@ const HomePage = () => {
       <main className="pt-17">
         <div className="px-5 md:px-20">
           <HomeBanner></HomeBanner>
+        </div>
+        <div className="px-5 md:px-20 mt-5">
+          <TrustBar></TrustBar>
         </div>
         <div className="p-1"></div>
         <div className="p-1"></div>

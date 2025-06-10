@@ -72,7 +72,7 @@ const Header = () => {
               <div className="w-full px-4 md:px-0">
                 <SearchBar className={"w-full md:w-auto"}></SearchBar>
               </div>
-              <span className="hidden md:block bg-cu-neutral-700 w-1px block h-6 rounded-3xl border-0"></span>
+              <span className="hidden md:block bg-cu-neutral-700 w-1px h-6 rounded-3xl border-0"></span>
               <div className="hidden md:block">
                 <CartCounter user={user}></CartCounter>
               </div>
@@ -91,7 +91,7 @@ const Header = () => {
                 ></AccountButtons>
               </div>
             </div>
-            <div className="block md:hidden flex flex-row justify-between items-center px-4">
+            <div className="flex md:hidden flex-row justify-between items-center px-4">
               <Link to={"/"}>
                 <img src={Logo} alt="logo" width={60} />
               </Link>
