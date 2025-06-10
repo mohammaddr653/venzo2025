@@ -2,6 +2,12 @@
 /* installed tailwind using vite method exepct the next 4 lines */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 
+  /* this code makes all bootstrap icons vertical align middle */
+  .bi::before{
+    vertical-align: middle
+  }
+
+
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
@@ -30,7 +36,6 @@
   button {
     font-family: "iransans";
   }
-
 }
 
 /* can use this utility with hover: md: lg: and... */
