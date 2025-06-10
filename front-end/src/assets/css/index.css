@@ -78,6 +78,7 @@
   --color-glass-shadow: rgba(0, 0, 0, 0.684);
 
   --shadow-b-lean-300: 0 .5px 10px rgba(0, 0, 0, 0.1);
+  --shadow-b-card-300: 0 0 5px 1px #AB3E16;
   --shadow-full-ring: 0 0 3px 2px #AB3E16;
 
   --spacing-1px: 1px;
