@@ -17,6 +17,7 @@ class BannerServices {
   async createBanner(req, res) {
     //اضافه کردن بنر
     const newBanner = new Banner({
+      location: req.body.location,
       show: req.body.show,
     });
     if (req.file) {
@@ -30,9 +31,14 @@ class BannerServices {
   async updateBanner(req, res) {
     const banner = await this.seeOneBanner(req, res);
     let data = {
+      location: req.body.location,
       show: req.body.show,
     };
-    const updateOp = await Banner.updateOne({ _id: banner.id }, { $set: data });
+    const updateOp = await Banner.updateOne(
+      { _id: banner.id },
+      { $set: data },
+      { runValidators: true }
+    );
     if (updateOp.modifiedCount.valueOf() > 0) {
       return true;
     }
