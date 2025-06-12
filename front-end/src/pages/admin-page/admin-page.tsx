@@ -103,6 +103,7 @@ const AdminPage = () => {
       <br />
       <h3>پیکره بندی صفحه</h3>
       <Link to={"/admin/page/banners"}>مدیریت بنر ها</Link>
+      <Link to={"/admin/page/trusts"}>مدیریت اعتماد ها</Link>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">
         this is zustand , hello{user ? user.name : " user"}

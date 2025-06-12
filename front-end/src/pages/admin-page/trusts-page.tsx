@@ -5,35 +5,54 @@ import callManager from "../../hooks/callManager";
 import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
-import useLoadBanners from "../../hooks/useLoadBanners";
-const BannersPage = () => {
+import useLoadTrusts from "../../hooks/useLoadTrusts";
+const TrustsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
-  const { banners, loadBanners } = useLoadBanners();
+  const { trusts, loadTrusts } = useLoadTrusts();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<any>({
     image: "",
+    title: "",
+    caption: "",
     show: false,
   });
   const [updateFormData, setUpdateFormData] = useState<any>();
-  const [selectedBannerId, setSelectedBannerId] = useState<any>(null);
+  const [selectedTrustId, setSelectedTrustId] = useState<any>(null);
 
   const fileInputRef = useRef<any>(null);
 
   async function refresh() {
     setFormData({
       image: "",
+      title: "",
+      caption: "",
       show: false,
     });
     // Reset file input field
     fileInputRef.current ? (fileInputRef.current.value = "") : null;
-    loadBanners();
+    loadTrusts();
   }
 
   useEffect(() => {
     refresh();
   }, []);
+
+  const handleFormChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleUpdateFormChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setUpdateFormData({ ...updateFormData, [e.target.name]: e.target.value });
+  };
 
   const handleFileChange = (event: any) => {
     setFormData({ ...formData, image: event.target.files[0] });
@@ -50,10 +69,10 @@ const BannersPage = () => {
 
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    bannerId: any
+    trustId: any
   ) => {
     const response = await call(
-      axios.delete(SERVER_API + `/admin/dashboard/page/banners/${bannerId}`),
+      axios.delete(SERVER_API + `/admin/dashboard/page/trusts/${trustId}`),
       true
     );
     refresh();
@@ -72,7 +91,7 @@ const BannersPage = () => {
     e.preventDefault();
     const response = await call(
       axios.put(
-        SERVER_API + `/admin/dashboard/page/banners/${selectedBannerId}`,
+        SERVER_API + `/admin/dashboard/page/trusts/${selectedTrustId}`,
         updateFormData
       ),
       true
@@ -93,7 +112,7 @@ const BannersPage = () => {
       dataToSend.append(key, value);
     });
     const response = await call(
-      axios.post(SERVER_API + "/admin/dashboard/page/banners", dataToSend),
+      axios.post(SERVER_API + "/admin/dashboard/page/trusts", dataToSend),
       true
     );
     refresh();
@@ -101,15 +120,31 @@ const BannersPage = () => {
 
   return (
     <div>
-      <h1>مدیریت بنرها</h1>
+      <h1>مدیریت اعتماد ها</h1>
       <br />
-      <h4>لطفا بنر ها را با ابعاد مشابه ایجاد کنید تا باعث ناهماهنگی نشود</h4>
+      <h4>لطفا تصویر اعتماد ها را با ابعاد مشابه ایجاد کنید تا باعث ناهماهنگی نشود</h4>
       <div className="bg-red-300">
         <form onSubmit={handleSubmit} className="flex-column">
           <input
+            type="text"
+            placeholder="title"
+            name="title"
+            value={formData.title}
+            className="border"
+            onChange={handleFormChange}
+          />
+          <input
+            type="text"
+            placeholder="caption"
+            name="caption"
+            value={formData.caption}
+            className="border"
+            onChange={handleFormChange}
+          />
+          <input
             type="file"
             name="image"
-            accept=".jpg,.jpeg"
+            accept=".png"
             className="border"
             onChange={handleFileChange}
             ref={fileInputRef}
@@ -135,7 +170,7 @@ const BannersPage = () => {
             غیرفعال
           </label>
           <br />
-          <LoadingButton loading={loading}>افزودن بنر</LoadingButton>
+          <LoadingButton loading={loading}>افزودن اعتماد</LoadingButton>
         </form>
       </div>
       <div className="bg-blue-300">
@@ -145,25 +180,41 @@ const BannersPage = () => {
           <thead>
             <tr>
               <th className="border">image</th>
-              <th className="border">وضعیت</th>
+              <th className="border">جزئیات</th>
               <th className="border">عملیات</th>
             </tr>
           </thead>
           <tbody>
-            {banners?.map((banner: any, index: any) => {
+            {trusts?.map((trust: any, index: any) => {
               return (
                 <tr key={index}>
                   <td className="border">
                     <img
-                      src={SERVER_URL + banner.image}
+                      src={SERVER_URL + trust.image}
                       alt=""
                       className="aspect-square object-cover"
                       width={100}
                     />
                   </td>
                   <td className="border">
-                    {selectedBannerId === banner._id.toString() ? (
+                    {selectedTrustId === trust._id.toString() ? (
                       <form onSubmit={(e) => handleUpdate(e)}>
+                        <input
+                          type="text"
+                          placeholder="title"
+                          name="title"
+                          value={updateFormData.title}
+                          className="border"
+                          onChange={handleUpdateFormChange}
+                        />
+                        <input
+                          type="text"
+                          placeholder="caption"
+                          name="caption"
+                          value={updateFormData.caption}
+                          className="border"
+                          onChange={handleUpdateFormChange}
+                        />
                         <label>
                           <input
                             type="radio"
@@ -187,11 +238,15 @@ const BannersPage = () => {
                       </form>
                     ) : (
                       <>
-                        <p>{banner.show.toString()}</p>
+                        <p>{trust.show.toString()}</p>
                         <button
                           onClick={() => {
-                            setUpdateFormData({ show: banner.show });
-                            setSelectedBannerId(banner._id.toString());
+                            setUpdateFormData({
+                              title: trust.title,
+                              caption: trust.caption,
+                              show: trust.show,
+                            });
+                            setSelectedTrustId(trust._id.toString());
                           }}
                         >
                           ویرایش
@@ -201,8 +256,8 @@ const BannersPage = () => {
                   </td>
                   <td className="border">
                     <button
-                      onClick={(e, bannerId = banner._id) => {
-                        handleDelete(e, bannerId);
+                      onClick={(e, trustId = trust._id) => {
+                        handleDelete(e, trustId);
                       }}
                     >
                       حذف
@@ -222,4 +277,4 @@ const BannersPage = () => {
     </div>
   );
 };
-export default BannersPage;
+export default TrustsPage;
