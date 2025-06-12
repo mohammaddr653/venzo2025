@@ -59,7 +59,7 @@ const HomeBanner = () => {
           <SwiperButtonNext></SwiperButtonNext>
 
           {banners.map((banner: any, index: any) => {
-            return banner.show ? (
+            return banner.show && banner.location === "main-banner" ? (
               <SwiperSlide>
                 <img
                   src={SERVER_URL + banner.image}

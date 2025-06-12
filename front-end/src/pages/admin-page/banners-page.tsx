@@ -14,6 +14,7 @@ const BannersPage = () => {
 
   const [formData, setFormData] = useState<any>({
     image: "",
+    location: "",
     show: false,
   });
   const [updateFormData, setUpdateFormData] = useState<any>();
@@ -24,6 +25,7 @@ const BannersPage = () => {
   async function refresh() {
     setFormData({
       image: "",
+      location: "",
       show: false,
     });
     // Reset file input field
@@ -37,6 +39,22 @@ const BannersPage = () => {
 
   const handleFileChange = (event: any) => {
     setFormData({ ...formData, image: event.target.files[0] });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setUpdateFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleShowChange = (event: any) => {
@@ -115,6 +133,16 @@ const BannersPage = () => {
             ref={fileInputRef}
           />
           <br />
+          <select
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            className="border"
+          >
+            <option value="">-- لطفاً انتخاب کنید --</option>
+            <option value="main-banner">بنر اصلی</option>
+            <option value="little-banner">بنر های کوچک</option>
+          </select>
           <label>
             <input
               type="radio"
@@ -164,6 +192,17 @@ const BannersPage = () => {
                   <td className="border">
                     {selectedBannerId === banner._id.toString() ? (
                       <form onSubmit={(e) => handleUpdate(e)}>
+                        <select
+                          name="location"
+                          value={updateFormData.location}
+                          onChange={handleUpdateChange}
+                          className="border"
+                        >
+                          <option value="">-- لطفاً انتخاب کنید --</option>
+                          <option value="main-banner">بنر اصلی</option>
+                          <option value="little-banner">بنر های کوچک</option>
+                        </select>
+                        <br />
                         <label>
                           <input
                             type="radio"
@@ -190,7 +229,10 @@ const BannersPage = () => {
                         <p>{banner.show.toString()}</p>
                         <button
                           onClick={() => {
-                            setUpdateFormData({ show: banner.show });
+                            setUpdateFormData({
+                              location: banner.location,
+                              show: banner.show,
+                            });
                             setSelectedBannerId(banner._id.toString());
                           }}
                         >
