@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 
-const uploadHandler = (destination,fieldName) => {
+const uploadHandler = (destination, fieldName, regExp) => {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, destination);
@@ -13,7 +13,7 @@ const uploadHandler = (destination,fieldName) => {
   });
   function checkFileType(file, cb) {
     // Allowed ext
-    const filetypes = /jpeg|jpg/;
+    const filetypes = regExp;
     // Check ext
     const extname = filetypes.test(path.extname(file.originalname).toString());
 
@@ -30,7 +30,7 @@ const uploadHandler = (destination,fieldName) => {
     },
   });
 
-  return upload.single(fieldName)
+  return upload.single(fieldName);
 };
 
 module.exports = uploadHandler;

@@ -1,6 +1,7 @@
 //controller
 const debug = require("debug")("app");
 const bannerServices = require("../../../services/bannerServices");
+const trustServices = require("../../../services/trustServices");
 const controller = require("./../../controller");
 const _ = require("lodash");
 
@@ -49,6 +50,55 @@ module.exports = new (class extends controller {
       this.response({
         res,
         message: "حذف بنر ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async createTrust(req, res) {
+    const result = await trustServices.createTrust(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "اعتماد با موفقیت اضافه شد",
+        data: result,
+      });
+    } else {
+      this.response({
+        res,
+        message: "ساخت اعتماد ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async updateTrust(req, res) {
+    const result = await trustServices.updateTrust(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "اعتماد با موفقیت بروزرسانی شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "بروزرسانی اعتماد ناموفق بود",
+        code: 400,
+      });
+    }
+  }
+
+  async deleteTrust(req, res) {
+    const result = await trustServices.deleteTrust(req, res);
+    if (result) {
+      this.response({
+        res,
+        message: "اعتماد با موفقیت حذف شد",
+      });
+    } else {
+      this.response({
+        res,
+        message: "حذف اعتماد ناموفق بود",
         code: 400,
       });
     }

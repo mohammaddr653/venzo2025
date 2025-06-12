@@ -6,11 +6,12 @@ const validator = require("./validator");
 const uploadHandler = require("../../../helpers/uploadHandler");
 const fileToReqBodyHandler = require("../../../middlewares/fileToReqBody");
 
+//banners
 //get all banners is in /page
 
 router.post(
   "/banners",
-  uploadHandler("./public/uploads/images/banners", "image"),
+  uploadHandler("./public/uploads/images/banners", "image", /jpeg|jpg/),
   fileToReqBodyHandler("image"),
   validator.bannerValidator(),
   controller.validate.bind(controller),
@@ -24,5 +25,25 @@ router.put(
 );
 
 router.delete("/banners/:bannerId", controller.deleteBanner.bind(controller));
+
+//trusts
+//get all trusts is in /page
+
+router.post(
+  "/trusts",
+  uploadHandler("./public/uploads/images/trusts", "image", /png/),
+  fileToReqBodyHandler("image"),
+  validator.trustValidator(),
+  controller.validate.bind(controller),
+  controller.createTrust.bind(controller)
+);
+router.put(
+  "/trusts/:trustId",
+  validator.updateTrustValidator(),
+  controller.validate.bind(controller),
+  controller.updateTrust.bind(controller)
+);
+
+router.delete("/trusts/:trustId", controller.deleteTrust.bind(controller));
 
 module.exports = router;
