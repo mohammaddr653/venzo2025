@@ -29,8 +29,8 @@ const useHeaderLog = () => {
     buildList(list, categories, null, null, true, handleLink);
   }, [categories]);
 
-  function handleLink(origin: string, categoryId: string) {
-    navigate(`/${origin}/${categoryId}`);
+  function handleLink(pathString: string) {
+    navigate(pathString);
   }
 
   return { user, list, userLogout };

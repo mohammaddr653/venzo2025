@@ -19,7 +19,8 @@ const CategoriesPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     motherId: "",
-    path: "",
+    type: "",
+    link: "",
   });
 
   const handleChange = (
@@ -34,7 +35,8 @@ const CategoriesPage = () => {
     setFormData({
       name: "",
       motherId: "",
-      path: "",
+      type: "",
+      link: "",
     });
     loadCategories();
   }
@@ -96,12 +98,21 @@ const CategoriesPage = () => {
             {/* dynamic */}
           </select>
           <br />
-          <p>اگر دسته بندی مادر است حتما این فیلد را پر کنید</p>
           <input
             type="text"
-            name="path"
-            placeholder="path"
-            value={formData.path}
+            name="type"
+            placeholder="type"
+            value={formData.type}
+            className="border"
+            onChange={handleChange}
+          />
+          <br />
+          <h4>آدرس لینک تنها برای دسته بندی های نوع لینک بکار می آید</h4>
+          <input
+            type="text"
+            name="link"
+            placeholder="link"
+            value={formData.link}
             className="border"
             onChange={handleChange}
           />

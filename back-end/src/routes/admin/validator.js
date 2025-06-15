@@ -1,5 +1,5 @@
 //validator
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
 const validator = require("../validator");
 
 module.exports = new (class extends validator {
@@ -13,13 +13,40 @@ module.exports = new (class extends validator {
     return [this.emailCheck];
   }
   categoryValidator() {
-    return [check("name", "لطفا نام دسته بندی را انتخاب کنید").notEmpty()];
+    return [
+      check("name", "لطفا نام دسته بندی را انتخاب کنید").notEmpty(),
+      check("type")
+        .notEmpty()
+        .withMessage("نوع دسته‌بندی نباید خالی باشد")
+        .isIn(["link", "shop", "archive", "box"])
+        .withMessage("نوع دسته‌بندی نامعتبر است"),
+      body("link").custom((value, { req }) => {
+        if (req.body.type && req.body.type === "link") {
+          if (!(typeof value === "string" && value.trim().length > 0)) {
+            throw new Error("لطفا آدرس لینک را وارد کنید");
+          }
+        }
+        return true;
+      }),
+    ];
   }
   categoryUpdateCheck() {
     return [
       check("name", "لطفا نام دسته بندی را انتخاب کنید").notEmpty(),
       check("motherId", "لطفا دسته مادر را انتخاب کنید").notEmpty(),
-      check("path", "لطفا لینک را تعیین کنید").notEmpty(),
+      check("type")
+        .notEmpty()
+        .withMessage("نوع دسته‌بندی نباید خالی باشد")
+        .isIn(["link", "shop", "archive", "box"])
+        .withMessage("نوع دسته‌بندی نامعتبر است"),
+      body("link").custom((value, { req }) => {
+        if (req.body.type && req.body.type === "link") {
+          if (!(typeof value === "string" && value.trim().length > 0)) {
+            throw new Error("لطفا آدرس لینک را وارد کنید");
+          }
+        }
+        return true;
+      }),
     ];
   }
   productValidator() {

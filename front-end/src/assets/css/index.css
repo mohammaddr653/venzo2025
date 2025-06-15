@@ -80,10 +80,13 @@
   --color-cu-neutral-800: #4a4947;
   --color-cu-neutral-900: #333;
 
+  --color-transparent: rgba(0, 0, 0, 0);
+
   --color-glass-shadow: rgba(0, 0, 0, 0.684);
 
   --shadow-b-lean-300: 0 .5px 10px rgba(0, 0, 0, 0.1);
   --shadow-b-card-300: 0 0 5px 1px #AB3E16;
+  --shadow-card-neutral: 0 0 5px 1px #bbbbbb;
   --shadow-full-ring: 0 0 3px 2px #AB3E16;
 
   --spacing-1px: 1px;
@@ -96,12 +99,14 @@
   --font-weight-weight100: 100;
 
   --text-size24: 24px;
+  --text-size17: 17px;
   --text-size16: 16px;
   --text-size15: 15px;
   --text-size14: 14px;
   --text-size13: 13px;
 
   --aspect-1353/555: 1353/555; 
+  --aspect-284/170: 284/170; 
 
   --breakpoint-*: initial;
   --breakpoint-sm: 40rem;

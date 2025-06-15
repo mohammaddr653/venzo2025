@@ -5,6 +5,7 @@ import TrustBar from "../components/common/trust-bar";
 import { useUserStore } from "../store";
 import "../assets/css/home-page.css";
 import HomeLittleBanner from "../components/common/home-little-banner";
+import ProductsArchive from "../components/common/productsArchive";
 
 const HomePage = () => {
   const { user } = useUserStore();
@@ -26,6 +27,9 @@ const HomePage = () => {
           </div>
           <div className="px-5 md:px-20 mt-5">
             <HomeLittleBanner></HomeLittleBanner>
+          </div>
+          <div className="px-5 md:px-20 mt-5">
+            <ProductsArchive></ProductsArchive>
           </div>
           <div className="p-1"></div>
           <div className="p-1"></div>

@@ -13,7 +13,8 @@ const OneCategoryPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     motherId: "",
-    path: "",
+    type: "",
+    link: "",
   });
   const { state } = useLocation();
   const { categoryId, categories } = state || null;
@@ -39,7 +40,8 @@ const OneCategoryPage = () => {
       ...formData,
       name: matchedCategory.name,
       motherId: matchedCategory.motherId,
-      path: matchedCategory.path,
+      type: matchedCategory.type,
+      link: matchedCategory.link,
     });
   }
   useEffect(() => {
@@ -102,9 +104,18 @@ const OneCategoryPage = () => {
           <input
             type="text"
             className="border rounded p-3"
-            placeholder="path"
-            name="path"
-            value={formData?.path}
+            placeholder="type"
+            name="type"
+            value={formData?.type}
+            onChange={handleChange}
+          />
+          <h4>آدرس لینک تنها برای دسته بندی های نوع لینک بکار می آید</h4>
+          <input
+            type="text"
+            name="link"
+            placeholder="link"
+            value={formData?.link}
+            className="border"
             onChange={handleChange}
           />
 

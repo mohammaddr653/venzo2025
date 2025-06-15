@@ -12,12 +12,12 @@ export const buildList = (
     list.current.innerHTML = "";
     categories.forEach((category: any) => {
       if (category.motherId === "root") {
-        listLoop(category, list.current, category.path);
+        listLoop(category, list.current);
       }
     });
   }
 
-  function listLoop(item: any, parent: any, origin: any) {
+  function listLoop(item: any, parent: any) {
     const newLi = document.createElement("li");
 
     const liHead = document.createElement("div");
@@ -32,11 +32,29 @@ export const buildList = (
 
     const title = document.createElement("h4");
     if (menu && handleLink) {
-      title.onclick = () => {
-        handleLink(origin, item._id);
-      };
+      switch (item.type) {
+        case "shop":
+          title.onclick = () => {
+            handleLink(`/shop/${item._id}`);
+          };
+          break;
+        case "archive":
+          title.onclick = () => {
+            handleLink(`/archive/${item._id}`);
+          };
+          break;
+        case "box": //note:need to be completed
+          break;
+        case "link":
+          title.onclick = () => {
+            window.open(item.link, "_blank");
+          };
+          break;
+        default:
+          break;
+      }
     }
-    title.innerHTML = item.name;
+    title.innerHTML = menu ? item.name : item.name + `${item.type}`;
 
     liHead.appendChild(title);
 
@@ -66,7 +84,7 @@ export const buildList = (
         const newUl = document.createElement("ul");
         newUl.classList.add("ps-5");
         newLi.appendChild(newUl);
-        listLoop(category, newUl, origin);
+        listLoop(category, newUl);
       }
     });
   }

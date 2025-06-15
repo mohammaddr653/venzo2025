@@ -15,14 +15,13 @@ class CategoriesServices {
     //اضافه کردن دسته بندی
     const newCategory = new Category({
       name: req.body.name,
+      type: req.body.type,
+      link: req.body.link,
     });
     if (req.body.motherId) {
       const exist = await Category.findById(req.body.motherId);
       if (!exist) return false;
       newCategory.motherId = new mongoose.Types.ObjectId(req.body.motherId);
-    }
-    if (req.body.path) {
-      newCategory.path = req.body.path;
     }
     return newCategory.save();
   }
@@ -37,14 +36,14 @@ class CategoriesServices {
           req.body.motherId === "root"
             ? req.body.motherId
             : new mongoose.Types.ObjectId(req.body.motherId),
-        path: req.body.path,
+        type: req.body.type,
+        link: req.body.link,
       };
       if (req.body.motherId !== category.id) {
         if (req.body.motherId !== "root") {
           const exist = await Category.findById(req.body.motherId);
           if (!exist) return false;
         }
-
         const updateOp = await Category.updateOne(
           { _id: category.id },
           { $set: data }
