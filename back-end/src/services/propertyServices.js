@@ -45,11 +45,13 @@ class PropertyServices {
     if (property) {
       return { code: 400 };
     }
-    property = new Property(_.pick(req.body, ["name", "specifiedVals"]));
+    property = new Property(
+      _.pick(req.body, ["name", "specifiedVals", "type"])
+    );
     await property.save();
     return {
       code: 200,
-      data: _.pick(property, ["_id", "name", "specifiedVals"]),
+      data: _.pick(property, ["_id", "name", "specifiedVals", "type"]),
     };
   }
 

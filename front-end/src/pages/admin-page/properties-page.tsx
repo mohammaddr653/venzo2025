@@ -14,12 +14,14 @@ const PropertiesPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     specifiedVals: "true",
+    type: "",
   });
 
   async function loadProperties() {
     setFormData({
       name: "",
       specifiedVals: "true",
+      type: "",
     });
     const response = await call(
       axios.get(SERVER_API + "/admin/dashboard/properties"),
@@ -37,7 +39,11 @@ const PropertiesPage = () => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "specifiedVals" && e.target.value === "false") {
+      setFormData({ ...formData, [e.target.name]: e.target.value, type: "" });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleDelete = async (
@@ -115,6 +121,21 @@ const PropertiesPage = () => {
             مقادیر متغیر
           </label>
           <br />
+          {formData.specifiedVals === "true" ? (
+            <>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                className="border"
+              >
+                <option value="">-- لطفاً انتخاب کنید --</option>
+                <option value="ordinary">نمایش عادی</option>
+                <option value="color">نمایش رنگ</option>
+              </select>
+              <br />
+            </>
+          ) : null}
           <LoadingButton loading={loading}>افزودن ویژگی</LoadingButton>
         </form>
       </div>
