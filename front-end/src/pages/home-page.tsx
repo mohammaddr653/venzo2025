@@ -28,7 +28,7 @@ const HomePage = () => {
           <div className="px-5 md:px-20 mt-5">
             <HomeLittleBanner></HomeLittleBanner>
           </div>
-          <div className="px-5 md:px-20 mt-5">
+          <div className="px-5 md:px-20">
             <ProductsArchive></ProductsArchive>
           </div>
           <div className="p-1"></div>
