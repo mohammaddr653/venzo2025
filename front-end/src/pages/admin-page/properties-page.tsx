@@ -14,12 +14,14 @@ const PropertiesPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     specifiedVals: "true",
+    type: "ordinary",
   });
 
   async function loadProperties() {
     setFormData({
       name: "",
       specifiedVals: "true",
+      type: "ordinary",
     });
     const response = await call(
       axios.get(SERVER_API + "/admin/dashboard/properties"),
@@ -115,6 +117,17 @@ const PropertiesPage = () => {
             مقادیر متغیر
           </label>
           <br />
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="border"
+          >
+            <option value="">-- لطفاً انتخاب کنید --</option>
+            <option value="ordinary">نمایش عادی</option>
+            <option value="color">نمایش رنگ</option>
+          </select>
+          <br />
           <LoadingButton loading={loading}>افزودن ویژگی</LoadingButton>
         </form>
       </div>
@@ -133,7 +146,15 @@ const PropertiesPage = () => {
             {properties?.map((property: any, index: any) => {
               return (
                 <tr key={index}>
-                  <td className="border">{property.name}</td>
+                  <td className="border">
+                    {property.name}
+                    {property.type !== "" ? (
+                      <>
+                        <br />
+                        {property.type}
+                      </>
+                    ) : null}
+                  </td>
                   <td className="border">
                     <button
                       onClick={(e, propertyId = property._id) => {

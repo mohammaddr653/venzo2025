@@ -64,7 +64,10 @@ module.exports = new (class extends validator {
     ];
   }
   propertyValidator() {
-    return [check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty()];
+    return [
+      check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty(),
+      check("type", "لطفا نوع نمایش را انتخاب کنید").notEmpty(),
+    ];
   }
   updatePropertyValidator() {
     return [check("name", "لطفا نام ویژگی را انتخاب کنید").notEmpty()];
