@@ -7,6 +7,7 @@ const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
 const Propertyval = require("../models/propertyval");
 const Product = require("../models/product");
+const withTransaction = require("../helpers/withTransaction");
 
 class PropertyServices {
   async getAllProperties(req) {
@@ -92,12 +93,16 @@ class PropertyServices {
       );
       return { code: 403, productsInUse: productsInUse };
     }
-    const deleteOp = await Property.deleteOne({ _id: req.params.propertyId });
 
-    if (deleteOp.deletedCount.valueOf() > 0) {
-      return { code: 200 };
-    }
-    return { code: 400 };
+    const transactionResult = await withTransaction(async (session) => {
+      await Property.deleteOne({ _id: req.params.propertyId }, { session });
+      await Propertyval.deleteMany(
+        { propertyId: req.params.propertyId },
+        { session }
+      );
+      return true;
+    });
+    return transactionResult;
   }
 }
 module.exports = new PropertyServices();

@@ -372,7 +372,7 @@ module.exports = new (class extends controller {
         message: `این ویژگی در محصولات زیر استفاده می شود ${result.productsInUse}`,
         code: 403,
       });
-    } else if (result.code === 200) {
+    } else if (result) {
       this.response({
         res,
         message: "ویژگی با موفقیت حذف شد",
