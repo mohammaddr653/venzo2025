@@ -8,6 +8,10 @@ const propertyvalSchema = new mongoose.Schema({
     required: true,
   },
   value: { type: String, required: true, trim: true },
+  hex: {
+    type: String,
+    trim: true,
+  },
 });
 propertyvalSchema.plugin(timestamp);
 module.exports = mongoose.model("Propertyval", propertyvalSchema);

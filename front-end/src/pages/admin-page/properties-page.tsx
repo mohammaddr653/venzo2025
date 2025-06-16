@@ -62,10 +62,9 @@ const PropertiesPage = () => {
 
   const handleManagment = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    propertyId: any,
-    propertyName: any
+    property: any
   ) => {
-    navigate("/admin/propertyvals", { state: { propertyId, propertyName } });
+    navigate("/admin/propertyvals", { state: { property } });
   };
 
   const handleRefresh = () => {
@@ -174,8 +173,8 @@ const PropertiesPage = () => {
                   <td className="border">
                     {property.specifiedVals ? (
                       <button
-                        onClick={(e, propertyId = property._id) => {
-                          handleManagment(e, propertyId, property.name);
+                        onClick={(e) => {
+                          handleManagment(e, property);
                         }}
                       >
                         مدیریت پیکره بندی

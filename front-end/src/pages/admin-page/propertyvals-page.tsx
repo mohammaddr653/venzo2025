@@ -12,20 +12,22 @@ const PropertyvalsPage = () => {
   const [propertyvals, setPropertyvals] = useState<any>([]);
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { propertyId, propertyName } = state || null;
+  const { property } = state || null;
   const [formData, setFormData] = useState({
-    propertyId: propertyId,
+    propertyId: property._id,
     value: "",
+    hex: "",
   });
 
   async function loadPropertyvals() {
     setFormData({
-      propertyId: propertyId,
+      propertyId: property._id,
       value: "",
+      hex: "",
     });
     const response = await call(
       axios.get(
-        SERVER_API + `/admin/dashboard/propertyvals/filter/${propertyId}`
+        SERVER_API + `/admin/dashboard/propertyvals/filter/${property._id}`
       ),
       false
     );
@@ -79,7 +81,7 @@ const PropertyvalsPage = () => {
 
   return (
     <div>
-      <h1>مدیریت مقدار های {propertyName}</h1>
+      <h1>مدیریت مقدار های {property.name}</h1>
       <div className="bg-red-300">
         <form onSubmit={handleSubmit} className="flex-column">
           <input
@@ -91,6 +93,19 @@ const PropertyvalsPage = () => {
             onChange={handleChange}
           />
           <br />
+          {property?.type === "color" ? (
+            <>
+            <h3>نوع نمایش این ویژگی "رنگ" است . پس مقدار هگزادیسیمال رنگ را تعیین کنید</h3>
+              <input
+                type="text"
+                placeholder="hex"
+                name="hex"
+                value={formData.hex}
+                className="border"
+                onChange={handleChange}
+              />
+            </>
+          ) : null}
           <LoadingButton loading={loading}>افزودن مقدار ویژگی</LoadingButton>
         </form>
       </div>
@@ -108,7 +123,16 @@ const PropertyvalsPage = () => {
             {propertyvals?.map((propertyval: any, index: any) => {
               return (
                 <tr key={index}>
-                  <td className="border">{propertyval.value}</td>
+                  <td className="border">
+                    {propertyval.value}
+
+                    {propertyval.hex ? (
+                      <>
+                        <br />
+                        {propertyval.hex}
+                      </>
+                    ) : null}
+                  </td>
                   <td className="border">
                     <button
                       onClick={(e, propertyvalId = propertyval._id) => {

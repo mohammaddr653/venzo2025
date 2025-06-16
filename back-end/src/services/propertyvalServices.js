@@ -39,6 +39,10 @@ class PropertyvalServices {
     if (repeatedValue.length) return { code: 409 };
     const exist = await Property.findById(req.body.propertyId);
     if (!exist) return { code: 400 };
+    if (exist.type === "color") {
+      if (!req.body.hex) return { code: 400 };
+      propertyval.hex = req.body.hex;
+    }
     propertyval.propertyId = new mongoose.Types.ObjectId(req.body.propertyId);
     await propertyval.save();
     return {
