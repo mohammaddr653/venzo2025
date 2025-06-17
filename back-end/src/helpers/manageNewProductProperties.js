@@ -9,16 +9,19 @@ const manageNewProductProperties = (properties) => {
       if (item.nameString && item.values.length) {
         let newProperty = {
           name: null,
+          nameString: "",
           selective: item.selective,
           values: [],
         };
         const property = await Property.findOne({ name: item.nameString });
         if (property) {
           newProperty.name = property._id;
+          newProperty.nameString = property.name;
           for (let value of item.values) {
             if (property.specifiedVals) {
               let newValue = {
                 value: null,
+                valueString: "",
               };
               value.price ? (newValue.price = value.price) : null;
               value.stock ? (newValue.stock = value.stock) : null;
@@ -28,6 +31,10 @@ const manageNewProductProperties = (properties) => {
               });
               if (propertyvalue) {
                 newValue.value = propertyvalue._id;
+                newValue.valueString = propertyvalue.value;
+                if (propertyvalue.hex) {
+                  newValue.hex = propertyvalue.hex;
+                }
                 newProperty.values.push(newValue);
               } else {
                 return false;

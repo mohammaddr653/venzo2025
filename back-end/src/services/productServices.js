@@ -21,11 +21,6 @@ class ProductServices {
 
   async getSingleShopWithProperties(req, res) {
     const product = await this.seeOneProduct(req, res);
-    if (product && product.properties.length) {
-      product.properties = (
-        await getPropertiesAndFilters(product.properties)
-      ).propertiesArr;
-    }
     return product;
   }
 
@@ -45,12 +40,11 @@ class ProductServices {
       });
     }
     for (let product of array) {
-      let { propertiesArr, updatedFilters } = await getPropertiesAndFilters(
+      let updatedFilters = await getPropertiesAndFilters(
         product.properties,
         filters
       );
       filters = [...updatedFilters];
-      product.properties = propertiesArr;
     }
     if (Object.keys(req.query).length) {
       array = applyFilters(req, array);
@@ -188,9 +182,6 @@ class ProductServices {
         const productInfo = cart.reservedProducts.find((p) =>
           p.productId.equals(product._id)
         );
-        product.properties = (
-          await getPropertiesAndFilters(product.properties)
-        ).propertiesArr;
         const { price, stock, selectionString } = getPriceAndStock(
           productInfo.selectedPropertyvalString,
           product

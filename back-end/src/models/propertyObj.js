@@ -17,6 +17,9 @@ const propertyvalObjSchema = new mongoose.Schema(
     stock: {
       type: Number,
     },
+    hex: {
+      type: String,
+    },
   },
   { _id: false }
 );
