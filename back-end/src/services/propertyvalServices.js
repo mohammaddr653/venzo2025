@@ -63,6 +63,7 @@ class PropertyvalServices {
     propertyval.value = req.body.value;
     const transactionResult = await withTransaction(async (session) => {
       const updateOp = await propertyval.save({ session });
+      //note:the next line can be a module it repeats in propertyServices too
       const updateProducts = await Product.updateMany(
         {
           properties: {

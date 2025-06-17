@@ -63,17 +63,35 @@ class PropertyServices {
     if (repeatedProperty && property.name !== req.body.name) {
       return false;
     }
-    let data = {
-      name: req.body.name,
-    };
-    const updateOp = await Property.updateOne(
-      { _id: req.params.propertyId },
-      { $set: data }
-    );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
-    }
-    return false;
+    property.name = req.body.name;
+
+    const transactionResult = await withTransaction(async (session) => {
+      const updateOp = await property.save({ session });
+      const updateProducts = await Product.updateMany(
+        {
+          properties: {
+            $elemMatch: {
+              name: property._id,
+            },
+          },
+        },
+        {
+          $set: {
+            "properties.$[outer].nameString": req.body.name,
+          },
+        },
+        {
+          arrayFilters: [{ "outer.name": property._id }],
+          session,
+        }
+      );
+      if (updateOp && updateProducts.modifiedCount.valueOf() > 0) {
+        return true;
+      }
+
+      return false;
+    });
+    return transactionResult;
   }
 
   //checks if this property is not used in any product then allow it to delete
