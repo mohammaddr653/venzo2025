@@ -8,6 +8,7 @@ const Property = require("../models/property");
 const Propertyval = require("../models/propertyval");
 const { default: mongoose } = require("mongoose");
 const Product = require("../models/product");
+const withTransaction = require("../helpers/withTransaction");
 
 class PropertyvalServices {
   async getAllPropertyvals(req) {
@@ -52,17 +53,48 @@ class PropertyvalServices {
   }
 
   async updatePropertyval(req, res) {
-    let data = {
+    const propertyval = await this.seeOnePropertyval(req, res);
+    let repeatedPropertyval = await Propertyval.findOne({
       value: req.body.value,
-    };
-    const updateOp = await Propertyval.updateOne(
-      { _id: req.params.propertyvalId },
-      { $set: data }
-    );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    });
+    if (repeatedPropertyval && propertyval.value !== req.body.value) {
+      return false;
     }
-    return false;
+    propertyval.value = req.body.value;
+    const transactionResult = await withTransaction(async (session) => {
+      const updateOp = await propertyval.save({ session });
+      const updateProducts = await Product.updateMany(
+        {
+          properties: {
+            $elemMatch: {
+              name: propertyval.propertyId,
+              values: {
+                $elemMatch: {
+                  value: propertyval._id,
+                },
+              },
+            },
+          },
+        },
+        {
+          $set: {
+            "properties.$[outer].values.$[inner].valueString": req.body.value,
+          },
+        },
+        {
+          arrayFilters: [
+            { "outer.name": propertyval.propertyId },
+            { "inner.value": propertyval._id },
+          ],
+          session,
+        }
+      );
+      if (updateOp && updateProducts.modifiedCount.valueOf() > 0) {
+        return true;
+      }
+      return false;
+    });
+    return transactionResult;
   }
 
   //checks if this propertyval is not used in any product then allow it to delete
