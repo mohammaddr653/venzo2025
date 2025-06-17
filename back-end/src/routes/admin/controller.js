@@ -160,13 +160,9 @@ module.exports = new (class extends controller {
     }
   }
 
+  //note:think about deleting this controller because I think its repeated in another controller too .
   async seeOneProduct(req, res) {
-    const result = await productServices.seeOneProduct(req, res);
-    if (result && result.properties.length) {
-      result.properties = (
-        await getPropertiesAndFilters(result.properties)
-      ).propertiesArr;
-    }
+    const result = await productServices.getSingleShopWithProperties(req, res);
     this.response({
       res,
       message: "نمایش یک محصول",

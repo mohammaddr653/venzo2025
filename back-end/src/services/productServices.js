@@ -33,7 +33,7 @@ class ProductServices {
     //خواندن محصولات مخصوص دسته بندی انتخاب شده از دیتابیس
     let array = [];
     let filters = [];
-    const products = await this.getAllProducts(req, res);
+    const products = await Product.find({});
     if (products) {
       products.forEach((product) => {
         if (
