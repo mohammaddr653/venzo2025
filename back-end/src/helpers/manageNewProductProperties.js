@@ -11,12 +11,14 @@ const manageNewProductProperties = (properties) => {
           name: null,
           nameString: "",
           selective: item.selective,
+          type: "",
           values: [],
         };
         const property = await Property.findOne({ name: item.nameString });
         if (property) {
           newProperty.name = property._id;
           newProperty.nameString = property.name;
+          newProperty.type = property.type;
           for (let value of item.values) {
             if (property.specifiedVals) {
               let newValue = {

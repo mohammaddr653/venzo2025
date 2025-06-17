@@ -85,7 +85,9 @@ const ShopPage = () => {
                         />
                         {val.hex ? (
                           <span
-                            style={{ backgroundColor: val.hex.toString() }}
+                            style={{
+                              backgroundColor: "#" + val.hex.toString(),
+                            }}
                             className="w-5 h-5 aspect-square rounded-full"
                           ></span>
                         ) : (

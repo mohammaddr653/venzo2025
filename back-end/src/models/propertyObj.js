@@ -36,6 +36,7 @@ const propertyObjSchema = new mongoose.Schema(
       ref: "Property",
     },
     selective: { type: Boolean, required: true },
+    type: { type: String, required: true, enum: ["ordinary", "color"] },
     values: [propertyvalObjSchema],
   },
   { _id: false }
