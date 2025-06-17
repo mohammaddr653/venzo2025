@@ -23,6 +23,7 @@ const manageNewProductProperties = (properties) => {
               value.price ? (newValue.price = value.price) : null;
               value.stock ? (newValue.stock = value.stock) : null;
               const propertyvalue = await Propertyval.findOne({
+                propertyId: property._id,
                 value: value.valueString,
               });
               if (propertyvalue) {

@@ -64,7 +64,10 @@ const ShopPage = () => {
               {item.values.length
                 ? item.values.map((val: any, index: any) => {
                     return (
-                      <label key={index}>
+                      <label
+                        key={index}
+                        className="flex flex-row gap-1 items-center"
+                      >
                         <input
                           type="checkbox"
                           name="selective"
@@ -80,7 +83,14 @@ const ShopPage = () => {
                             handleFilterCheck(e, item.nameString)
                           }
                         />
-                        {val.valueString}
+                        {val.hex ? (
+                          <span
+                            style={{ backgroundColor: val.hex.toString() }}
+                            className="w-5 h-5 aspect-square rounded-full"
+                          ></span>
+                        ) : (
+                          val.valueString
+                        )}
                       </label>
                     );
                   })

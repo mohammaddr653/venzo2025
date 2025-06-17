@@ -13,6 +13,9 @@ const setFilters = (property, specifiedVals, propertyval) => {
         value: propertyval._id,
         valueString: propertyval.value,
       };
+      if (propertyval.hex) {
+        newValue.hex = propertyval.hex;
+      }
     } else {
       newValue = {
         valueString: propertyval,
@@ -83,6 +86,9 @@ const getPropertiesAndFilters = async (properties, filters) => {
             ? setFilters(property, property.specifiedVals, propertyvalue)
             : null;
           newValue.valueString = propertyvalue.value;
+          if (propertyvalue.hex) {
+            newValue.hex = propertyvalue.hex;
+          }
           newProperty.values.push(newValue);
         } else {
           filters
