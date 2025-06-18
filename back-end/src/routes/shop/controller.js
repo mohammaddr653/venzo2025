@@ -19,7 +19,6 @@ module.exports = new (class extends controller {
     const categoryArr = await categoriesServices.createCategoryArr(req, res); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const { products, filters } =
       await productServices.getProductsByCategoryString(categoryArr, req, res); //دریافت محصولات مطابق با آرایه دسته بندی
-    filters.sort((a, b) => a.name.toString().localeCompare(b.name.toString()));
     this.response({
       res,
       message: "this is shop , products of specific category",

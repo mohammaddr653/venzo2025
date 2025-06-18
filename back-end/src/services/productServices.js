@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
 const manageNewProductProperties = require("../helpers/manageNewProductProperties");
-const getPropertiesAndFilters = require("../helpers/getProperties&filters");
 const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
@@ -26,15 +25,52 @@ class ProductServices {
 
   async getProductsByCategoryString(categoryArr, req, res) {
     //خواندن محصولات مخصوص دسته بندی انتخاب شده از دیتابیس
-    let filters = [];
-    let products = await Product.find({ categoryId: { $in: categoryArr } });
-    for (let product of products) {
-      let updatedFilters = await getPropertiesAndFilters(
-        product.properties,
-        filters
-      );
-      filters = [...updatedFilters];
-    }
+    const result = await Product.aggregate([
+      { $match: { categoryId: { $in: categoryArr } } },
+      {
+        $facet: {
+          products: [],
+          filters: [
+            { $unwind: "$properties" },
+            { $unwind: "$properties.values" },
+            {
+              $group: {
+                _id: "$properties.nameString",
+                values: {
+                  $addToSet: {
+                    $cond: [
+                      { $ifNull: ["$properties.values.hex", false] },
+                      {
+                        valueString: "$properties.values.valueString",
+                        hex: "$properties.values.hex",
+                      },
+                      {
+                        valueString: "$properties.values.valueString",
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                values: {
+                  $sortArray: {
+                    input: "$values",
+                    sortBy: { valueString: 1 },
+                  },
+                },
+                nameString: "$_id",
+              },
+            },
+            { $sort: { nameString: 1 } },
+          ],
+        },
+      },
+    ]);
+    let filters = result[0].filters;
+    let products = result[0].products;
     if (Object.keys(req.query).length) {
       products = applyFilters(req, products);
     }
