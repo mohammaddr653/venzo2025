@@ -75,22 +75,23 @@ class CategoriesServices {
     return parentCategoryId;
   }
 
-  //آیدی کتگوری سرچ شده رو میگیره و یک رشته مشتق شده از این آیدی و تمام آیدی های زیرمجموعه اش بر میگردونه
-  async createString(req, res) {
-    let string = req.params.categoryString;
+  //آیدی کتگوری سرچ شده رو میگیره و یک آرایه مشتق شده از این آیدی و تمام آیدی های زیرمجموعه اش بر میگردونه
+  async createCategoryArr(req, res) {
+    const initialId = new mongoose.Types.ObjectId(req.params.categoryString);
+    let categoryArr = [initialId];
     const categories = await this.getAllCategories(req, res);
     if (categories) {
       const loop = (array, id) => {
         array.forEach((obj) => {
-          if (obj.motherId.toString() === id) {
-            string = string.concat(obj.id);
-            loop(categories, obj.id);
+          if (typeof obj.motherId !== "string" && obj.motherId.equals(id)) {
+            categoryArr.push(obj._id);
+            loop(categories, obj._id);
           }
         });
       };
-      loop(categories, req.params.categoryString);
+      loop(categories, initialId);
     }
-    return string;
+    return categoryArr;
   }
 }
 module.exports = new CategoriesServices();

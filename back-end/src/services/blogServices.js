@@ -12,6 +12,7 @@ class BlogServices {
     return Blog.findById(req.params.blogId);
   }
 
+  //note:this function needs to fix .
   async getBlogsByCategoryString(string, req, res) {
     //خواندن مقالات مخصوص دسته بندی انتخاب شده از دیتابیس
     let array = [];

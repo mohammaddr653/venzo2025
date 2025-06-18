@@ -24,22 +24,11 @@ class ProductServices {
     return product;
   }
 
-  async getProductsByCategoryString(string, req, res) {
+  async getProductsByCategoryString(categoryArr, req, res) {
     //خواندن محصولات مخصوص دسته بندی انتخاب شده از دیتابیس
-    let array = [];
     let filters = [];
-    const products = await Product.find({});
-    if (products) {
-      products.forEach((product) => {
-        if (
-          product.categoryId &&
-          string.includes(product.categoryId.toString())
-        ) {
-          array.push(product);
-        }
-      });
-    }
-    for (let product of array) {
+    let products = await Product.find({ categoryId: { $in: categoryArr } });
+    for (let product of products) {
       let updatedFilters = await getPropertiesAndFilters(
         product.properties,
         filters
@@ -47,9 +36,9 @@ class ProductServices {
       filters = [...updatedFilters];
     }
     if (Object.keys(req.query).length) {
-      array = applyFilters(req, array);
+      products = applyFilters(req, products);
     }
-    return { array, filters };
+    return { products, filters };
   }
 
   async createProduct(req, res) {

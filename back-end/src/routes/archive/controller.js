@@ -6,13 +6,14 @@ const controller = require("./../controller");
 const _ = require("lodash");
 
 module.exports = new (class extends controller {
+  //note: this function needs to be fixed maybe
   async getArchive(req, res) {
-    const string = await categoriesServices.createString(req, res); //رشته دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
+    const categoryArr = await categoriesServices.createCategoryArr(req, res); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const result = await blogServices.getBlogsByCategoryString(
-      string,
+      categoryArr,
       req,
       res
-    ); //دریافت مقالات مطابق با رشته دسته بندی
+    ); //دریافت مقالات مطابق با آرایه دسته بندی
     this.response({
       res,
       message: "this is archive, blogs of specific category",
