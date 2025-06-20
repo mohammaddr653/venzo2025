@@ -12,8 +12,6 @@ import {
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
 import callManager from "../../hooks/callManager";
-import { SERVER_API } from "../../../config";
-import axios from "axios";
 
 interface PropertiesManagerProps {
   properties: PropertiesObj[];
@@ -91,6 +89,7 @@ const PropertiesManager = ({
     }
   };
 
+  //note:handleslectivePrice and handleselectiveStock maybe can merged in one function
   const handleSelectivePrice = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -125,26 +124,31 @@ const PropertiesManager = ({
         return alert(
           "تنها ویژگی های با مقادیر مشخص می توانند ویژگی انتخابی باشند"
         );
-      addProperty();
-    } else {
-      let formData = {
-        name: property.nameString,
-      };
-      const response = await call(
-        axios.post(SERVER_API + "/admin/dashboard/properties", formData),
-        true
-      );
-      if (response.status === 200) {
-        addProperty();
-        loadPropertiesAndVals();
-      }
+      addProperty(matches);
     }
+    //note:if the property not exist then it wont be added
+    // else {
+    //   let formData = {
+    //     name: property.nameString,
+    //   };
+    //   const response = await call(
+    //     axios.post(SERVER_API + "/admin/dashboard/properties", formData),
+    //     true
+    //   );
+    //   if (response.status === 200) {
+    //     addProperty();
+    //     loadPropertiesAndVals();
+    //   }
+    // }
   };
 
-  const addProperty = () => {
+  const addProperty = (matchedProperty: any) => {
     let propertyObj: PropertiesObj = {
+      name: matchedProperty._id,
       nameString: property.nameString,
       selective: property.selective,
+      specifiedVals: matchedProperty.specifiedVals,
+      type: matchedProperty.type,
       values: [],
     };
     setProperties((prev) => {
@@ -157,7 +161,11 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setProperty({ nameString: "", selective: false, suggestions: [] });
+    setProperty({
+      nameString: "",
+      selective: false,
+      suggestions: [],
+    });
   };
 
   const handlepropertyval = (
@@ -209,27 +217,29 @@ const PropertiesManager = ({
         (obj: any) => obj.value === propertyval.valueString
       );
       if (matches) {
-        addPropertyval();
-      } else {
-        const formData = {
-          propertyId: matchedProperty.propertyId,
-          value: propertyval.valueString,
-        };
-        const response = await call(
-          axios.post(SERVER_API + "/admin/dashboard/propertyvals", formData),
-          true
-        );
-        if (response.status === 200) {
-          addPropertyval();
-          loadPropertiesAndVals();
-        }
+        addPropertyval(matches);
       }
+      //note:if the propertyval not exist then it wont be added
+      // else {
+      //   const formData = {
+      //     propertyId: matchedProperty._id,
+      //     value: propertyval.valueString,
+      //   };
+      //   const response = await call(
+      //     axios.post(SERVER_API + "/admin/dashboard/propertyvals", formData),
+      //     true
+      //   );
+      //   if (response.status === 200) {
+      //     addPropertyval();
+      //     loadPropertiesAndVals();
+      //   }
+      // }
     } else if (matchedProperty && !matchedProperty.specifiedVals) {
       addPropertyval();
     }
   };
 
-  const addPropertyval = () => {
+  const addPropertyval = (matchedPropertyval?: any) => {
     let propertyvalue: PropertyvalsObj = {
       valueString: propertyval.valueString,
     };
@@ -239,6 +249,10 @@ const PropertiesManager = ({
     price ? (propertyvalue.price = price) : null;
     stock ? (propertyvalue.stock = stock) : null;
 
+    if (matchedPropertyval) {
+      propertyvalue.value = matchedPropertyval._id;
+      if (matchedPropertyval.hex) propertyvalue.hex = matchedPropertyval.hex;
+    }
     setProperties((prev) => {
       const exist = prev.find((item) => item.nameString === selectedProperty);
       if (exist) {

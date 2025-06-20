@@ -16,7 +16,7 @@ const ProductsArchive = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {products.map((product: any, index: any) => {
           return (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1" key={index}>
               <div className="flex flex-row gap-1 p-1">
                 {product.properties
                   .find((property: any) => property.type === "color")

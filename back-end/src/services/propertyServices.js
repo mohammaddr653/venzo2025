@@ -21,14 +21,15 @@ class PropertyServices {
     const properties = await Property.find({});
     for (const property of properties) {
       const data = {
-        propertyId: property._id,
+        _id: property._id,
         name: property.name,
         specifiedVals: property.specifiedVals,
+        type: property.type,
         values: [],
       };
       data.values = await Propertyval.find(
         { propertyId: property._id },
-        { _id: 1, value: 1 }
+        { _id: 1, value: 1, hex: 1 }
       );
       result.push(data);
     }

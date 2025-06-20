@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
-const manageNewProductProperties = require("../helpers/manageNewProductProperties");
 const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
@@ -84,6 +83,7 @@ class ProductServices {
       price: req.body.price,
       stock: req.body.stock,
       description: req.body.description,
+      properties: JSON.parse(req.body.properties),
     });
     if (req.body.categoryId) {
       newProduct.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
@@ -91,16 +91,6 @@ class ProductServices {
     if (req.file) {
       newProduct.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
-    if (req.body.properties) {
-      let properties = await manageNewProductProperties(req.body.properties);
-      if (properties && properties.length) {
-        properties = properties.filter((property) => property);
-        newProduct.properties = properties;
-      }
-    } else {
-      newProduct.properties = [];
-    }
-
     return newProduct.save();
   }
 
@@ -113,6 +103,7 @@ class ProductServices {
       stock: req.body.stock,
       categoryId: req.body.categoryId === "" ? null : product.categoryId,
       description: req.body.description,
+      properties: JSON.parse(req.body.properties),
       img: product.img,
     };
     if (req.body.categoryId) {
@@ -121,15 +112,6 @@ class ProductServices {
     if (req.file) {
       deleteFile("public" + product.img, "public" + product.img);
       data.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
-    }
-    if (req.body.properties) {
-      let properties = await manageNewProductProperties(req.body.properties);
-      if (properties && properties.length) {
-        properties = properties.filter((property) => property);
-        data.properties = properties;
-      }
-    } else {
-      data.properties = [];
     }
     const updateOp = await Product.updateOne(
       { _id: product.id },
