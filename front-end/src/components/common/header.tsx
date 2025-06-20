@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
 import AccountButtons from "./account-buttons";
 import CartCounter from "./cart-counter";
+import GoUp from "./goUp";
 
 const Header = () => {
   const { user, list, userLogout } = useHeaderLog();
@@ -33,6 +34,7 @@ const Header = () => {
   return (
     <>
       <header className="fixed">
+        {isScrolled ? <GoUp></GoUp> : null}
         <div
           id="header-container"
           className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 ${
