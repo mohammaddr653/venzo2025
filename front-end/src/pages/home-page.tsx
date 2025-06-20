@@ -9,7 +9,6 @@ import ProductsArchive from "../components/common/productsArchive";
 import Footer from "../components/common/footer";
 
 const HomePage = () => {
-  const { user } = useUserStore();
   return (
     <>
       <Header></Header>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store";
 import { SERVER_API } from "../../../config";
 import axios from "axios";

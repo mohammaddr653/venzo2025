@@ -38,6 +38,7 @@ import PropertyvalsPage from "./pages/admin-page/propertyvals-page";
 import OnePropertyvalPage from "./pages/admin-page/onePropertyval-page";
 import BannersPage from "./pages/admin-page/banners-page";
 import TrustsPage from "./pages/admin-page/trusts-page";
+import { handleGoUp } from "./helpers/handleGoUp";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -48,6 +49,7 @@ function App() {
   }, []);
   useEffect(() => {
     getAuthedUser(); //if token exist , set the user
+    handleGoUp("instant");
   }, [location.pathname]);
 
   if (userLoading) return <p>Loading defaults...</p>; //waiting to read some values from server
