@@ -37,7 +37,7 @@ const Header = () => {
         {isScrolled ? <GoUp></GoUp> : null}
         <div
           id="header-container"
-          className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 ${
+          className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 transition-all duration-300 ${
             isScrolled
               ? "bg-white/80 backdrop-blur-2xl shadow-b-lean-300"
               : "bg-transparent"

@@ -243,11 +243,9 @@ const PropertiesManager = ({
     let propertyvalue: PropertyvalsObj = {
       valueString: propertyval.valueString,
     };
-    const price = parseInt(propertyval.price);
-    const stock = parseInt(propertyval.stock);
 
-    price ? (propertyvalue.price = price) : null;
-    stock ? (propertyvalue.stock = stock) : null;
+    propertyval.price ? (propertyvalue.price = propertyval.price) : null;
+    propertyval.stock ? (propertyvalue.stock = propertyval.stock) : null;
 
     if (matchedPropertyval) {
       propertyvalue.value = matchedPropertyval._id;

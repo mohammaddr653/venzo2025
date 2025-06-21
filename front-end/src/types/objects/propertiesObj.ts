@@ -2,8 +2,8 @@ export interface PropertyvalsObj {
   value?: string;
   valueString: string;
   hex?: string;
-  price?: number;
-  stock?: number;
+  price?: string;
+  stock?: string;
 }
 export interface PropertiesObj {
   name: string;

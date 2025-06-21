@@ -45,11 +45,15 @@ module.exports = new (class extends controller {
 
   async addToCart(req, res) {
     const cart = await cartServices.seeOneCart(req, res);
-    const stock = await productServices.stockCheck(req, res, cart); //تعداد در انبار
-    if (stock && stock >= 1) {
+    const existing = await cartServices.existOrNot(req, res, cart);
+    if (!existing) {
       //تعدادی که از این محصول در سبد خرید موجود داریم
-      const existing = await cartServices.existOrNot(req, res, cart);
-      if (!existing) {
+      const stock = await productServices.stockCheck(
+        req,
+        res,
+        req.body.selectedPropertyvalString
+      ); //تعداد در انبار
+      if (stock && stock >= 1) {
         const result = await cartServices.addToCart(req, res, cart);
         if (result) {
           this.response({
@@ -66,14 +70,14 @@ module.exports = new (class extends controller {
       } else {
         this.response({
           res,
-          message: "این محصول در سبد خرید موجود است",
+          message: "موجودی محصول کافی نیست",
           code: 400,
         });
       }
     } else {
       this.response({
         res,
-        message: "موجودی محصول کافی نیست",
+        message: "این محصول در سبد خرید موجود است",
         code: 400,
       });
     }
@@ -81,43 +85,39 @@ module.exports = new (class extends controller {
 
   async plusCount(req, res) {
     const cart = await cartServices.seeOneCart(req, res);
-    const stock = await productServices.stockCheck(req, res, cart); //تعداد در انبار
-    if (stock && stock >= 1) {
-      //تعدادی که از این محصول در سبد خرید موجود داریم
-      const existing = await cartServices.existOrNot(req, res, cart);
-      if (existing && existing.count >= 1) {
-        if (existing.count + 1 <= stock) {
-          const result = await cartServices.plusCount(req, res, cart);
-          if (result) {
-            this.response({
-              res,
-              message: "تعداد محصول اضافه شد",
-            });
-          } else {
-            this.response({
-              res,
-              message: "خطایی رخ داد",
-              code: 400,
-            });
-          }
+    const existing = await cartServices.existOrNot(req, res, cart);
+    if (existing && existing.count >= 1) {
+      const stock = await productServices.stockCheck(
+        req,
+        res,
+        existing.selectedPropertyvalString
+      ); //تعداد در انبار
+      if (stock && existing.count + 1 <= stock) {
+        //تعدادی که از این محصول در سبد خرید موجود داریم
+        const result = await cartServices.plusCount(req, res, cart);
+        if (result) {
+          this.response({
+            res,
+            message: "تعداد محصول اضافه شد",
+          });
         } else {
           this.response({
             res,
-            message: "موجودی محصول کافی نیست",
+            message: "خطا در اضافه کردن محصول",
             code: 400,
           });
         }
       } else {
         this.response({
           res,
-          message: "خطایی رخ داد",
+          message: "موجودی محصول کافی نیست",
           code: 400,
         });
       }
     } else {
       this.response({
         res,
-        message: "موجودی محصول کافی نیست",
+        message: "محصول در سبد خرید یافت نشد",
         code: 400,
       });
     }

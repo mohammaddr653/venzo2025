@@ -157,21 +157,13 @@ class ProductServices {
     return false;
   }
 
-  async stockCheck(req, res, cart) {
+  async stockCheck(req, res, selectedPropertyvalString) {
     //چک کردن موجودی محصول
     //اگر محصول ویژگی انتخابی داشت باید انبار همان ویژگی خوانده شود
     const product = await this.seeOneProduct(req, res);
     if (product) {
-      const existing = await cartServices.existOrNot(req, res, cart);
-      if (existing) {
-        const selectedPropertyvalString = existing.selectedPropertyvalString;
-        const stock = getPriceAndStock(
-          selectedPropertyvalString,
-          product
-        ).stock;
-        return stock;
-      }
-      return product.stock;
+      const stock = getPriceAndStock(selectedPropertyvalString, product).stock;
+      return stock;
     } else {
       return false;
     }
