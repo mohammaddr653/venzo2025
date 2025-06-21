@@ -10,7 +10,7 @@ const SingleShopPage = () => {
     formData,
     handleSelectProperty,
     handleAddToCart,
-    user,
+    selectedPropertyvalString,
   } = useSingleShopLog();
 
   return (
@@ -105,43 +105,48 @@ const SingleShopPage = () => {
                 ) : null}
               </div>
               <div className="mt-auto flex flex-col gap-4">
-                <div className="bg-red-400">
+                <div className=" flex flex-col gap-2">
                   {product?.properties.length
                     ? product.properties.map((property: any, index: any) => {
                         if (property.selective) {
                           return (
-                            <form key={index}>
-                              <h4>
-                                <span>{property.nameString} :</span>
-                                <span>
-                                  {formData.selectedPropertyvalString}
+                            <>
+                              <h4 className="flex flex-row gap-1">
+                                <span className="font-weight300 text-neutral-900">
+                                  {property.nameString} :
                                 </span>
+                                <span>{selectedPropertyvalString}</span>
                               </h4>
-                              {property.values.map(
-                                (propertyval: any, index: any) => {
-                                  return (
-                                    <label key={index}>
-                                      <input
-                                        type="radio"
-                                        name="selectiveProperty"
-                                        value={propertyval.value.toString()}
-                                        checked={
-                                          formData.selectedPropertyvalString.includes(
-                                            propertyval.value.toString()
-                                          )
-                                            ? true
-                                            : false
-                                        }
-                                        onChange={(e) =>
-                                          handleSelectProperty(e)
-                                        }
-                                      />
-                                      {propertyval.valueString}
-                                    </label>
-                                  );
-                                }
-                              )}
-                            </form>
+                              <form key={index}>
+                                {property.values.map(
+                                  (propertyval: any, index: any) => {
+                                    return (
+                                      <label key={index}>
+                                        <input
+                                          type="radio"
+                                          name="selectiveProperty"
+                                          value={propertyval.value.toString()}
+                                          checked={
+                                            formData.selectedPropertyvalString.includes(
+                                              propertyval.value.toString()
+                                            )
+                                              ? true
+                                              : false
+                                          }
+                                          onChange={(e) =>
+                                            handleSelectProperty(
+                                              e,
+                                              propertyval.valueString
+                                            )
+                                          }
+                                        />
+                                        {propertyval.valueString}
+                                      </label>
+                                    );
+                                  }
+                                )}
+                              </form>
+                            </>
                           );
                         }
                       })

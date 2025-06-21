@@ -14,11 +14,17 @@ const useSingleShopLog = () => {
     price: null,
     stock: null,
   });
-  const [defaultSelectiveProperty, setDefaultSelectiveProperty] =
-    useState<string>();
+  const [defaultSelectiveProperty, setDefaultSelectiveProperty] = useState<any>(
+    {
+      id: "",
+      valueString: "",
+    }
+  );
   const [formData, setFormData] = useState<any>({
     selectedPropertyvalString: "",
   });
+  const [selectedPropertyvalString, setSelectedPropertyvalString] =
+    useState<any>("");
 
   useEffect(() => {
     load();
@@ -28,7 +34,10 @@ const useSingleShopLog = () => {
     const selectiveProperty = product.properties.find(
       (property: any) => property.selective
     );
-    setDefaultSelectiveProperty(selectiveProperty?.values[0].value.toString());
+    setDefaultSelectiveProperty({
+      id: selectiveProperty?.values[0].value.toString(),
+      valueString: selectiveProperty?.values[0].valueString,
+    });
   }
 
   function handlePriceAndStock() {
@@ -59,8 +68,10 @@ const useSingleShopLog = () => {
   }, [product, formData]);
 
   useEffect(() => {
-    if (defaultSelectiveProperty)
-      setFormData({ selectedPropertyvalString: defaultSelectiveProperty });
+    if (defaultSelectiveProperty) {
+      setFormData({ selectedPropertyvalString: defaultSelectiveProperty.id });
+      setSelectedPropertyvalString(defaultSelectiveProperty.valueString);
+    }
   }, [defaultSelectiveProperty]);
 
   async function load() {
@@ -78,9 +89,13 @@ const useSingleShopLog = () => {
     );
   }
 
-  const handleSelectProperty = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSelectProperty = (
+    e: ChangeEvent<HTMLInputElement>,
+    propertyvalString: any
+  ) => {
     if (e.target.checked) {
       setFormData({ selectedPropertyvalString: e.target.value });
+      setSelectedPropertyvalString(propertyvalString);
     }
   };
 
@@ -90,7 +105,7 @@ const useSingleShopLog = () => {
     formData,
     handleSelectProperty,
     handleAddToCart,
-    user,
+    selectedPropertyvalString,
   };
 };
 
