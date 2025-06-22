@@ -2,6 +2,7 @@ import Header from "../components/common/header";
 import { DEFAULT_PRODUCT, SERVER_API, SERVER_URL } from "../../config";
 import useSingleShopLog from "../hooks/logics/useSingleShopLog";
 import Footer from "../components/common/footer";
+import PropertySelector from "../components/common/propertySelector";
 
 const SingleShopPage = () => {
   const {
@@ -35,7 +36,7 @@ const SingleShopPage = () => {
               </div>
             </div>
             <div className=" w-full flex flex-col">
-              <div className="flex flex-row items-center gap-1">
+              <div className="flex flex-row items-center gap-2">
                 <h1 className="text-size17 font-weight300 text-neutral-900 text-nowrap">
                   {product?.name}
                 </h1>
@@ -69,20 +70,22 @@ const SingleShopPage = () => {
                                         index === 1
                                       ) {
                                         return (
-                                          <>
-                                            <li key={index}>
-                                              {propertyval.valueString}
-                                            </li>
-                                          </>
+                                          <li
+                                            key={index}
+                                            className="flex flex-row gap-0.5 items-center"
+                                          >
+                                            <h4>{propertyval.valueString}</h4>
+                                          </li>
                                         );
                                       } else {
                                         return (
-                                          <>
-                                            <li key={index}>
-                                              {propertyval.valueString}
-                                            </li>
+                                          <li
+                                            key={index}
+                                            className="flex flex-row gap-0.5 items-center"
+                                          >
+                                            <h4>{propertyval.valueString}</h4>
                                             <span>,</span>
-                                          </>
+                                          </li>
                                         );
                                       }
                                     }
@@ -105,19 +108,19 @@ const SingleShopPage = () => {
                 ) : null}
               </div>
               <div className="mt-auto flex flex-col gap-4">
-                <div className=" flex flex-col gap-2">
+                <div>
                   {product?.properties.length
                     ? product.properties.map((property: any, index: any) => {
                         if (property.selective) {
                           return (
-                            <>
+                            <div key={index} className=" flex flex-col gap-2">
                               <h4 className="flex flex-row gap-1">
                                 <span className="font-weight300 text-neutral-900">
                                   {property.nameString} :
                                 </span>
                                 <span>{selectedPropertyvalString}</span>
                               </h4>
-                              <form key={index}>
+                              <form className="selective-property-form flex flex-row flex-wrap gap-4">
                                 {property.values.map(
                                   (propertyval: any, index: any) => {
                                     return (
@@ -126,10 +129,10 @@ const SingleShopPage = () => {
                                           type="radio"
                                           name="selectiveProperty"
                                           value={propertyval.value.toString()}
+                                          className="hidden property-selector-input"
                                           checked={
-                                            formData.selectedPropertyvalString.includes(
-                                              propertyval.value.toString()
-                                            )
+                                            formData.selectedPropertyvalString ===
+                                            propertyval.value
                                               ? true
                                               : false
                                           }
@@ -140,19 +143,23 @@ const SingleShopPage = () => {
                                             )
                                           }
                                         />
-                                        {propertyval.valueString}
+                                        <PropertySelector
+                                          propertyval={propertyval}
+                                          type={property.type}
+                                          formData={formData}
+                                        ></PropertySelector>
                                       </label>
                                     );
                                   }
                                 )}
                               </form>
-                            </>
+                            </div>
                           );
                         }
                       })
                     : null}
                 </div>
-                <div className="bg-amber-500 flex flex-col gap-2 items-end">
+                <div className=" flex flex-col gap-2 items-end">
                   <div className="flex flex-row gap-1 items-center flex-nowrap">
                     <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
                       {priceAndStock.price}

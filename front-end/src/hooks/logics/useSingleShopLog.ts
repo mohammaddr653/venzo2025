@@ -34,10 +34,12 @@ const useSingleShopLog = () => {
     const selectiveProperty = product.properties.find(
       (property: any) => property.selective
     );
-    setDefaultSelectiveProperty({
-      id: selectiveProperty?.values[0].value.toString(),
-      valueString: selectiveProperty?.values[0].valueString,
-    });
+    if (selectiveProperty) {
+      setDefaultSelectiveProperty({
+        id: selectiveProperty?.values[0].value.toString(),
+        valueString: selectiveProperty?.values[0].valueString,
+      });
+    }
   }
 
   function handlePriceAndStock() {
@@ -68,7 +70,10 @@ const useSingleShopLog = () => {
   }, [product, formData]);
 
   useEffect(() => {
-    if (defaultSelectiveProperty) {
+    if (
+      defaultSelectiveProperty.id !== "" &&
+      defaultSelectiveProperty.valueString !== ""
+    ) {
       setFormData({ selectedPropertyvalString: defaultSelectiveProperty.id });
       setSelectedPropertyvalString(defaultSelectiveProperty.valueString);
     }

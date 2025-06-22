@@ -23,9 +23,9 @@ class CartServices {
 
   async deleteReservedProduct(failedProductIds, cart, req, res) {
     // حذف محصول رزرو شده از سبد خرید ، یک آرایه از آیدی محصولاتی که قصد حذف آنها از سبد خرید را دارید میگیرد
-    cart.reservedProducts = cart.reservedProducts.filter((reserved) => {
-      !failedProductIds.includes(reserved.productId.toString());
-    });
+    cart.reservedProducts = cart.reservedProducts.filter(
+      (reserved) => !failedProductIds.includes(reserved.productId.toString())
+    );
     await cart.save();
   }
 
