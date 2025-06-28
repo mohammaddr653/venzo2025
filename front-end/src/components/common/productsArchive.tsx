@@ -23,9 +23,9 @@ const ProductsArchive = () => {
           return (
             <div className="flex flex-col gap-1" key={index}>
               <div className="flex flex-row gap-1 p-1">
-                {product.properties
+                {product?.properties
                   .find((property: any) => property.type === "color")
-                  .values.map((color: any, index: any) => {
+                  ?.values.map((color: any, index: any) => {
                     return color.hex ? (
                       <span
                         key={index}

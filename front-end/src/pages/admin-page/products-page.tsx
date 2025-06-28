@@ -164,8 +164,10 @@ const ProductsPage = () => {
             {/* dynamic */}
           </select>
 
+          {/* note:need to be modify for uploads */}
           <Editor
-            apiKey="ajfufhhbmu74o5t6nn4o9rj4ba4wwrhp3gxd6lk3k668y54x"
+            tinymceScriptSrc="/tinymce/js/tinymce/tinymce.min.js"
+            licenseKey="gpl"
             onInit={(_evt, editor) => (editorRef.current = editor)}
             onEditorChange={(content) =>
               setFormData({ ...formData, description: content })
