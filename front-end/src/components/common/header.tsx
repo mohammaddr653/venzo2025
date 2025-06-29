@@ -8,7 +8,11 @@ import AccountButtons from "./account-buttons";
 import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
 
-const Header = () => {
+interface HeaderProps {
+  focus?: boolean;
+}
+
+const Header = (props: HeaderProps) => {
   const { user, list, userLogout } = useHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
   const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
@@ -38,7 +42,7 @@ const Header = () => {
         <div
           id="header-container"
           className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 transition-all duration-300 ${
-            isScrolled
+            isScrolled || props.focus
               ? "bg-white/80 backdrop-blur-2xl shadow-b-lean-300"
               : "bg-transparent"
           }`}

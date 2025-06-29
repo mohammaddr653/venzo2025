@@ -1,132 +1,79 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../components/common/header";
-import { useUserStore } from "../store";
-import { ChangeEvent, useEffect, useState } from "react";
-import callManager from "../hooks/callManager";
-import { DEFAULT_PRODUCT, SERVER_API, SERVER_URL } from "../../config";
-import axios from "axios";
+import { DEFAULT_PRODUCT, SERVER_URL } from "../../config";
+import useShopLog from "../hooks/logics/useShopLog";
+import Footer from "../components/common/footer";
+import PropertySelector from "../components/common/propertySelector";
+import ProductCard from "../components/common/product-card";
 
 const ShopPage = () => {
-  const { categoryId } = useParams();
-  const { user } = useUserStore();
-  const { call, loading } = callManager();
-  const [products, setProducts] = useState<any[]>([]);
-  const [filters, setFilters] = useState<any[]>([]);
-  const [allParams, setAllParams] = useSearchParams();
-  const [appliedFilters, setAppliedFilters] = useState<any>();
+  const { filters, appliedFilters, handleFilterCheck, products } = useShopLog();
 
-  async function load() {
-    const response = await call(
-      axios.get(SERVER_API + `/shop/${categoryId}?${allParams}`),
-      false
-    );
-    setProducts([...response?.data.data.products]);
-    setFilters([...response?.data.data.filters]);
-  }
-
-  useEffect(() => {
-    let filtersObj: any = {};
-    for (const [key, value] of allParams.entries()) {
-      if (filtersObj[key] && !filtersObj[key].includes(value)) {
-        filtersObj[key] = [...filtersObj[key], value];
-      }
-      if (!filtersObj[key]) {
-        filtersObj[key] = [value];
-      }
-    }
-    setAppliedFilters({ ...filtersObj });
-  }, [allParams]);
-
-  useEffect(() => {
-    if (categoryId && appliedFilters) {
-      load();
-    }
-  }, [appliedFilters, categoryId]);
-
-  const handleFilterCheck = (e: ChangeEvent<HTMLInputElement>, name: any) => {
-    let currentParams = new URLSearchParams(allParams);
-    if (e.target.checked) {
-      currentParams.append(name, e.target.value);
-    } else {
-      currentParams.delete(name, e.target.value);
-    }
-    setAllParams(currentParams);
-  };
   return (
-    <div>
-      <Header></Header>
-      <h1>shop page</h1>
-      <div className="bg-amber-700 p-5 flex flex-row gap-3">
-        {filters?.map((item: any, index: any) => {
-          return (
-            <form className="border flex flex-col gap-1" key={index}>
-              <h4>{item.nameString}</h4>
-              {item.values.length
-                ? item.values.map((val: any, index: any) => {
-                    return (
-                      <label
-                        key={index}
-                        className="flex flex-row gap-1 items-center"
-                      >
-                        <input
-                          type="checkbox"
-                          name="selective"
-                          value={val.valueString}
-                          checked={
-                            appliedFilters[item.nameString]?.includes(
-                              val.valueString
-                            )
-                              ? true
-                              : false
-                          }
-                          onChange={(e) =>
-                            handleFilterCheck(e, item.nameString)
-                          }
-                        />
-                        {val.hex ? (
-                          <span
-                            style={{
-                              backgroundColor: "#" + val.hex.toString(),
-                            }}
-                            className="w-5 h-5 aspect-square rounded-full"
-                          ></span>
-                        ) : (
-                          val.valueString
-                        )}
-                      </label>
-                    );
-                  })
-                : null}
-            </form>
-          );
-        })}
-      </div>
-      <div className="bg-amber-700 p-5 flex flex-row gap-3">
-        {products?.map((item: any, index) => {
-          return (
-            <Link
-              to={`/single-shop/${item._id}`}
-              key={index}
-              className="border"
-            >
-              <img
-                src={item.img ? SERVER_URL + item.img : DEFAULT_PRODUCT}
-                alt=""
-                className="aspect-square object-cover"
-                width={100}
-              />
-              <p>{item.name}</p>
-              <p>{item.price}</p>
-              <p>{item.stock}</p>
-            </Link>
-          );
-        })}
-      </div>
-      <div className="bg-sky-600">this is tailwind</div>
-      <div className="bg-sky-300">
-        this is zustand , hello{user ? user.name : " user"}
-      </div>
-    </div>
+    <>
+      <Header focus={true}></Header>
+      <main className="pt-20 pb-15">
+        <div className="shopPage-container">
+          <div className="flex flex-row justify-between px-5 md:px-20 gap-5">
+            <div className=" w-[25%] border border-neutral-300 rounded-md">
+              {filters?.map((item: any, index: any) => {
+                return (
+                  <form className="flex flex-col gap-2 p-4" key={index}>
+                    <h4 className="font-weight300">{item.nameString}</h4>
+                    <div className="flex flex-col gap-1 ms-1">
+                      {item.values.length
+                        ? item.values.map((val: any, index: any) => {
+                            return (
+                              <label
+                                key={index}
+                                className="flex flex-row gap-1 items-center text-neutral-900 text-size14"
+                              >
+                                <input
+                                  type="checkbox"
+                                  name="selective"
+                                  value={val.valueString}
+                                  checked={
+                                    appliedFilters[item.nameString]?.includes(
+                                      val.valueString
+                                    )
+                                      ? true
+                                      : false
+                                  }
+                                  onChange={(e) =>
+                                    handleFilterCheck(e, item.nameString)
+                                  }
+                                />
+                                {val.hex ? (
+                                  <span
+                                    style={{
+                                      backgroundColor: "#" + val.hex.toString(),
+                                    }}
+                                    className="w-5 h-5 aspect-square rounded-full"
+                                  ></span>
+                                ) : (
+                                  val.valueString
+                                )}
+                              </label>
+                            );
+                          })
+                        : null}
+                    </div>
+                  </form>
+                );
+              })}
+            </div>
+            <div className=" w-full flex flex-col">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {products?.map((item: any, index: any) => {
+                  return <ProductCard key={index} product={item}></ProductCard>;
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer></Footer>
+    </>
   );
 };
 export default ShopPage;
