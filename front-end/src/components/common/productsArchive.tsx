@@ -21,8 +21,8 @@ const ProductsArchive = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {products.map((product: any, index: any) => {
           return (
-            <div className="flex flex-col gap-1" key={index}>
-              <div className="flex flex-row gap-1 p-1">
+            <div className="flex flex-col gap-1.5" key={index}>
+              <div className="flex flex-row gap-1 h-2.5">
                 {product?.properties
                   .find((property: any) => property.type === "color")
                   ?.values.map((color: any, index: any) => {
@@ -32,7 +32,7 @@ const ProductsArchive = () => {
                         style={{
                           backgroundColor: "#" + color.hex.toString(),
                         }}
-                        className="w-2.5 h-2.5 aspect-square rounded-full border border-neutral-300"
+                        className="h-full aspect-square rounded-full border border-neutral-300"
                       ></span>
                     ) : null;
                   })}
