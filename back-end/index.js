@@ -31,7 +31,5 @@ app.get("/", (req, res) => {
 app.use("/api", router);
 const mode = process.env.NODE_ENV;
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost";
-mode === "production"
-  ? app.listen()
-  : app.listen(port, host, () => debug(`listening on http://${host}:${port}`));
+const host = process.env.HOST || "0.0.0.0";
+app.listen(port, host, () => debug(`listening on http://${host}:${port}`));
