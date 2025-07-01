@@ -9,7 +9,7 @@ import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
 
 interface HeaderProps {
-  focus?: boolean;
+  focus?: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const Header = (props: HeaderProps) => {

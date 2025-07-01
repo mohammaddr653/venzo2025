@@ -30,12 +30,6 @@ Run the following command to install the necessary dependencies and create the `
 npm i
 ```
 
-Run the following command to install the nodemon npm package :
-
-```sh
-npm i nodemon
-```
-
 ## 🔧 Environment Variables
 
 1. Copy the `.env.example` file and rename it to `.env`.
