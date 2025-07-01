@@ -70,3 +70,7 @@ npm start
 
 - Ensure MongoDB is running before starting the server.
 - Review the logs in `logfile.log` for debugging any errors.
+
+## License
+
+This project is licensed under the MIT License © Mohammad Amin Derakhshande 2025.
