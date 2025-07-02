@@ -1,0 +1,8 @@
+{
+  "app": "venzo2025-frontend",
+  "port": 80,
+  "build": {
+    "location": "iran"
+  },
+  "disks": []
+}

@@ -131,27 +131,27 @@ xl	: (1280px)
   font-style: normal;
   font-weight: 400;
   src: local("iransans"),
-    url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_Bold.woff2");
+    url("/src/assets/fonts/iransans/IRANSansWeb_FaNum_Bold.woff2");
 }
 @font-face {
   font-family: "iransans";
   font-style: normal;
   font-weight: 200;
   src: local("iransans"),
-    url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_Light.woff2");
+    url("/src/assets/fonts/iransans/IRANSansWeb_FaNum_Light.woff2");
 }
 @font-face {
   font-family: "iransans";
   font-style: normal;
   font-weight: 300;
   src: local("iransans"),
-    url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_Medium.woff2");
+    url("/src/assets/fonts/iransans/IRANSansWeb_FaNum_Medium.woff2");
 }
 @font-face {
   font-family: "iransans";
   font-style: normal;
   font-weight: 100;
   src: local("iransans"),
-    url("/src/assets/fonts/iransans/IRANSansWeb\(FaNum\)_UltraLight.woff2");
+    url("/src/assets/fonts/iransans/IRANSansWeb_FaNum_UltraLight.woff2");
 }
 
