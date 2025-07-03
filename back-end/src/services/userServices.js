@@ -66,7 +66,7 @@ class UserServices {
       const deleteCartOp = await Cart.deleteOne({
         userId: req.params.userId,
       });
-      deleteFile("public" + user.avatar, "public" + user.avatar);
+      deleteFile(user.avatar.substring(1), user.avatar.substring(1));
       if (
         deleteUserOp.deletedCount.valueOf() > 0 &&
         deleteCartOp.deletedCount.valueOf() > 0
@@ -83,8 +83,8 @@ class UserServices {
       name: req.body.name,
     };
     if (req.file) {
-      deleteFile("public" + req.user.avatar, "public" + req.user.avatar);
-      data.avatar = req.file.path.replace(/\\/g, "/").substring(6); //some modifications on file address to store in db
+      deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1));
+      data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
     }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
     if (updateOp.modifiedCount.valueOf() > 0) {
@@ -99,8 +99,8 @@ class UserServices {
       name: req.body.name,
     };
     if (req.file) {
-      deleteFile("public" + req.user.avatar, "public" + req.user.avatar);
-      data.avatar = req.file.path.replace(/\\/g, "/").substring(6); //some modifications on file address to store in db
+      deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1));
+      data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
     }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
     if (updateOp.modifiedCount.valueOf() > 0) {

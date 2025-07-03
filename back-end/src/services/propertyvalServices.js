@@ -1,9 +1,4 @@
-const User = require("../models/user");
 const _ = require("lodash");
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
-const Cart = require("../models/cart");
-const deleteFile = require("../helpers/deleteFile");
 const Property = require("../models/property");
 const Propertyval = require("../models/propertyval");
 const { default: mongoose } = require("mongoose");

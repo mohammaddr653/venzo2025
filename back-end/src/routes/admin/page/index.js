@@ -11,7 +11,7 @@ const fileToReqBodyHandler = require("../../../middlewares/fileToReqBody");
 
 router.post(
   "/banners",
-  uploadHandler("./public/uploads/images/banners", "image", /jpeg|jpg/),
+  uploadHandler("./uploads/images/banners", "image", /jpeg|jpg/),
   fileToReqBodyHandler("image"),
   validator.bannerValidator(),
   controller.validate.bind(controller),
@@ -31,7 +31,7 @@ router.delete("/banners/:bannerId", controller.deleteBanner.bind(controller));
 
 router.post(
   "/trusts",
-  uploadHandler("./public/uploads/images/trusts", "image", /png/),
+  uploadHandler("./uploads/images/trusts", "image", /png/),
   fileToReqBodyHandler("image"),
   validator.trustValidator(),
   controller.validate.bind(controller),

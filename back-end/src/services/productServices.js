@@ -5,7 +5,6 @@ const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
 const getPriceAndStock = require("../helpers/getPriceAndStock");
-const cartServices = require("./cartServices");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -89,7 +88,7 @@ class ProductServices {
       newProduct.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }
     if (req.file) {
-      newProduct.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
+      newProduct.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
     return newProduct.save();
   }
@@ -110,8 +109,8 @@ class ProductServices {
       data.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }
     if (req.file) {
-      deleteFile("public" + product.img, "public" + product.img);
-      data.img = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
+      deleteFile(product.img.substring(1), product.img.substring(1));
+      data.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
     const updateOp = await Product.updateOne(
       { _id: product.id },
@@ -139,7 +138,7 @@ class ProductServices {
     //حذف محصول . محصول را همچنین از سبد خرید تمام کاربرانی که آن را دارند حذف میکند . تست شده برای یک سبد خرید . هنوز مطمئن نیستم اگر در چند سبد خرید این محصول موجود باشه چه نتیجه ای میده
     const product = await this.seeOneProduct(req, res);
     if (product) {
-      deleteFile("public" + product.img, "public" + product.img);
+      deleteFile(product.img.substring(1), product.img.substring(1));
 
       const transactionResult = await withTransaction(async (session) => {
         await Product.deleteOne({ _id: req.params.productId }, { session });

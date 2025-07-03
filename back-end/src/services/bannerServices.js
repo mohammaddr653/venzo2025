@@ -21,7 +21,7 @@ class BannerServices {
       show: req.body.show,
     });
     if (req.file) {
-      newBanner.image = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر بنر برای ذخیره در مونگو دی بی
+      newBanner.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر بنر برای ذخیره در مونگو دی بی
     }
 
     return newBanner.save();
@@ -49,7 +49,7 @@ class BannerServices {
     //حذف بنر
     const banner = await this.seeOneBanner(req, res);
     if (banner) {
-      deleteFile("public" + banner.image, "public" + banner.image);
+      deleteFile(banner.image.substring(1), banner.image.substring(1));
       const deleteOp = await Banner.deleteOne({ _id: req.params.bannerId });
       if (deleteOp.deletedCount.valueOf() > 0) {
         return true;

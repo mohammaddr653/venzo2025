@@ -7,7 +7,7 @@
   "disks": [
     {
       "name": "venzo2025-disk",
-      "mountTo": "public/uploads/images/banners"
+      "mountTo": "uploads"
     }
   ]
 }

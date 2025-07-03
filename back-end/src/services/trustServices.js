@@ -20,7 +20,7 @@ class TrustServices {
       show: req.body.show,
     });
     if (req.file) {
-      newTrust.image = req.file.path.replace(/\\/g, "/").substring(6); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+      newTrust.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
     }
 
     return newTrust.save();
@@ -45,7 +45,7 @@ class TrustServices {
     //حذف اعتماد
     const trust = await this.seeOneTrust(req, res);
     if (trust) {
-      deleteFile("public" + trust.image, "public" + trust.image);
+      deleteFile(trust.image.substring(1), trust.image.substring(1));
       const deleteOp = await Trust.deleteOne({ _id: req.params.trustId });
       if (deleteOp.deletedCount.valueOf() > 0) {
         return true;
