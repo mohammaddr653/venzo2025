@@ -9,7 +9,7 @@ const _ = require("lodash");
 module.exports = new (class extends controller {
   async getCart(req, res) {
     //سبد خرید رو میگیره و میره تمام محصولاتی که در سبد خرید هستند رو پیدا میکنه و درون یک آرایه به سمت کاربر میفرسته
-    const cart = await cartServices.seeOneCart(req, res);
+    const { data: cart } = await cartServices.seeOneCart(req, res);
     const reservedProducts = await productServices.getProductsOfCart(
       cart,
       req,
@@ -17,34 +17,31 @@ module.exports = new (class extends controller {
     );
     //چک کردن موجودی محصولات سبد خرید ، محصولی که موجودی کافی نداشته باشد را هم از دیتابیس و هم از آرایه محصولات رزرو شده حذف میکند
     //ممکن است زمانی که این محصولات به سبد افزوده شده اند موجودی کافی بوده اما هربار که سبد خرید لود می شود باید دوباره بررسی کرد که آیا محصولات همچنان موجودی دارند یا خیر
-    const finalResult = await cartServices.checkReservedProducts(
-      reservedProducts,
-      cart
+    const { data: results } = await cartServices.checkReservedProducts(
+      reservedProducts
     );
-    if (!finalResult) {
-      req.msg =
-        "بنظر می رسد بعضی محصولات سبد خرید شما به علت عدم موجودی کافی حذف شده اند";
-      return this.getCart(req, res);
-    }
     //قیمت نهایی را محاسبه میکند
     const totalPrice = await productServices.totalPrice(
-      reservedProducts,
+      results.finalReservedProducts,
       req,
       res
     );
-    this.response({
+    if (results.failedProductIds.length) {
+      await cartServices.deleteReservedProduct(results.failedProductIds, cart);
+    }
+    return this.response({
       res,
-      message: ["this is cart", req.msg],
+      message: "this is cart",
       data: {
-        reservedProducts,
+        reservedProducts: results.finalReservedProducts,
         totalPrice,
       },
     });
   }
 
   async addToCart(req, res) {
-    const cart = await cartServices.seeOneCart(req, res);
-    const existing = await cartServices.existOrNot(req, res, cart);
+    const { data: cart } = await cartServices.seeOneCart(req, res);
+    const { data: existing } = await cartServices.existOrNot(req, res, cart);
     if (!existing) {
       //تعدادی که از این محصول در سبد خرید موجود داریم
       const stock = await productServices.stockCheck(
@@ -53,28 +50,20 @@ module.exports = new (class extends controller {
         req.body.selectedPropertyvalString
       ); //تعداد در انبار
       if (stock && stock >= 1) {
-        const result = await cartServices.addToCart(req, res, cart);
-        if (result) {
-          this.response({
-            res,
-            message: "این محصول به سبد خرید اضافه شد",
-          });
-        } else {
-          this.response({
-            res,
-            message: "خطایی رخ داد",
-            code: 400,
-          });
-        }
+        await cartServices.addToCart(req, res, cart);
+        return this.response({
+          res,
+          message: "این محصول به سبد خرید اضافه شد",
+        });
       } else {
-        this.response({
+        return this.response({
           res,
           message: "موجودی محصول کافی نیست",
           code: 400,
         });
       }
     } else {
-      this.response({
+      return this.response({
         res,
         message: "این محصول در سبد خرید موجود است",
         code: 400,
@@ -83,8 +72,8 @@ module.exports = new (class extends controller {
   }
 
   async plusCount(req, res) {
-    const cart = await cartServices.seeOneCart(req, res);
-    const existing = await cartServices.existOrNot(req, res, cart);
+    const { data: cart } = await cartServices.seeOneCart(req, res);
+    const { data: existing } = await cartServices.existOrNot(req, res, cart);
     if (existing && existing.count >= 1) {
       const stock = await productServices.stockCheck(
         req,
@@ -94,27 +83,29 @@ module.exports = new (class extends controller {
       if (stock && existing.count + 1 <= stock) {
         //تعدادی که از این محصول در سبد خرید موجود داریم
         const result = await cartServices.plusCount(req, res, cart);
-        if (result) {
-          this.response({
+        if (result.status === 200) {
+          return this.response({
             res,
             message: "تعداد محصول اضافه شد",
           });
-        } else {
-          this.response({
+        }
+        if (result.status === 404) {
+          return this.response({
             res,
             message: "خطا در اضافه کردن محصول",
-            code: 400,
+            code: result.status,
           });
         }
+        throw Error;
       } else {
-        this.response({
+        return this.response({
           res,
           message: "موجودی محصول کافی نیست",
           code: 400,
         });
       }
     } else {
-      this.response({
+      return this.response({
         res,
         message: "محصول در سبد خرید یافت نشد",
         code: 400,
@@ -123,33 +114,35 @@ module.exports = new (class extends controller {
   }
 
   async minusCount(req, res) {
-    const cart = await cartServices.seeOneCart(req, res);
+    const { data: cart } = await cartServices.seeOneCart(req, res);
     //تعدادی که از این محصول در سبد خرید موجود داریم
-    const existing = await cartServices.existOrNot(req, res, cart);
+    const { data: existing } = await cartServices.existOrNot(req, res, cart);
     if (existing && existing.count >= 1) {
       if (existing.count - 1 <= 0) {
         await cartServices.deleteReservedProduct([req.params.productId], cart);
-        this.response({
+        return this.response({
           res,
           message: "محصول از سبد خرید حذف شد",
         });
       } else {
         const result = await cartServices.minusCount(req, res, cart);
-        if (result) {
-          this.response({
+        if (result.status === 200) {
+          return this.response({
             res,
             message: "تعداد محصول کم شد",
           });
-        } else {
-          this.response({
+        }
+        if (result.status === 404) {
+          return this.response({
             res,
             message: "خطایی رخ داد",
-            code: 400,
+            code: result.status,
           });
         }
+        throw Error;
       }
     } else {
-      this.response({
+      return this.response({
         res,
         message: "خطایی رخ داد",
         code: 400,
@@ -158,9 +151,9 @@ module.exports = new (class extends controller {
   }
 
   async deleteReservedProduct(req, res) {
-    const cart = await cartServices.seeOneCart(req, res);
+    const { data: cart } = await cartServices.seeOneCart(req, res);
     await cartServices.deleteReservedProduct([req.params.productId], cart);
-    this.response({
+    return this.response({
       res,
       message: "محصول از سبد خرید حذف شد",
     });

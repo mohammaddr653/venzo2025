@@ -1,23 +1,21 @@
 const mongoose = require("mongoose");
 const Cart = require("../models/cart");
 const reservedProduct = require("../models/reservedProduct");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class CartServices {
-  async checkReservedProducts(reservedProducts, cart) {
+  async checkReservedProducts(reservedProducts) {
     // چک کردن موجودی محصولات سبد خرید ، اگر موجودی کافی نیست محصول حذف شود
     let failedProductIds = [];
-    reservedProducts.forEach((product) => {
+    const finalReservedProducts = reservedProducts.filter((product) => {
       if (product.count > product.stock || product.count <= 0) {
-        //اگر تعداد در سبد بیشتر از موجودی شد یا تعداد در سبد کوچکتر از صفر بود محصول از سبد حذف شود
+        //اگر تعداد در سبد بیشتر از موجودی شد یا تعداد در سبد کوچکتر از صفر بود محصول باید از سبد حذف شود
         failedProductIds.push(product._id.toString());
+        return false;
       }
+      return true;
     });
-    if (failedProductIds.length > 0) {
-      // اگر آیدی برای حذف کردن وجود دارداز دیتابیس سبد خرید حذفش کن
-      await this.deleteReservedProduct(failedProductIds, cart);
-      return false;
-    }
-    return true;
+    return serviceResponse(200, { finalReservedProducts, failedProductIds });
   }
 
   async deleteReservedProduct(failedProductIds, cart) {
@@ -26,12 +24,13 @@ class CartServices {
       (reserved) => !failedProductIds.includes(reserved.productId.toString())
     );
     await cart.save();
+    return serviceResponse(200, {});
   }
 
   async seeOneCart(req, res) {
     // خواندن یک سبد خرید از دیتابیس
-    return Cart.findOne({ userId: req.user.id });
-    //yes , you are right...in Cart schima , userId is an ObjectId type & req.user.id returns a string of id . but mongoose is smart enough to handle this.
+    const findOp = await Cart.findOne({ userId: req.user.id });
+    return serviceResponse(200, findOp);
   }
 
   async existOrNot(req, res, cart) {
@@ -41,7 +40,7 @@ class CartServices {
         new mongoose.Types.ObjectId(req.params.productId)
       )
     );
-    return existing;
+    return serviceResponse(200, existing);
   }
   async addToCart(req, res, cart) {
     //افزودن به سبد خرید
@@ -55,7 +54,7 @@ class CartServices {
     }
     cart.reservedProducts.push(reservedProduct);
     await cart.save();
-    return true;
+    return serviceResponse(200, {});
   }
 
   async plusCount(req, res, cart) {
@@ -68,9 +67,9 @@ class CartServices {
     if (existing) {
       existing.count += 1;
       await cart.save();
-      return true;
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async minusCount(req, res, cart) {
@@ -83,18 +82,16 @@ class CartServices {
     if (existing) {
       existing.count -= 1;
       await cart.save();
-      return true;
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async deleteCart(req, res, next) {
     //حذف سبد خرید در صورتی که یوزر را حذف کردیم
-    try {
-      await Cart.deleteOne({ userId: req.params.userId });
-    } catch (err) {
-      next(err);
-    }
+    const deleteOp = await Cart.deleteOne({ userId: req.params.userId });
+    if (deleteOp.deletedCount > 0) return serviceResponse(200, {});
+    return serviceResponse(404, {});
   }
 }
 module.exports = new CartServices();

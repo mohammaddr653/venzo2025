@@ -1,7 +1,7 @@
-const serverResponse = (message, data={}) => {
+const serverResponse = (message, data = {}) => {
   return {
     message: message, //عنوان پاسخ
-    data: data,  //جزئیات پاسخ
+    data: data, //جزئیات پاسخ
   };
 };
 
