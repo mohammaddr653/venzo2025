@@ -19,8 +19,7 @@ module.exports = new (class extends controller {
     //ممکن است زمانی که این محصولات به سبد افزوده شده اند موجودی کافی بوده اما هربار که سبد خرید لود می شود باید دوباره بررسی کرد که آیا محصولات همچنان موجودی دارند یا خیر
     const finalResult = await cartServices.checkReservedProducts(
       reservedProducts,
-      req,
-      res
+      cart
     );
     if (!finalResult) {
       req.msg =
@@ -129,12 +128,7 @@ module.exports = new (class extends controller {
     const existing = await cartServices.existOrNot(req, res, cart);
     if (existing && existing.count >= 1) {
       if (existing.count - 1 <= 0) {
-        await cartServices.deleteReservedProduct(
-          [req.params.productId],
-          cart,
-          req,
-          res
-        );
+        await cartServices.deleteReservedProduct([req.params.productId], cart);
         this.response({
           res,
           message: "محصول از سبد خرید حذف شد",
@@ -165,12 +159,7 @@ module.exports = new (class extends controller {
 
   async deleteReservedProduct(req, res) {
     const cart = await cartServices.seeOneCart(req, res);
-    await cartServices.deleteReservedProduct(
-      [req.params.productId],
-      cart,
-      req,
-      res
-    );
+    await cartServices.deleteReservedProduct([req.params.productId], cart);
     this.response({
       res,
       message: "محصول از سبد خرید حذف شد",

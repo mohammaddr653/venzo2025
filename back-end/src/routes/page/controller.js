@@ -8,11 +8,13 @@ const _ = require("lodash");
 module.exports = new (class extends controller {
   async getBanners(req, res) {
     const result = await bannerServices.getAllBanners(req, res);
-    this.response({
-      res,
-      message: "لیست تمام بنر ها",
-      data: result,
-    });
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "لیست تمام بنر ها",
+        data: result.data,
+      });
+    throw Error;
   }
 
   async getTrusts(req, res) {

@@ -2,16 +2,19 @@ const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Blog = require("../models/blog");
 const Banner = require("../models/banner");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class BannerServices {
   async getAllBanners(req, res) {
     //خواندن تمام بنر ها از دیتابیس
-    return Banner.find({});
+    const findOp = await Banner.find({});
+    return serviceResponse(200, findOp);
   }
 
   async seeOneBanner(req, res) {
     // خواندن یک بنر از دیتابیس
-    return Banner.findById(req.params.bannerId);
+    const findOp = await Banner.findById(req.params.bannerId);
+    return serviceResponse(200, findOp);
   }
 
   async createBanner(req, res) {
@@ -24,38 +27,35 @@ class BannerServices {
       newBanner.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر بنر برای ذخیره در مونگو دی بی
     }
 
-    return newBanner.save();
+    const saveOp = await newBanner.save();
+    return serviceResponse(200, saveOp);
   }
 
   //بروزرسانی بنر
   async updateBanner(req, res) {
-    const banner = await this.seeOneBanner(req, res);
     let data = {
       location: req.body.location,
       show: req.body.show,
     };
-    const updateOp = await Banner.updateOne(
-      { _id: banner.id },
+    const updateOp = await Banner.findOneAndUpdate(
+      { _id: req.params.bannerId },
       { $set: data },
       { runValidators: true }
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
-    }
-    return false;
+    if (updateOp) return serviceResponse(200, {});
+    return serviceResponse(404, {});
   }
 
   async deleteBanner(req, res) {
     //حذف بنر
-    const banner = await this.seeOneBanner(req, res);
-    if (banner) {
-      deleteFile(banner.image.substring(1), banner.image.substring(1));
-      const deleteOp = await Banner.deleteOne({ _id: req.params.bannerId });
-      if (deleteOp.deletedCount.valueOf() > 0) {
-        return true;
-      }
+    const deleteOp = await Banner.findOneAndDelete({
+      _id: req.params.bannerId,
+    });
+    if (deleteOp) {
+      deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1));
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 }
 module.exports = new BannerServices();

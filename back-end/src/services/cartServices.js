@@ -3,25 +3,24 @@ const Cart = require("../models/cart");
 const reservedProduct = require("../models/reservedProduct");
 
 class CartServices {
-  async checkReservedProducts(reservedProducts, req, res) {
+  async checkReservedProducts(reservedProducts, cart) {
     // چک کردن موجودی محصولات سبد خرید ، اگر موجودی کافی نیست محصول حذف شود
     let failedProductIds = [];
     reservedProducts.forEach((product) => {
       if (product.count > product.stock || product.count <= 0) {
         //اگر تعداد در سبد بیشتر از موجودی شد یا تعداد در سبد کوچکتر از صفر بود محصول از سبد حذف شود
-        failedProductIds.push(product._id);
+        failedProductIds.push(product._id.toString());
       }
     });
     if (failedProductIds.length > 0) {
       // اگر آیدی برای حذف کردن وجود دارداز دیتابیس سبد خرید حذفش کن
-      const cart = await this.seeOneCart(req, res);
-      await this.deleteReservedProduct(failedProductIds, cart, req, res);
+      await this.deleteReservedProduct(failedProductIds, cart);
       return false;
     }
     return true;
   }
 
-  async deleteReservedProduct(failedProductIds, cart, req, res) {
+  async deleteReservedProduct(failedProductIds, cart) {
     // حذف محصول رزرو شده از سبد خرید ، یک آرایه از آیدی محصولاتی که قصد حذف آنها از سبد خرید را دارید میگیرد
     cart.reservedProducts = cart.reservedProducts.filter(
       (reserved) => !failedProductIds.includes(reserved.productId.toString())

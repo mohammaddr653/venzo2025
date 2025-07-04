@@ -8,51 +8,50 @@ const _ = require("lodash");
 module.exports = new (class extends controller {
   async createBanner(req, res) {
     const result = await bannerServices.createBanner(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "بنر با موفقیت اضافه شد",
-        data: result,
+        data: result.data,
       });
-    } else {
-      this.response({
-        res,
-        message: "ساخت بنر ناموفق بود",
-        code: 400,
-      });
-    }
+
+    throw Error;
   }
 
   async updateBanner(req, res) {
     const result = await bannerServices.updateBanner(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "بنر با موفقیت بروزرسانی شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 404)
+      return this.response({
         res,
         message: "بروزرسانی بنر ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async deleteBanner(req, res) {
     const result = await bannerServices.deleteBanner(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "بنر با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 404)
+      return this.response({
         res,
         message: "حذف بنر ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async createTrust(req, res) {
