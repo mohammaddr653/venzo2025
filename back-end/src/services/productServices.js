@@ -5,20 +5,23 @@ const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
 const getPriceAndStock = require("../helpers/getPriceAndStock");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class ProductServices {
   async getAllProducts(req, res) {
     //خواندن تمام محصولات از دیتابیس
-    return Product.find({});
+    const findOp = await Product.find({});
+    return serviceResponse(200, findOp);
   }
   async seeOneProduct(req, res) {
     // خواندن یک محصول از دیتابیس
-    return Product.findById(req.params.productId);
+    const findOp = await Product.findById(req.params.productId);
+    return serviceResponse(200, findOp);
   }
 
   async getSingleShopWithProperties(req, res) {
-    const product = await this.seeOneProduct(req, res);
-    return product;
+    const { data: product } = await this.seeOneProduct(req, res);
+    return serviceResponse(200, product);
   }
 
   async getProductsByCategoryString(categoryArr, req, res) {
@@ -72,7 +75,7 @@ class ProductServices {
     if (Object.keys(req.query).length) {
       products = applyFilters(req, products);
     }
-    return { products, filters };
+    return serviceResponse(200, { products, filters });
   }
 
   async createProduct(req, res) {
@@ -90,36 +93,29 @@ class ProductServices {
     if (req.file) {
       newProduct.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
-    return newProduct.save();
+    const saveOp = await newProduct.save();
+    return serviceResponse(200, saveOp);
   }
 
   //بروزرسانی محصول
   async updateProduct(req, res) {
     const product = await Product.findById(req.params.productId);
-    let data = {
-      name: req.body.name,
-      price: req.body.price,
-      stock: req.body.stock,
-      categoryId: req.body.categoryId === "" ? null : product.categoryId,
-      description: req.body.description,
-      properties: JSON.parse(req.body.properties),
-      img: product.img,
-    };
+    product.name = req.body.name;
+    product.price = req.body.price;
+    product.stock = req.body.stock;
+    product.categoryId = req.body.categoryId === "" ? null : product.categoryId;
+    product.description = req.body.description;
+    product.properties = JSON.parse(req.body.properties);
+    product.img = product.img;
     if (req.body.categoryId) {
-      data.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
+      product.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }
     if (req.file) {
       deleteFile(product.img.substring(1), product.img.substring(1));
-      data.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
+      product.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
-    const updateOp = await Product.updateOne(
-      { _id: product.id },
-      { $set: data }
-    );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
-    }
-    return false;
+    const saveOp = await product.save();
+    return serviceResponse(200, {});
   }
 
   //انتقال محصولات به کتگوری دیگر بعد از حذف کتگوری فعلی
@@ -132,39 +128,46 @@ class ProductServices {
       { categoryId: new mongoose.Types.ObjectId(req.params.categoryId) },
       { $set: { categoryId: newCategoryId } }
     );
+    return serviceResponse(200, {});
   }
 
   async deleteProduct(req, res) {
     //حذف محصول . محصول را همچنین از سبد خرید تمام کاربرانی که آن را دارند حذف میکند . تست شده برای یک سبد خرید . هنوز مطمئن نیستم اگر در چند سبد خرید این محصول موجود باشه چه نتیجه ای میده
-    const product = await this.seeOneProduct(req, res);
-    if (product) {
-      deleteFile(product.img.substring(1), product.img.substring(1));
-
-      const transactionResult = await withTransaction(async (session) => {
-        await Product.deleteOne({ _id: req.params.productId }, { session });
+    const transactionResult = await withTransaction(async (session) => {
+      const deleteOp = await Product.findOneAndDelete(
+        { _id: req.params.productId },
+        { session }
+      );
+      if (deleteOp) {
         await Cart.updateMany(
           {
-            reservedProducts: { $elemMatch: { productId: product._id } },
+            reservedProducts: { $elemMatch: { productId: deleteOp._id } },
           },
-          { $pull: { reservedProducts: { productId: product._id } } },
+          { $pull: { reservedProducts: { productId: deleteOp._id } } },
           { session }
         );
-        return true;
-      });
-      return transactionResult;
+        return serviceResponse(200, deleteOp);
+      }
+      return serviceResponse(404, {});
+    });
+    if (transactionResult.status === 200 && transactionResult.data.img) {
+      deleteFile(
+        transactionResult.data.img.substring(1),
+        transactionResult.data.img.substring(1)
+      );
     }
-    return false;
+    return transactionResult;
   }
 
   async stockCheck(req, res, selectedPropertyvalString) {
     //چک کردن موجودی محصول
     //اگر محصول ویژگی انتخابی داشت باید انبار همان ویژگی خوانده شود
-    const product = await this.seeOneProduct(req, res);
+    const { data: product } = await this.seeOneProduct(req, res);
     if (product) {
       const stock = getPriceAndStock(selectedPropertyvalString, product).stock;
-      return stock;
+      return serviceResponse(200, stock);
     } else {
-      return false;
+      return serviceResponse(404, {});
     }
   }
 
@@ -175,7 +178,7 @@ class ProductServices {
     );
     const products = await Product.find({ _id: { $in: productIds } });
 
-    const productsWithCounts = Promise.all(
+    const productsWithCounts = await Promise.all(
       products.map(async (product) => {
         const productInfo = cart.reservedProducts.find((p) =>
           p.productId.equals(product._id)
@@ -193,7 +196,7 @@ class ProductServices {
         };
       })
     );
-    return productsWithCounts;
+    return serviceResponse(200, productsWithCounts);
   }
 
   async totalPrice(reservedProducts, req, res) {
@@ -202,7 +205,7 @@ class ProductServices {
     reservedProducts.forEach((product) => {
       totalPrice = totalPrice + product.count * product.price;
     });
-    return totalPrice;
+    return serviceResponse(200, totalPrice);
   }
 }
 module.exports = new ProductServices();

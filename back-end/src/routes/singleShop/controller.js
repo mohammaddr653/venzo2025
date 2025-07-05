@@ -8,22 +8,18 @@ const _ = require("lodash");
 module.exports = new (class extends controller {
   async getSingleShop(req, res) {
     const result = await productServices.seeOneProduct(req, res);
-    if (result) {
-      return this.response({
-        res,
-        message: "this is single shop",
-        data: result,
-      });
-    }
+    return this.response({
+      res,
+      message: "this is single shop",
+      data: result.data,
+    });
   }
   async getSingleShopWithProperties(req, res) {
     const result = await productServices.getSingleShopWithProperties(req, res);
-    if (result) {
-      return this.response({
-        res,
-        message: "this is single shop with properties",
-        data: result,
-      });
-    }
+    return this.response({
+      res,
+      message: "this is single shop with properties",
+      data: result.data,
+    });
   }
 })();

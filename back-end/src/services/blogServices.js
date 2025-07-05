@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const deleteFile = require("../helpers/deleteFile");
 const Blog = require("../models/blog");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class BlogServices {
   async getAllBlogs(req, res) {
@@ -77,6 +78,7 @@ class BlogServices {
       { categoryId: new mongoose.Types.ObjectId(req.params.categoryId) },
       { $set: { categoryId: newCategoryId } }
     );
+    return serviceResponse(200, {});
   }
 
   async deleteBlog(req, res) {

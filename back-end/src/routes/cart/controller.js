@@ -10,7 +10,7 @@ module.exports = new (class extends controller {
   async getCart(req, res) {
     //سبد خرید رو میگیره و میره تمام محصولاتی که در سبد خرید هستند رو پیدا میکنه و درون یک آرایه به سمت کاربر میفرسته
     const { data: cart } = await cartServices.seeOneCart(req, res);
-    const reservedProducts = await productServices.getProductsOfCart(
+    const { data: reservedProducts } = await productServices.getProductsOfCart(
       cart,
       req,
       res
@@ -21,7 +21,7 @@ module.exports = new (class extends controller {
       reservedProducts
     );
     //قیمت نهایی را محاسبه میکند
-    const totalPrice = await productServices.totalPrice(
+    const { data: totalPrice } = await productServices.totalPrice(
       results.finalReservedProducts,
       req,
       res
@@ -49,19 +49,24 @@ module.exports = new (class extends controller {
         res,
         req.body.selectedPropertyvalString
       ); //تعداد در انبار
-      if (stock && stock >= 1) {
+      if (stock.status === 200 && stock.data >= 1) {
         await cartServices.addToCart(req, res, cart);
         return this.response({
           res,
           message: "این محصول به سبد خرید اضافه شد",
         });
-      } else {
+      }
+      if (stock.status === 404)
         return this.response({
           res,
-          message: "موجودی محصول کافی نیست",
-          code: 400,
+          message: "محصول یافت نشد",
+          code: stock.status,
         });
-      }
+      return this.response({
+        res,
+        message: "موجودی محصول کافی نیست",
+        code: 400,
+      });
     } else {
       return this.response({
         res,
@@ -80,7 +85,7 @@ module.exports = new (class extends controller {
         res,
         existing.selectedPropertyvalString
       ); //تعداد در انبار
-      if (stock && existing.count + 1 <= stock) {
+      if (stock.status === 200 && existing.count + 1 <= stock.data) {
         //تعدادی که از این محصول در سبد خرید موجود داریم
         const result = await cartServices.plusCount(req, res, cart);
         if (result.status === 200) {
@@ -97,13 +102,18 @@ module.exports = new (class extends controller {
           });
         }
         throw Error;
-      } else {
+      }
+      if (stock.status === 404)
         return this.response({
           res,
-          message: "موجودی محصول کافی نیست",
-          code: 400,
+          message: "محصول یافت نشد",
+          code: stock.status,
         });
-      }
+      return this.response({
+        res,
+        message: "موجودی محصول کافی نیست",
+        code: 400,
+      });
     } else {
       return this.response({
         res,

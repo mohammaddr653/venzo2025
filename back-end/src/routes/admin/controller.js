@@ -151,12 +151,16 @@ module.exports = new (class extends controller {
   async deleteCategory(req, res) {
     const parentCategoryId = await categoriesServices.deleteCategory(req, res); //آیدی کتگوری انتخاب شده را حذف میکنه و آیدی کتگوری بالاتر را برمیگردونه تا محصولات کتگوری حذف شده رو بهش منتقل کنیم
     if (parentCategoryId.status === 200) {
-      await productServices.sendToParentCategory(
+      const sendProductsToParent = await productServices.sendToParentCategory(
         parentCategoryId.data,
         req,
         res
       );
-      await blogServices.sendToParentCategory(parentCategoryId.data, req, res);
+      const sendBlogsToParent = await blogServices.sendToParentCategory(
+        parentCategoryId.data,
+        req,
+        res
+      );
       return this.response({
         res,
         message: "دسته بندی با موفقیت حذف شد",
@@ -168,68 +172,44 @@ module.exports = new (class extends controller {
   //note:think about deleting this controller because I think its repeated in another controller too .
   async seeOneProduct(req, res) {
     const result = await productServices.getSingleShopWithProperties(req, res);
-    this.response({
+    return this.response({
       res,
       message: "نمایش یک محصول",
-      data: result,
+      data: result.data,
     });
   }
 
   async createProduct(req, res) {
     const result = await productServices.createProduct(req, res);
-    if (result) {
-      this.response({
-        res,
-        message: "محصول با موفقیت ساخته شد",
-        data: result,
-      });
-    } else {
-      if (req.file)
-        //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
-
-      this.response({
-        res,
-        message: "خطا در ساخت محصول",
-        code: 400,
-      });
-    }
+    return this.response({
+      res,
+      message: "محصول با موفقیت ساخته شد",
+      data: result.data,
+    });
   }
 
   async updateProduct(req, res) {
     const result = await productServices.updateProduct(req, res);
-    if (result) {
-      this.response({
-        res,
-        message: "محصول با موفقیت بروزرسانی شد",
-      });
-    } else {
-      if (req.file)
-        //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
-
-      this.response({
-        res,
-        message: "خطا در بروزرسانی محصول",
-        code: 400,
-      });
-    }
+    return this.response({
+      res,
+      message: "محصول با موفقیت بروزرسانی شد",
+    });
   }
 
   async deleteProduct(req, res) {
     const result = await productServices.deleteProduct(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "محصول با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+    if (result.status === 404)
+      return this.response({
         res,
         message: "حذف محصول ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+    throw Error;
   }
 
   async getBlogs(req, res) {
