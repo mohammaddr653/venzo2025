@@ -288,83 +288,83 @@ module.exports = new (class extends controller {
 
   async getProperties(req, res) {
     const result = await propertyServices.getAllProperties(req);
-    this.response({
+    return this.response({
       res,
       message: "this is all properties",
-      data: result,
+      data: result.data,
     });
   }
 
   async getPropertiesWithVals(req, res) {
     const result = await propertyServices.getPropertiesWithVals(req);
-    this.response({
+    return this.response({
       res,
       message: "this is all properties with vals",
-      data: result,
+      data: result.data,
     });
   }
 
   async seeOneProperty(req, res) {
     const result = await propertyServices.seeOneProperty(req, res);
-    this.response({
+    return this.response({
       res,
       message: "this is property",
-      data: result,
+      data: result.data,
     });
   }
 
   async createProperty(req, res) {
     const result = await propertyServices.createProperty(req, res);
-    if (result.code === 400) {
+    if (result.status === 400)
       return this.response({
         res,
         message: "یک ویژگی با این نام قبلا ساخته شده است",
-        code: 400,
+        code: result.status,
       });
-    }
-    this.response({
+
+    return this.response({
       res,
       message: "ویژگی ساخته شد",
-      data: result.data,
     });
   }
 
   async updateProperty(req, res) {
     const result = await propertyServices.updateProperty(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "ویژگی با موفقیت بروزرسانی شد",
       });
-    } else {
-      this.response({
+    if (result.status === 400)
+      return this.response({
         res,
-        message: "بروزرسانی ویژگی ناموفق بود",
-        code: 400,
+        message: "نام ویژگی تکراری است",
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async deleteProperty(req, res) {
     const result = await propertyServices.deleteProperty(req, res);
-    if (result.code === 403) {
-      this.response({
+    if (result.status === 403)
+      return this.response({
         res,
-        message: `این ویژگی در محصولات زیر استفاده می شود ${result.productsInUse}`,
-        code: 403,
+        message: `این ویژگی در محصولات زیر استفاده می شود ${result.data}`,
+        code: result.status,
       });
-    } else if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "ویژگی با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+    if (result.status === 404)
+      return this.response({
         res,
         message: "حذف ویژگی ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+    throw Error;
   }
 
   async getPropertyvals(req, res) {

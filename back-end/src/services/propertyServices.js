@@ -4,13 +4,16 @@ const Property = require("../models/property");
 const Propertyval = require("../models/propertyval");
 const Product = require("../models/product");
 const withTransaction = require("../helpers/withTransaction");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class PropertyServices {
   async getAllProperties(req) {
     //reading all properties
-    return Property.find({});
+    const findOp = await Property.find({});
+    return serviceResponse(200, findOp);
   }
 
+  //note:maybe I can do this with aggregation
   async getPropertiesWithVals(req) {
     //reading all properties with values
     const result = [];
@@ -29,36 +32,34 @@ class PropertyServices {
       );
       result.push(data);
     }
-    return result;
+    return serviceResponse(200, result);
   }
 
   async seeOneProperty(req, res) {
     // reading one property from database
-    return Property.findById(req.params.propertyId);
+    const findOp = await Property.findById(req.params.propertyId);
+    return serviceResponse(200, findOp);
   }
 
   async createProperty(req, res) {
     // create property
     let property = await Property.findOne({ name: req.body.name });
     if (property) {
-      return { code: 400 };
+      return serviceResponse(400, {});
     }
     property = new Property(
       _.pick(req.body, ["name", "specifiedVals", "type"])
     );
-    await property.save();
-    return {
-      code: 200,
-      data: _.pick(property, ["_id", "name", "specifiedVals", "type"]),
-    };
+    const saveOp = await property.save();
+    return serviceResponse(200, {});
   }
 
   async updateProperty(req, res) {
     //if you changed the name field , it checks if its exists or not , then it updates the property
-    const property = await this.seeOneProperty(req, res);
+    const { data: property } = await this.seeOneProperty(req, res);
     let repeatedProperty = await Property.findOne({ name: req.body.name });
     if (repeatedProperty && property.name !== req.body.name) {
-      return false;
+      return serviceResponse(400, {});
     }
     property.name = req.body.name;
 
@@ -82,18 +83,14 @@ class PropertyServices {
           session,
         }
       );
-      if (updateOp && updateProducts.modifiedCount.valueOf() > 0) {
-        return true;
-      }
-
-      return false;
+      return serviceResponse(200, {});
     });
     return transactionResult;
   }
 
   //checks if this property is not used in any product then allow it to delete
   async deleteProperty(req, res) {
-    const property = await this.seeOneProperty(req, res);
+    const { data: property } = await this.seeOneProperty(req, res);
     let productsInUse = await Product.find(
       {
         properties: { $elemMatch: { name: property._id } },
@@ -106,16 +103,22 @@ class PropertyServices {
           return item.name;
         })
       );
-      return { code: 403, productsInUse: productsInUse };
+      return serviceResponse(403, productsInUse);
     }
 
     const transactionResult = await withTransaction(async (session) => {
-      await Property.deleteOne({ _id: req.params.propertyId }, { session });
-      await Propertyval.deleteMany(
-        { propertyId: req.params.propertyId },
+      const deleteOp = await Property.deleteOne(
+        { _id: req.params.propertyId },
         { session }
       );
-      return true;
+      if (deleteOp.deletedCount > 0) {
+        await Propertyval.deleteMany(
+          { propertyId: req.params.propertyId },
+          { session }
+        );
+        return serviceResponse(200, {});
+      }
+      return serviceResponse(404, {});
     });
     return transactionResult;
   }
