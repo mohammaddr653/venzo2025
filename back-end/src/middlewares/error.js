@@ -8,5 +8,5 @@ module.exports = (err, req, res, next) => {
     //if some files uploaded with this req , delete them
     deleteFile(req.file.path, req.file.path);
   winston.error(err.message, err);
-  res.status(500).json({ message: "(server error) something failed" });
+  res.status(500).json({ message: "خطای سرور" });
 };

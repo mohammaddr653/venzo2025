@@ -5,10 +5,10 @@ const controller = require("./../controller");
 module.exports = new (class extends controller {
   async getCategories(req, res) {
     const result = await categoriesServices.getAllCategories(req, res);
-    this.response({
+    return this.response({
       res,
       message: "لیست دسته بندی ها",
-      data: result,
+      data: result.data,
     });
   }
 })();

@@ -107,56 +107,62 @@ module.exports = new (class extends controller {
 
   async createCategory(req, res) {
     const result = await categoriesServices.createCategory(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "دسته بندی با موفقیت ساخته شد",
-        data: result,
+        data: result.data,
       });
-    } else {
-      this.response({
+    if (result.status === 404)
+      return this.response({
         res,
         message: "ساخت دسته بندی ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+    throw Error;
   }
 
   async seeOneCategory(req, res) {
     const result = await categoriesServices.seeOneCategory(req, res);
-    this.response({
+    return this.response({
       res,
       message: "نمایش یک دسته بندی",
-      data: result,
+      data: result.data,
     });
   }
 
   async updateCategory(req, res) {
     const result = await categoriesServices.updateCategory(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "دسته بندی با موفقیت بروزرسانی شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 404)
+      return this.response({
         res,
         message: "بروزرسانی دسته بندی ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+    throw Error;
   }
 
   async deleteCategory(req, res) {
     const parentCategoryId = await categoriesServices.deleteCategory(req, res); //آیدی کتگوری انتخاب شده را حذف میکنه و آیدی کتگوری بالاتر را برمیگردونه تا محصولات کتگوری حذف شده رو بهش منتقل کنیم
-    await productServices.sendToParentCategory(parentCategoryId, req, res);
-    await blogServices.sendToParentCategory(parentCategoryId, req, res);
-    if (parentCategoryId) {
-      this.response({
+    if (parentCategoryId.status === 200) {
+      await productServices.sendToParentCategory(
+        parentCategoryId.data,
+        req,
+        res
+      );
+      await blogServices.sendToParentCategory(parentCategoryId.data, req, res);
+      return this.response({
         res,
         message: "دسته بندی با موفقیت حذف شد",
       });
     }
+    throw Error;
   }
 
   //note:think about deleting this controller because I think its repeated in another controller too .

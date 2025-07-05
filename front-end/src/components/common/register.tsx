@@ -80,8 +80,12 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
         )}
         <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>
-      <br />
-      <Link to={"/auth/login"}>قبلا ثبت نام کرده اید ؟ وارد شوید .</Link>
+      {isAdmin ? null : (
+        <>
+          <br />
+          <Link to={"/auth/login"}>قبلا ثبت نام کرده اید ؟ وارد شوید .</Link>
+        </>
+      )}
     </div>
   );
 };

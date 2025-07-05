@@ -88,7 +88,7 @@ class CartServices {
   }
 
   async deleteCart(req, res, next) {
-    //حذف سبد خرید در صورتی که یوزر را حذف کردیم
+    //حذف سبد خرید
     const deleteOp = await Cart.deleteOne({ userId: req.params.userId });
     if (deleteOp.deletedCount > 0) return serviceResponse(200, {});
     return serviceResponse(404, {});

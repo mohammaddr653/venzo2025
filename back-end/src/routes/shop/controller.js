@@ -16,10 +16,13 @@ module.exports = new (class extends controller {
   }
 
   async getShopByCategory(req, res) {
-    const categoryArr = await categoriesServices.createCategoryArr(req, res); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
+    const { data: categoryArr } = await categoriesServices.createCategoryArr(
+      req,
+      res
+    ); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const { products, filters } =
       await productServices.getProductsByCategoryString(categoryArr, req, res); //دریافت محصولات مطابق با آرایه دسته بندی
-    this.response({
+    return this.response({
       res,
       message: "this is shop , products of specific category",
       data: {
