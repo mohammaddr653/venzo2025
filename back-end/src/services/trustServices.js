@@ -1,15 +1,18 @@
 const deleteFile = require("../helpers/deleteFile");
+const serviceResponse = require("../helpers/serviceResponse");
 const Trust = require("../models/trust");
 
 class TrustServices {
   async getAllTrusts(req, res) {
     //خواندن تمام اعتماد ها از دیتابیس
-    return Trust.find({});
+    const findOp = await Trust.find({});
+    return serviceResponse(200, findOp);
   }
 
   async seeOneTrust(req, res) {
     // خواندن یک اعتماد از دیتابیس
-    return Trust.findById(req.params.trustId);
+    const findOp = await Trust.findById(req.params.trustId);
+    return serviceResponse(200, findOp);
   }
 
   async createTrust(req, res) {
@@ -23,35 +26,35 @@ class TrustServices {
       newTrust.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
     }
 
-    return newTrust.save();
+    const saveOp = await newTrust.save();
+    return serviceResponse(200, saveOp);
   }
 
   //بروزرسانی اعتماد
   async updateTrust(req, res) {
-    const trust = await this.seeOneTrust(req, res);
     let data = {
       title: req.body.title,
       caption: req.body.caption,
       show: req.body.show,
     };
-    const updateOp = await Trust.updateOne({ _id: trust.id }, { $set: data });
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    const updateOp = await Trust.findOneAndUpdate(
+      { _id: req.params.trustId },
+      { $set: data }
+    );
+    if (updateOp) {
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async deleteTrust(req, res) {
     //حذف اعتماد
-    const trust = await this.seeOneTrust(req, res);
-    if (trust) {
-      deleteFile(trust.image.substring(1), trust.image.substring(1));
-      const deleteOp = await Trust.deleteOne({ _id: req.params.trustId });
-      if (deleteOp.deletedCount.valueOf() > 0) {
-        return true;
-      }
+    const deleteOp = await Trust.findOneAndDelete({ _id: req.params.trustId });
+    if (deleteOp) {
+      deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1));
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 }
 module.exports = new TrustServices();

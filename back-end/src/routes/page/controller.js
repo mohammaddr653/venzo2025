@@ -19,10 +19,10 @@ module.exports = new (class extends controller {
 
   async getTrusts(req, res) {
     const result = await trustServices.getAllTrusts(req, res);
-    this.response({
+    return this.response({
       res,
       message: "لیست تمام اعتماد ها",
-      data: result,
+      data: result.data,
     });
   }
 })();
