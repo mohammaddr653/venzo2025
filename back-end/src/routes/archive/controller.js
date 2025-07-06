@@ -20,7 +20,7 @@ module.exports = new (class extends controller {
     return this.response({
       res,
       message: "this is archive, blogs of specific category",
-      data: result,
+      data: result.data,
     });
   }
 })();

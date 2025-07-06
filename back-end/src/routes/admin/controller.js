@@ -235,76 +235,70 @@ module.exports = new (class extends controller {
 
   async getBlogs(req, res) {
     const result = await blogServices.getAllBlogs(req, res);
-    this.response({
+    return this.response({
       res,
       message: "لیست مقالات",
-      data: result,
+      data: result.data,
     });
   }
 
   async seeOneBlog(req, res) {
     const result = await blogServices.seeOneBlog(req, res);
-    this.response({
+    return this.response({
       res,
       message: "نمایش یک مقاله",
-      data: result,
+      data: result.data,
     });
   }
 
   async createBlog(req, res) {
     const result = await blogServices.createBlog(req, res);
-    if (result) {
-      this.response({
-        res,
-        message: "مقاله با موفقیت ساخته شد",
-        data: result,
-      });
-    } else {
-      if (req.file)
-        //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
-
-      this.response({
-        res,
-        message: "خطا در ساخت مقاله",
-      });
-    }
+    return this.response({
+      res,
+      message: "مقاله با موفقیت ساخته شد",
+      data: result.data,
+    });
   }
 
   async updateBlog(req, res) {
     const result = await blogServices.updateBlog(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "مقاله با موفقیت بروزرسانی شد",
       });
-    } else {
+
+    if (result.status === 404) {
       if (req.file)
         //if some files uploaded with this req , delete them
         deleteFile(req.file.path, req.file.path);
 
-      this.response({
+      return this.response({
         res,
         message: "خطا در بروزرسانی مقاله",
-        code: 400,
+        code: result.status,
       });
     }
+
+    throw Error;
   }
 
   async deleteBlog(req, res) {
     const result = await blogServices.deleteBlog(req, res);
-    if (result) {
-      this.response({
+    if (result.status === 200)
+      return this.response({
         res,
         message: "مقاله با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 404)
+      return this.response({
         res,
         message: "حذف مقاله ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async getProperties(req, res) {
