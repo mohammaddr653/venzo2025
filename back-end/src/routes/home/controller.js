@@ -4,7 +4,7 @@ const controller = require("./../controller");
 
 module.exports = new (class extends controller {
   async getHome(req, res) {
-    this.response({
+    return this.response({
       res,
       message: "this is home",
     });

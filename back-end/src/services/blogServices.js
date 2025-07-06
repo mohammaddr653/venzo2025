@@ -58,7 +58,9 @@ class BlogServices {
       data.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }
     if (req.file) {
-      deleteFile(blog.img.substring(1), blog.img.substring(1));
+      blog.img
+        ? deleteFile(blog.img.substring(1), blog.img.substring(1))
+        : null;
       data.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
     const updateOp = await Blog.updateOne({ _id: blog.id }, { $set: data });
@@ -85,7 +87,9 @@ class BlogServices {
     //حذف مقاله
     const blog = await this.seeOneBlog(req, res);
     if (blog) {
-      deleteFile(blog.img.substring(1), blog.img.substring(1));
+      blog.img
+        ? deleteFile(blog.img.substring(1), blog.img.substring(1))
+        : null;
       const deleteOp = await Blog.deleteOne({ _id: req.params.blogId });
       if (deleteOp.deletedCount.valueOf() > 0) {
         return true;

@@ -52,7 +52,9 @@ class BannerServices {
       _id: req.params.bannerId,
     });
     if (deleteOp) {
-      deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1));
+      deleteOp.image
+        ? deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1))
+        : null;
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});

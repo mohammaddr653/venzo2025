@@ -5,7 +5,7 @@ const _ = require("lodash");
 
 module.exports = new (class extends controller {
   async getSingleArchive(req, res) {
-    this.response({
+    return this.response({
       res,
       message: "this is single archive",
     });

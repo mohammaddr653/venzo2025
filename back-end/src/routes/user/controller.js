@@ -7,7 +7,7 @@ const _ = require("lodash");
 
 module.exports = new (class extends controller {
   async dashboard(req, res) {
-    this.response({
+    return this.response({
       res,
       message: "this is user dashboard",
       data: _.pick(req.user, ["name", "email", "isadmin"]),

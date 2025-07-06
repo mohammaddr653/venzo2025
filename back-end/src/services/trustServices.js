@@ -51,7 +51,9 @@ class TrustServices {
     //حذف اعتماد
     const deleteOp = await Trust.findOneAndDelete({ _id: req.params.trustId });
     if (deleteOp) {
-      deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1));
+      deleteOp.image
+        ? deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1))
+        : null;
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});
