@@ -96,4 +96,7 @@ module.exports = new (class extends validator {
       check("author", "لطفا نام نویسنده را وارد کنید").notEmpty(),
     ];
   }
+  mediaValidator() {
+    return [check("media", "لطفا رسانه ای بارگزاری کنید").notEmpty()];
+  }
 })();

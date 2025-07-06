@@ -3,6 +3,7 @@ const debug = require("debug")("app");
 const deleteFile = require("../../helpers/deleteFile");
 const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
+const mediaServices = require("../../services/mediaServices");
 const productServices = require("../../services/productServices");
 const propertyServices = require("../../services/propertyServices");
 const propertyvalServices = require("../../services/propertyvalServices");
@@ -473,6 +474,68 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         message: "حذف مقدار ویژگی ناموفق بود",
+        code: result.status,
+      });
+
+    throw Error;
+  }
+
+  async getMedias(req, res) {
+    const result = await mediaServices.getAllMedias(req, res);
+    return this.response({
+      res,
+      message: "لیست تمام رسانه ها",
+      data: result.data,
+    });
+  }
+
+  async seeOneMedia(req, res) {
+    const result = await mediaServices.seeOneMedia(req, res);
+    return this.response({
+      res,
+      message: "this is media",
+      data: result.data,
+    });
+  }
+
+  async createMedia(req, res) {
+    const result = await mediaServices.createMedia(req, res);
+    return this.response({
+      res,
+      message: "رسانه با موفقیت اضافه شد",
+      data: result.data,
+    });
+  }
+
+  async updateMedia(req, res) {
+    const result = await mediaServices.updateMedia(req, res);
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "رسانه با موفقیت بروزرسانی شد",
+      });
+
+    if (result.status === 404)
+      return this.response({
+        res,
+        message: "رسانه یافت نشد",
+        code: result.status,
+      });
+  }
+
+  async deleteMedia(req, res) {
+    const result = await mediaServices.deleteMedia(req, res);
+
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "رسانه با موفقیت حذف شد",
+      });
+
+    if (result.status === 404)
+      return this.response({
+        res,
+        message: "حذف رسانه ناموفق بود",
         code: result.status,
       });
 

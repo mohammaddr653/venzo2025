@@ -198,4 +198,31 @@ router.delete(
 
 router.use("/dashboard/page", pageRouter);
 
+//medias
+
+router.get("/dashboard/medias", controller.getMedias.bind(controller));
+router.get(
+  "/dashboard/medias/:mediaId",
+  controller.seeOneMedia.bind(controller)
+);
+router.post(
+  "/dashboard/medias",
+  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/),
+  fileToReqBodyHandler("media"),
+  validator.mediaValidator(),
+  controller.validate.bind(controller),
+  controller.createMedia.bind(controller)
+);
+router.put(
+  "/dashboard/medias/:mediaId",
+  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/),
+  fileToReqBodyHandler("media"),
+  controller.updateMedia.bind(controller)
+);
+
+router.delete(
+  "/dashboard/medias/:mediaId",
+  controller.deleteMedia.bind(controller)
+);
+
 module.exports = router;
