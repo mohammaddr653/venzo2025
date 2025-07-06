@@ -21,88 +21,109 @@ module.exports = new (class extends controller {
 
   async updateProfile(req, res) {
     const result = await userServices.adminUpdateProfile(req, res);
-    if (result) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: " اکانت شما با موفقیت بروزرسانی شد",
       });
-    } else {
+
+    if (result.status === 404) {
       if (req.file)
         //if some files uploaded with this req , delete them
         deleteFile(req.file.path, req.file.path);
 
-      this.response({
+      return this.response({
         res,
-        code: 400,
+        code: result.status,
         message: "خطا در بروزرسانی",
       });
     }
+
+    throw Error;
   }
 
   async getUsers(req, res) {
     const result = await userServices.getAllUsers(req);
-    this.response({
+    return this.response({
       res,
       message: "this is all users",
-      data: result,
+      data: result.data,
     });
   }
 
   async seeOneUser(req, res) {
     const result = await userServices.seeOneUser(req, res);
-    this.response({
+    return this.response({
       res,
       message: "this is user",
-      data: result,
+      data: result.data,
     });
   }
 
   async createUser(req, res) {
     const result = await userServices.registerUser(req, res);
-    if (result.code === 400) {
+
+    if (result.status === 400)
       return this.response({
         res,
         message: "کاربری با این ایمیل قبلا ثبت نام کرده است",
-        code: 400,
+        code: result.status,
       });
-    }
-    this.response({
-      res,
-      message: "کاربر با موفقیت ثبت نام شد",
-      data: result.data,
-    });
+
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "کاربر با موفقیت ثبت نام شد",
+        data: result.data,
+      });
+
+    throw Error;
   }
 
   async updateUser(req, res) {
     const result = await userServices.updateUser(req, res);
-    if (result) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: "کاربر با موفقیت بروزرسانی شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 400)
+      return this.response({
         res,
-        message: "بروزرسانی کاربر ناموفق بود",
-        code: 400,
+        message: "کاربری با این ایمیل قبلا ثبت نام کرده است",
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async deleteUser(req, res) {
     const result = await userServices.deleteUser(req, res);
-    if (result) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: "کاربر با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 400)
+      return this.response({
+        res,
+        message: "شما نمیتوانید خود را حذف کنید",
+        code: result.status,
+      });
+
+    if (result.status === 404)
+      return this.response({
         res,
         message: "حذف کاربر ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async createCategory(req, res) {

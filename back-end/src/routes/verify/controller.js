@@ -18,17 +18,21 @@ module.exports = new (class extends controller {
   async checkVerification(req, res) {
     if (req.body.code === this.code) {
       const response = await userServices.verifyUser(req, res);
-      if (response) {
+
+      if (response.status === 200)
         return this.response({
           res,
           message: "ایمیل شما با موفقیت تایید شد",
         });
-      }
-      return this.response({
-        res,
-        code: 400,
-        message: "خطا در تایید ایمیل",
-      });
+
+      if (response.status === 404)
+        return this.response({
+          res,
+          message: "کاربر شناسایی نشد",
+          code: response.status,
+        });
+
+      throw Error;
     } else {
       return this.response({
         res,

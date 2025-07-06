@@ -111,7 +111,9 @@ class ProductServices {
       product.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }
     if (req.file) {
-      deleteFile(product.img.substring(1), product.img.substring(1));
+      product.img
+        ? deleteFile(product.img.substring(1), product.img.substring(1))
+        : null;
       product.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
     const saveOp = await product.save();

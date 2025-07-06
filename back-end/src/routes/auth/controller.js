@@ -34,18 +34,22 @@ module.exports = new (class extends controller {
 
     //same as create user
     const result = await userServices.registerUser(req, res);
-    if (result.code === 400) {
+
+    if (result.status === 400)
       return this.response({
         res,
         message: "کاربری با این ایمیل قبلا ثبت نام کرده است",
-        code: 400,
+        code: result.status,
       });
-    }
-    this.response({
-      res,
-      message: "کاربر با موفقیت ثبت نام شد",
-      data: result.data,
-    });
+
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "کاربر با موفقیت ثبت نام شد",
+        data: result.data,
+      });
+
+    throw Error;
   }
 
   async login(req, res) {

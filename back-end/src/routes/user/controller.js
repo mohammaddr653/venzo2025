@@ -16,21 +16,25 @@ module.exports = new (class extends controller {
 
   async updateProfile(req, res) {
     const result = await userServices.updateProfile(req, res);
-    if (result) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: " اکانت شما با موفقیت بروزرسانی شد",
       });
-    } else {
+
+    if (result.status === 404) {
       if (req.file)
         //if some files uploaded with this req , delete them
         deleteFile(req.file.path, req.file.path);
 
-      this.response({
+      return this.response({
         res,
-        code: 400,
+        code: result.status,
         message: "خطا در بروزرسانی",
       });
     }
+
+    throw Error;
   }
 })();

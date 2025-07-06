@@ -5,76 +5,83 @@ const bcrypt = require("bcrypt");
 const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const withTransaction = require("../helpers/withTransaction");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class UserServices {
   async getAllUsers(req) {
     //reading all users from database except current user that is maybe admin
-    return User.find({ _id: { $ne: req.user.id } });
+    const findOp = await User.find({ _id: { $ne: req.user.id } });
+    return serviceResponse(200, findOp);
   }
 
   async seeOneUser(req, res) {
     // reading one user from database
-    return User.findById(req.params.userId);
+    const findOp = await User.findById(req.params.userId);
+    return serviceResponse(200, findOp);
   }
 
   async registerUser(req, res) {
     // create user , same as register , after user created , the cart will automaticly create
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      return { code: 400 };
+      return serviceResponse(400, {});
     }
     user = new User(_.pick(req.body, ["name", "email", "password"]));
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     const transactionResult = await withTransaction(async (session) => {
-      await user.save({ session });
+      const saveOp = await user.save({ session });
       const newCart = new Cart({
         userId: user.id,
       });
       await newCart.save({ session });
-      return { code: 200, data: _.pick(user, ["_id", "name", "email"]) };
+      return serviceResponse(200, saveOp);
     });
     return transactionResult;
   }
 
   async updateUser(req, res) {
     //if you changed the email field , it checks if its exists or not , then it updates the user
-    const user = await this.seeOneUser(req, res);
+    const { data: user } = await this.seeOneUser(req, res);
     let repeatedEmail = await User.findOne({ email: req.body.email });
     if (repeatedEmail && user.email !== req.body.email) {
-      return false;
+      return serviceResponse(400, {});
     }
-    let data = {
-      name: req.body.name,
-      email: req.body.email,
-    };
-    const updateOp = await User.updateOne(
-      { _id: req.params.userId },
-      { $set: data }
-    );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
-    }
-    return false;
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    const updateOp = await user.save();
+    return serviceResponse(200, {});
   }
 
   async deleteUser(req, res) {
     //delete user , admin cant delete himself
     if (req.params.userId !== req.user.id) {
-      const user = await this.seeOneUser(req, res);
-      const deleteUserOp = await User.deleteOne({ _id: req.params.userId });
-      const deleteCartOp = await Cart.deleteOne({
-        userId: req.params.userId,
+      const transactionResult = await withTransaction(async (session) => {
+        const deleteOp = await User.findOneAndDelete(
+          { _id: req.params.userId },
+          { session }
+        );
+        if (deleteOp) {
+          const deleteCartOp = await Cart.deleteOne(
+            {
+              userId: req.params.userId,
+            },
+            { session }
+          );
+          deleteOp.avatar
+            ? deleteFile(
+                deleteOp.avatar.substring(1),
+                deleteOp.avatar.substring(1)
+              )
+            : null;
+          return serviceResponse(200, {});
+        }
+        return serviceResponse(404, {});
       });
-      deleteFile(user.avatar.substring(1), user.avatar.substring(1));
-      if (
-        deleteUserOp.deletedCount.valueOf() > 0 &&
-        deleteCartOp.deletedCount.valueOf() > 0
-      ) {
-        return true;
-      }
+      return transactionResult;
     }
-    return false;
+    return serviceResponse(400, {});
   }
 
   //update profile
@@ -83,14 +90,16 @@ class UserServices {
       name: req.body.name,
     };
     if (req.file) {
-      deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1));
+      req.user.avatar
+        ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
+        : null;
       data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
     }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    if (updateOp.matchedCount > 0) {
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   //admin update profile
@@ -99,14 +108,16 @@ class UserServices {
       name: req.body.name,
     };
     if (req.file) {
-      deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1));
+      req.user.avatar
+        ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
+        : null;
       data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
     }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    if (updateOp.matchedCount > 0) {
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async verifyUser(req, res) {
@@ -114,10 +125,10 @@ class UserServices {
       { email: req.user.email },
       { $set: { verified: true } }
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    if (updateOp.matchedCount > 0) {
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async createResetPasswordToken(req, res) {
@@ -139,10 +150,10 @@ class UserServices {
         },
       }
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return resetToken;
+    if (updateOp.modifiedCount > 0) {
+      return serviceResponse(200, resetToken);
     }
-    return false;
+    return serviceResponse(404, {});
   }
 
   async passwordRestoration(req, res) {
@@ -163,10 +174,10 @@ class UserServices {
         },
       }
     );
-    if (updateOp.modifiedCount.valueOf() > 0) {
-      return true;
+    if (updateOp.modifiedCount > 0) {
+      return serviceResponse(200, {});
     }
-    return false;
+    return serviceResponse(404, {});
   }
 }
 module.exports = new UserServices();
