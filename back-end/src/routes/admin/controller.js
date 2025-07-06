@@ -368,90 +368,99 @@ module.exports = new (class extends controller {
   }
 
   async getPropertyvals(req, res) {
-    const result = await propertyvalServices.getAllPropertyvals(req);
-    this.response({
+    const result = await propertyvalServices.getAllPropertyvals();
+    return this.response({
       res,
       message: "this is all propertyvals",
-      data: result,
+      data: result.data,
     });
   }
 
   async getPropertyvalsById(req, res) {
     const result = await propertyvalServices.getPropertyvalsById(req);
-    this.response({
+    return this.response({
       res,
       message: "this is all propertyvals by id",
-      data: result,
+      data: result.data,
     });
   }
 
   async seeOnePropertyval(req, res) {
     const result = await propertyvalServices.seeOnePropertyval(req, res);
-    this.response({
+    return this.response({
       res,
       message: "this is propertyval",
-      data: result,
+      data: result.data,
     });
   }
 
   async createPropertyval(req, res) {
     const result = await propertyvalServices.createPropertyval(req, res);
-    if (result.code === 409) {
+    if (result.status === 409)
       return this.response({
         res,
         message: "این مقدار ویژگی تکراری است",
-        code: 409,
+        code: result.status,
       });
-    }
-    if (result.code === 400) {
+
+    if (result.status === 400)
       return this.response({
         res,
         message: "ساخت مقدار ویژگی ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
-    this.response({
-      res,
-      message: "مقدار ویژگی ساخته شد",
-      data: result.data,
-    });
+
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "مقدار ویژگی ساخته شد",
+      });
+
+    throw Error;
   }
 
   async updatePropertyval(req, res) {
     const result = await propertyvalServices.updatePropertyval(req, res);
-    if (result) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: "مقدار ویژگی با موفقیت بروزرسانی شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 400)
+      return this.response({
         res,
-        message: "بروزرسانی مقدار ویژگی ناموفق بود",
-        code: 400,
+        message: "این مقدار ویژگی تکراری است",
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 
   async deletePropertyval(req, res) {
     const result = await propertyvalServices.deletePropertyval(req, res);
-    if (result.code === 403) {
-      this.response({
+
+    if (result.status === 403)
+      return this.response({
         res,
-        message: `این مقدار ویژگی در محصولات زیر استفاده می شود ${result.productsInUse}`,
-        code: 403,
+        message: `این مقدار ویژگی در محصولات زیر استفاده می شود ${result.data}`,
+        code: result.status,
       });
-    } else if (result.code === 200) {
-      this.response({
+
+    if (result.status === 200)
+      return this.response({
         res,
         message: "مقدار ویژگی با موفقیت حذف شد",
       });
-    } else {
-      this.response({
+
+    if (result.status === 403)
+      return this.response({
         res,
         message: "حذف مقدار ویژگی ناموفق بود",
-        code: 400,
+        code: result.status,
       });
-    }
+
+    throw Error;
   }
 })();

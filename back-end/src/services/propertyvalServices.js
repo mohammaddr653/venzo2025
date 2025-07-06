@@ -4,56 +4,59 @@ const Propertyval = require("../models/propertyval");
 const { default: mongoose } = require("mongoose");
 const Product = require("../models/product");
 const withTransaction = require("../helpers/withTransaction");
+const serviceResponse = require("../helpers/serviceResponse");
 
 class PropertyvalServices {
-  async getAllPropertyvals(req) {
+  async getAllPropertyvals() {
     //reading all propertyvals
-    return Propertyval.find({});
+    const findOp = await Propertyval.find({});
+    return serviceResponse(200, findOp);
   }
 
   async getPropertyvalsById(req) {
     //reading all propertyvals by id
-    return Propertyval.find({
+    const findOp = await Propertyval.find({
       propertyId: req.params.propertyId,
     });
+    return serviceResponse(200, findOp);
   }
 
   async seeOnePropertyval(req, res) {
     // reading one propertyval from database
-    return Propertyval.findById(req.params.propertyvalId);
+    const findOp = await Propertyval.findById(req.params.propertyvalId);
+    return serviceResponse(200, findOp);
   }
 
   async createPropertyval(req, res) {
     // create propertyval
-    const propertyval = new Propertyval({
-      value: req.body.value,
-    });
-    const repeatedValue = await Propertyval.find({
+    const repeatedValue = await Propertyval.findOne({
       propertyId: req.body.propertyId,
       value: req.body.value,
     });
-    if (repeatedValue.length) return { code: 409 };
+    if (repeatedValue) return serviceResponse(409, {});
+
+    const propertyval = new Propertyval({
+      value: req.body.value,
+    });
     const exist = await Property.findById(req.body.propertyId);
-    if (!exist) return { code: 400 };
+    if (!exist) return serviceResponse(400, {});
     if (exist.type === "color") {
-      if (!req.body.hex) return { code: 400 };
+      if (!req.body.hex) return serviceResponse(400, {});
       propertyval.hex = req.body.hex;
     }
     propertyval.propertyId = new mongoose.Types.ObjectId(req.body.propertyId);
-    await propertyval.save();
-    return {
-      code: 200,
-      data: _.pick(propertyval, ["_id", "value", "propertyId"]),
-    };
+    const saveOp = await propertyval.save();
+    return serviceResponse(200, {});
   }
 
   async updatePropertyval(req, res) {
-    const propertyval = await this.seeOnePropertyval(req, res);
+    const { data: propertyval } = await this.seeOnePropertyval(req, res);
     let repeatedPropertyval = await Propertyval.findOne({
+      propertyId: propertyval.propertyId,
       value: req.body.value,
     });
     if (repeatedPropertyval && propertyval.value !== req.body.value) {
-      return false;
+      return serviceResponse(400, {});
     }
     propertyval.value = req.body.value;
     const transactionResult = await withTransaction(async (session) => {
@@ -85,17 +88,14 @@ class PropertyvalServices {
           session,
         }
       );
-      if (updateOp && updateProducts.modifiedCount.valueOf() > 0) {
-        return true;
-      }
-      return false;
+      return serviceResponse(200, {});
     });
     return transactionResult;
   }
 
   //checks if this propertyval is not used in any product then allow it to delete
   async deletePropertyval(req, res) {
-    const propertyval = await this.seeOnePropertyval(req, res);
+    const { data: propertyval } = await this.seeOnePropertyval(req, res);
     let productsInUse = await Product.find(
       {
         properties: {
@@ -113,16 +113,16 @@ class PropertyvalServices {
           return item.name;
         })
       );
-      return { code: 403, productsInUse: productsInUse };
+      return serviceResponse(403, productsInUse);
     }
-    const deleteOp = await propertyval.deleteOne({
+    const deleteOp = await Propertyval.deleteOne({
       _id: req.params.propertyvalId,
     });
 
-    if (deleteOp.deletedCount.valueOf() > 0) {
-      return { code: 200 };
+    if (deleteOp.deletedCount > 0) {
+      return serviceResponse(200, {});
     }
-    return { code: 400 };
+    return serviceResponse(404, {});
   }
 }
 module.exports = new PropertyvalServices();
