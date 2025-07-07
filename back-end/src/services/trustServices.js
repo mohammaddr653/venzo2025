@@ -18,13 +18,11 @@ class TrustServices {
   async createTrust(req, res) {
     //اضافه کردن اعتماد
     const newTrust = new Trust({
+      image: req.body.image,
       title: req.body.title,
       caption: req.body.caption,
       show: req.body.show,
     });
-    if (req.file) {
-      newTrust.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-    }
 
     const saveOp = await newTrust.save();
     return serviceResponse(200, saveOp);

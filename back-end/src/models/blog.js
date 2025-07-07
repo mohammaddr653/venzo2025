@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
     default: null,
   }, //دسته بندی میتواند خالی باشد ولی مقاله هیچ جا نمایش داده نمی شود
   description: { type: String },
-  img: { type: String, default: null },
+  img: { type: String, default: "" },
 });
 blogSchema.plugin(timestamp);
 

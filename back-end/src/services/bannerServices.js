@@ -20,12 +20,10 @@ class BannerServices {
   async createBanner(req, res) {
     //اضافه کردن بنر
     const newBanner = new Banner({
+      image: req.body.image,
       location: req.body.location,
       show: req.body.show,
     });
-    if (req.file) {
-      newBanner.image = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر بنر برای ذخیره در مونگو دی بی
-    }
 
     const saveOp = await newBanner.save();
     return serviceResponse(200, saveOp);

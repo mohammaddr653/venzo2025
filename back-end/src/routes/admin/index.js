@@ -169,8 +169,6 @@ router.get("/dashboard/blogs/:blogId", controller.seeOneBlog.bind(controller));
 
 router.post(
   "/dashboard/blogs",
-  uploadHandler("./uploads/images/blogs", "img", /jpeg|jpg/),
-  fileToReqBodyHandler("img"),
   validator.blogValidator(),
   controller.validate.bind(controller),
   controller.createBlog.bind(controller)
@@ -178,8 +176,6 @@ router.post(
 
 router.put(
   "/dashboard/blogs/:blogId",
-  uploadHandler("./uploads/images/blogs", "img", /jpeg|jpg/),
-  fileToReqBodyHandler("img"),
   validator.updateBlogValidator(),
   controller.validate.bind(controller),
   controller.updateBlog.bind(controller)

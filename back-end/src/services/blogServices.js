@@ -37,12 +37,10 @@ class BlogServices {
       title: req.body.title,
       author: req.body.author,
       description: req.body.description,
+      img: req.body.img,
     });
     if (req.body.categoryId) {
       newBlog.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
-    }
-    if (req.file) {
-      newBlog.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر مقاله برای ذخیره در مونگو دی بی
     }
     const saveOp = await newBlog.save();
     return serviceResponse(200, saveOp);
@@ -55,14 +53,10 @@ class BlogServices {
       blog.title = req.body.title;
       blog.author = req.body.author;
       blog.description = req.body.description;
+      blog.img = req.body.img;
+
       if (req.body.categoryId) {
         blog.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
-      }
-      if (req.file) {
-        blog.img
-          ? deleteFile(blog.img.substring(1), blog.img.substring(1))
-          : null;
-        blog.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
       }
       const updateOp = await blog.save();
       return serviceResponse(200, {});

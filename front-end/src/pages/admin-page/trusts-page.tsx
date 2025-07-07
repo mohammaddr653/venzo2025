@@ -21,8 +21,6 @@ const TrustsPage = () => {
   const [updateFormData, setUpdateFormData] = useState<any>();
   const [selectedTrustId, setSelectedTrustId] = useState<any>(null);
 
-  const fileInputRef = useRef<any>(null);
-
   async function refresh() {
     setFormData({
       image: "",
@@ -30,8 +28,6 @@ const TrustsPage = () => {
       caption: "",
       show: false,
     });
-    // Reset file input field
-    fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadTrusts();
   }
 
@@ -52,10 +48,6 @@ const TrustsPage = () => {
     >
   ) => {
     setUpdateFormData({ ...updateFormData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (event: any) => {
-    setFormData({ ...formData, image: event.target.files[0] });
   };
 
   const handleShowChange = (event: any) => {
@@ -105,14 +97,8 @@ const TrustsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dataToSend = new FormData();
-
-    // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]: any) => {
-      dataToSend.append(key, value);
-    });
     const response = await call(
-      axios.post(SERVER_API + "/admin/dashboard/page/trusts", dataToSend),
+      axios.post(SERVER_API + "/admin/dashboard/page/trusts", formData),
       true
     );
     refresh();
@@ -122,7 +108,9 @@ const TrustsPage = () => {
     <div>
       <h1>مدیریت اعتماد ها</h1>
       <br />
-      <h4>لطفا تصویر اعتماد ها را با ابعاد مشابه ایجاد کنید تا باعث ناهماهنگی نشود</h4>
+      <h4>
+        لطفا تصویر اعتماد ها را با ابعاد مشابه ایجاد کنید تا باعث ناهماهنگی نشود
+      </h4>
       <div className="bg-red-300">
         <form onSubmit={handleSubmit} className="flex-column">
           <input
@@ -142,12 +130,10 @@ const TrustsPage = () => {
             onChange={handleFormChange}
           />
           <input
-            type="file"
+            type="text"
             name="image"
-            accept=".png"
             className="border"
-            onChange={handleFileChange}
-            ref={fileInputRef}
+            onChange={handleFormChange}
           />
           <br />
           <label>

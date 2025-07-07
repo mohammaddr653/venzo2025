@@ -20,26 +20,18 @@ const BannersPage = () => {
   const [updateFormData, setUpdateFormData] = useState<any>();
   const [selectedBannerId, setSelectedBannerId] = useState<any>(null);
 
-  const fileInputRef = useRef<any>(null);
-
   async function refresh() {
     setFormData({
       image: "",
       location: "",
       show: false,
     });
-    // Reset file input field
-    fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadBanners();
   }
 
   useEffect(() => {
     refresh();
   }, []);
-
-  const handleFileChange = (event: any) => {
-    setFormData({ ...formData, image: event.target.files[0] });
-  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -104,14 +96,8 @@ const BannersPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dataToSend = new FormData();
-
-    // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]: any) => {
-      dataToSend.append(key, value);
-    });
     const response = await call(
-      axios.post(SERVER_API + "/admin/dashboard/page/banners", dataToSend),
+      axios.post(SERVER_API + "/admin/dashboard/page/banners", formData),
       true
     );
     refresh();
@@ -125,12 +111,11 @@ const BannersPage = () => {
       <div className="bg-red-300">
         <form onSubmit={handleSubmit} className="flex-column">
           <input
-            type="file"
+            type="text"
             name="image"
-            accept=".jpg,.jpeg"
+            value={formData.image}
             className="border"
-            onChange={handleFileChange}
-            ref={fileInputRef}
+            onChange={handleChange}
           />
           <br />
           <select

@@ -3,16 +3,12 @@ const express = require("express");
 const router = express.Router();
 const controller = require("./controller");
 const validator = require("./validator");
-const uploadHandler = require("../../../helpers/uploadHandler");
-const fileToReqBodyHandler = require("../../../middlewares/fileToReqBody");
 
 //banners
 //get all banners is in /page
 
 router.post(
   "/banners",
-  uploadHandler("./uploads/images/banners", "image", /jpeg|jpg/),
-  fileToReqBodyHandler("image"),
   validator.bannerValidator(),
   controller.validate.bind(controller),
   controller.createBanner.bind(controller)
@@ -31,8 +27,6 @@ router.delete("/banners/:bannerId", controller.deleteBanner.bind(controller));
 
 router.post(
   "/trusts",
-  uploadHandler("./uploads/images/trusts", "image", /png/),
-  fileToReqBodyHandler("image"),
   validator.trustValidator(),
   controller.validate.bind(controller),
   controller.createTrust.bind(controller)
