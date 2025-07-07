@@ -28,7 +28,6 @@ const OneProductPage = () => {
     img: "",
   });
   const [properties, setProperties] = useState<PropertiesObj[]>([]);
-  const fileInputRef = useRef<any>(null);
   const { state } = useLocation();
   const { productId } = state || null;
 
@@ -52,16 +51,12 @@ const OneProductPage = () => {
   }
 
   function refresh() {
-    // Reset file input field
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     loadCategories();
   }
 
   useEffect(() => {
     setFormData((prev: any) => {
-      return { ...prev, properties: [...properties] };
+      return { ...prev, properties: JSON.stringify([...properties]) };
     });
   }, [properties]);
 
@@ -77,10 +72,6 @@ const OneProductPage = () => {
     }
   }, [categories]);
 
-  const handleFileChange = (event: any) => {
-    setFormData({ ...formData, img: event.target.files[0] });
-  };
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -92,21 +83,10 @@ const OneProductPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const dataToSend = new FormData();
-
-    // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]: any) => {
-      if (key === "properties") {
-        dataToSend.append("properties", JSON.stringify(value));
-      } else {
-        dataToSend.append(key, value);
-      }
-    });
-
     const response = await call(
       axios.put(
         SERVER_API + `/admin/dashboard/products/${productId}`,
-        dataToSend
+        formData
       ),
       true
     );
@@ -164,12 +144,12 @@ const OneProductPage = () => {
             className="border"
           ></textarea>
           <input
-            type="file"
+            type="text"
+            placeholder="img"
             name="img"
-            accept=".jpg,.jpeg"
+            value={formData.img}
             className="border"
-            onChange={handleFileChange}
-            ref={fileInputRef}
+            onChange={handleChange}
           />
           <br />
 

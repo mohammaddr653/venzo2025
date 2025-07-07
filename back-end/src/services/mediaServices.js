@@ -18,7 +18,7 @@ class MediaServices {
   async createMedia(req, res) {
     //اضافه کردن رسانه
     const newMedia = new Media({
-      path: "/" + req.file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+      media: "/" + req.file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
     });
 
     const saveOp = await newMedia.save();
@@ -30,10 +30,10 @@ class MediaServices {
     const media = await Media.findById(req.params.mediaId);
     if (media) {
       if (req.file) {
-        media.path
-          ? deleteFile(media.path.substring(1), media.path.substring(1))
+        media.media
+          ? deleteFile(media.media.substring(1), media.media.substring(1))
           : null;
-        media.path = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس رسانه برای ذخیره در مونگو دی بی
+        media.media = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس رسانه برای ذخیره در مونگو دی بی
       }
       const saveOp = await media.save();
       return serviceResponse(200, {});
@@ -45,8 +45,8 @@ class MediaServices {
     //حذف رسانه
     const deleteOp = await Media.findOneAndDelete({ _id: req.params.mediaId });
     if (deleteOp) {
-      deleteOp.path
-        ? deleteFile(deleteOp.path.substring(1), deleteOp.path.substring(1))
+      deleteOp.media
+        ? deleteFile(deleteOp.media.substring(1), deleteOp.media.substring(1))
         : null;
       return serviceResponse(200, {});
     }

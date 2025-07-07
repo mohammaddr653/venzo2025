@@ -10,7 +10,7 @@ const fileToReqBodyHandler = require("../../middlewares/fileToReqBody");
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
-  uploadHandler("./uploads/images/avatars", "avatar", /jpeg|jpg/),
+  uploadHandler("./uploads/avatars", "avatar", /jpeg|jpg/),
   fileToReqBodyHandler("avatar"),
   validator.updateProfileCheck(),
   controller.validate.bind(controller),
@@ -75,8 +75,6 @@ router.get(
 
 router.post(
   "/dashboard/products",
-  uploadHandler("./uploads/images/products", "img", /jpeg|jpg/),
-  fileToReqBodyHandler("img"),
   validator.productValidator(),
   controller.validate.bind(controller),
   controller.createProduct.bind(controller)
@@ -84,8 +82,6 @@ router.post(
 
 router.put(
   "/dashboard/products/:productId",
-  uploadHandler("./uploads/images/products", "img", /jpeg|jpg/),
-  fileToReqBodyHandler("img"),
   validator.updateProductValidator(),
   controller.validate.bind(controller),
   controller.updateProduct.bind(controller)

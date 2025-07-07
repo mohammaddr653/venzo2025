@@ -86,12 +86,10 @@ class ProductServices {
       stock: req.body.stock,
       description: req.body.description,
       properties: JSON.parse(req.body.properties),
+      img: req.body.img,
     });
     if (req.body.categoryId) {
       newProduct.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
-    }
-    if (req.file) {
-      newProduct.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر محصول برای ذخیره در مونگو دی بی
     }
     const saveOp = await newProduct.save();
     return serviceResponse(200, saveOp);
@@ -106,15 +104,9 @@ class ProductServices {
     product.categoryId = req.body.categoryId === "" ? null : product.categoryId;
     product.description = req.body.description;
     product.properties = JSON.parse(req.body.properties);
-    product.img = product.img;
+    product.img = req.body.img;
     if (req.body.categoryId) {
       product.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
-    }
-    if (req.file) {
-      product.img
-        ? deleteFile(product.img.substring(1), product.img.substring(1))
-        : null;
-      product.img = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس تصویر پروفایل برای ذخیره در مونگو دی بی
     }
     const saveOp = await product.save();
     return serviceResponse(200, {});

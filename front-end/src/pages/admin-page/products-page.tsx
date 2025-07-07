@@ -34,12 +34,11 @@ const ProductsPage = () => {
   });
   const [properties, setProperties] = useState<PropertiesObj[]>([]);
 
-  const fileInputRef = useRef<any>(null);
   const editorRef = useRef<any>(null);
 
   useEffect(() => {
-    setFormData((prev) => {
-      return { ...prev, properties: [...properties] };
+    setFormData((prev: any) => {
+      return { ...prev, properties: JSON.stringify([...properties]) };
     });
   }, [properties]);
 
@@ -58,8 +57,6 @@ const ProductsPage = () => {
       img: "",
     });
     setProperties([]);
-    // Reset file input field
-    fileInputRef.current ? (fileInputRef.current.value = "") : null;
     loadCategories();
     loadProducts();
     loadPropertiesAndVals();
@@ -69,9 +66,6 @@ const ProductsPage = () => {
     loadProductsAndCats();
   }, []);
 
-  const handleFileChange = (event: any) => {
-    setFormData({ ...formData, img: event.target.files[0] });
-  };
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -104,18 +98,8 @@ const ProductsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dataToSend = new FormData();
-
-    // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]: any) => {
-      if (key === "properties") {
-        dataToSend.append("properties", JSON.stringify(value));
-      } else {
-        dataToSend.append(key, value);
-      }
-    });
     const response = await call(
-      axios.post(SERVER_API + "/admin/dashboard/products", dataToSend),
+      axios.post(SERVER_API + "/admin/dashboard/products", formData),
       true
     );
     loadProductsAndCats();
@@ -206,12 +190,12 @@ const ProductsPage = () => {
             }}
           />
           <input
-            type="file"
+            type="text"
+            placeholder="img"
             name="img"
-            accept=".jpg,.jpeg"
+            value={formData.img}
             className="border"
-            onChange={handleFileChange}
-            ref={fileInputRef}
+            onChange={handleChange}
           />
         </form>
         <PropertiesManager

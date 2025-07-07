@@ -95,6 +95,7 @@ const AdminPage = () => {
       </div>
       <div className="bg-gray-300 flex">
         <Link to={"/admin/users"}>مدیریت کاربران</Link>
+        <Link to={"/admin/medias"}>کتابخانه</Link>
         <Link to={"/admin/categories"}>مدیریت دسته بندی ها</Link>
         <Link to={"/admin/products"}>مدیریت محصولات</Link>
         <Link to={"/admin/properties"}>مدیریت ویژگی ها</Link>

@@ -1,8 +1,5 @@
 node_modules
-uploads/images/*/*.*
-!uploads/images/*/default-product.jpg
-!uploads/images/*/default-avatar.jpg
-!uploads/images/*/default-blog.jpg
+uploads
 
 .env
 logfile.log

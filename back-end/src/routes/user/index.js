@@ -9,7 +9,7 @@ const fileToReqBodyHandler = require("../../middlewares/fileToReqBody");
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
-  uploadHandler("./uploads/images/avatars", "avatar", /jpeg|jpg/),
+  uploadHandler("./uploads/avatars", "avatar", /jpeg|jpg/),
   fileToReqBodyHandler("avatar"),
   validator.updateCheck(),
   controller.validate.bind(controller),
