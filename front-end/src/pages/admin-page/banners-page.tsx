@@ -6,11 +6,13 @@ import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import useLoadBanners from "../../hooks/useLoadBanners";
+import Library from "../../components/common/library";
 const BannersPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const { banners, loadBanners } = useLoadBanners();
-  const navigate = useNavigate();
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState([]);
 
   const [formData, setFormData] = useState<any>({
     image: "",
@@ -26,12 +28,25 @@ const BannersPage = () => {
       location: "",
       show: false,
     });
+    setSelectedImgs([]);
     loadBanners();
   }
 
   useEffect(() => {
     refresh();
   }, []);
+
+  useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, image: selectedImgs[0] };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, image: "" };
+      });
+    }
+  }, [selectedImgs]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -110,13 +125,32 @@ const BannersPage = () => {
       <h4>لطفا بنر ها را با ابعاد مشابه ایجاد کنید تا باعث ناهماهنگی نشود</h4>
       <div className="bg-red-300">
         <form onSubmit={handleSubmit} className="flex-column">
-          <input
-            type="text"
-            name="image"
-            value={formData.image}
-            className="border"
-            onChange={handleChange}
-          />
+          <div className="flex flex-row items-center">
+            <img
+              src={
+                formData.image ? SERVER_URL + formData.image : DEFAULT_PRODUCT
+              }
+              alt=""
+              className="aspect-square object-cover"
+              width={100}
+            />
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر بنر
+            </p>
+            {libShow ? (
+              <Library
+                libShow={libShow}
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
           <br />
           <select
             name="location"

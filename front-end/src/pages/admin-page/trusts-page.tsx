@@ -6,11 +6,14 @@ import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import useLoadTrusts from "../../hooks/useLoadTrusts";
+import Library from "../../components/common/library";
 const TrustsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const { trusts, loadTrusts } = useLoadTrusts();
   const navigate = useNavigate();
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState([]);
 
   const [formData, setFormData] = useState<any>({
     image: "",
@@ -28,12 +31,25 @@ const TrustsPage = () => {
       caption: "",
       show: false,
     });
+    setSelectedImgs([]);
     loadTrusts();
   }
 
   useEffect(() => {
     refresh();
   }, []);
+
+  useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, image: selectedImgs[0] };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, image: "" };
+      });
+    }
+  }, [selectedImgs]);
 
   const handleFormChange = (
     e: React.ChangeEvent<
@@ -129,12 +145,30 @@ const TrustsPage = () => {
             className="border"
             onChange={handleFormChange}
           />
-          <input
-            type="text"
-            name="image"
-            className="border"
-            onChange={handleFormChange}
-          />
+          <div className="flex flex-row items-center">
+            <img
+              src={formData.image ? SERVER_URL + formData.image : DEFAULT_PRODUCT}
+              alt=""
+              className="aspect-square object-cover"
+              width={100}
+            />
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر اعتماد
+            </p>
+            {libShow ? (
+              <Library
+                libShow={libShow}
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
           <br />
           <label>
             <input

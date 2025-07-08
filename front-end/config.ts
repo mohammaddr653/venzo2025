@@ -9,11 +9,17 @@ export const SERVER_URL =
 
 export const SERVER_API = SERVER_URL + "/api";
 
-export const DEFAULT_PRODUCT = SERVER_URL + "/images/default-product.jpg";
+export const DEFAULT_PRODUCT =
+  SERVER_URL +
+  "/images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
 
-export const DEFAULT_BLOG = SERVER_URL + "/images/default-blog.jpg";
+export const DEFAULT_BLOG =
+  SERVER_URL +
+  "/images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
 
-export const DEFAULT_AVATAR = SERVER_URL + "/images/default-avatar.jpg";
+export const DEFAULT_AVATAR =
+  SERVER_URL +
+  "/images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
 
 export const Logo = SERVER_URL + "/images/logo.png";
 

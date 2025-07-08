@@ -33,7 +33,7 @@ const Library = (props: LibraryProps) => {
         className="library-overlay fixed w-full h-full z-10 top-0 right-0 bg-glass-shadow"
         onClick={() => props.setLibShow(false)}
       ></div>
-      <div className="bg-pink-400 border fixed w-[90vw] h-[90vh] rounded-lg top-[5vh] right-[5vw] z-20">
+      <div className="bg-pink-400 border fixed w-[90vw] h-[90vh] overflow-y-scroll rounded-lg top-[5vh] right-[5vw] z-20">
         <div>
           {medias?.map((media: any, index: any) => {
             return (
