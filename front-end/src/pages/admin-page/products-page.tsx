@@ -13,11 +13,14 @@ import PropertiesManager from "../../components/common/propertiesManager";
 import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 import { NewProductFormData } from "../../types/objects/newProductFormData";
 import { PropertiesObj } from "../../types/objects/propertiesObj";
+import Library from "../../components/common/library";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const { propertiesAndVals, loadPropertiesAndVals } =
     useLoadPropertiesAndVals();
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState([]);
   const { products, loadProducts } = useLoadProducts();
   const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
@@ -43,6 +46,18 @@ const ProductsPage = () => {
   }, [properties]);
 
   useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, img: selectedImgs[0] };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, img: "" };
+      });
+    }
+  }, [selectedImgs]);
+
+  useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
   }, [categories]);
 
@@ -56,6 +71,7 @@ const ProductsPage = () => {
       properties: [],
       img: "",
     });
+    setSelectedImgs([]);
     setProperties([]);
     loadCategories();
     loadProducts();
@@ -189,14 +205,30 @@ const ProductsPage = () => {
                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             }}
           />
-          <input
-            type="text"
-            placeholder="img"
-            name="img"
-            value={formData.img}
-            className="border"
-            onChange={handleChange}
-          />
+          <div className="flex flex-row items-center">
+            <img
+              src={formData.img ? SERVER_URL + formData.img : DEFAULT_PRODUCT}
+              alt=""
+              className="aspect-square object-cover"
+              width={100}
+            />
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر محصول
+            </p>
+            {libShow ? (
+              <Library
+                libShow={libShow}
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
         </form>
         <PropertiesManager
           properties={properties}
