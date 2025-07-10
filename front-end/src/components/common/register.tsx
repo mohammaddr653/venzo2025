@@ -7,11 +7,7 @@ import callManager from "../../hooks/callManager";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";
 
-interface RegisterArguments {
-  isAdmin?: boolean;
-}
-
-const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
+const Register = () => {
   const { call, loading } = callManager();
   const [formData, setFormData] = useState({
     name: "",
@@ -33,16 +29,11 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = isAdmin
-      ? await call(
-          axios.post(SERVER_API + "/admin/dashboard/users", formData),
-          true
-        )
-      : await call(
-          axios.post(SERVER_API + "/auth/register", formData),
-          true,
-          "/auth/login"
-        );
+    const response = await call(
+      axios.post(SERVER_API + "/auth/register", formData),
+      true,
+      "/auth/login"
+    );
     reRef.current?.reset();
   };
 
@@ -71,21 +62,15 @@ const Register: React.FC<RegisterArguments> = ({ isAdmin = false }) => {
           className="border"
           onChange={handleChange}
         />
-        {isAdmin ? null : (
-          <ReCAPTCHA
-            sitekey={SITE_KEY}
-            ref={reRef}
-            onChange={handleCaptchaChange}
-          />
-        )}
+        <ReCAPTCHA
+          sitekey={SITE_KEY}
+          ref={reRef}
+          onChange={handleCaptchaChange}
+        />
         <LoadingButton loading={loading}>ثبت نام</LoadingButton>
       </form>
-      {isAdmin ? null : (
-        <>
-          <br />
-          <Link to={"/auth/login"}>قبلا ثبت نام کرده اید ؟ وارد شوید .</Link>
-        </>
-      )}
+      <br />
+      <Link to={"/auth/login"}>قبلا ثبت نام کرده اید ؟ وارد شوید .</Link>
     </div>
   );
 };

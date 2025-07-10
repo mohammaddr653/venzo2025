@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
-import Register from "../../components/common/register";
 import { useUserStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import callManager from "../../hooks/callManager";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
+import LoadingButton from "../../components/common/loadingButton";
 
 const UsersPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const [users, setUsers] = useState<any[]>([]);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    token: "",
+  });
 
   async function loadUsers() {
     const response = await call(
@@ -22,6 +28,12 @@ const UsersPage = () => {
   useEffect(() => {
     loadUsers();
   }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -45,11 +57,43 @@ const UsersPage = () => {
     loadUsers();
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const response = await call(
+      axios.post(SERVER_API + "/admin/dashboard/users", formData),
+      true
+    );
+  };
+
   return (
     <div>
       <h1>مدیریت کاربران</h1>
       <div className="bg-red-300">
-        <Register isAdmin={true}></Register>
+        <h1>ثبت نام</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="name"
+            className="border"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="email"
+            placeholder="email"
+            className="border"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="password"
+            placeholder="password"
+            className="border"
+            onChange={handleChange}
+          />
+          <LoadingButton loading={loading}>ثبت نام</LoadingButton>
+        </form>
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>
