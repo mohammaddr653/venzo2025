@@ -6,60 +6,37 @@ import callManager from "../../hooks/callManager";
 // @ts-ignore
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";
+import useRegisterLog from "../../hooks/logics/useRegisterLog";
 
 const Register = () => {
-  const { call, loading } = callManager();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    token: "",
-  });
-  const reRef = useRef<ReCAPTCHA | null>(null);
-
-  const handleCaptchaChange = (value: any) => {
-    setFormData({ ...formData, token: value });
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const response = await call(
-      axios.post(SERVER_API + "/auth/register", formData),
-      true,
-      "/auth/login"
-    );
-    reRef.current?.reset();
-  };
+  const { handleSubmit, handleChange, reRef, handleCaptchaChange, loading } =
+    useRegisterLog();
 
   return (
-    <div>
-      <h1>ثبت نام</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="flex flex-col gap-3 bg-white border p-4 py-5 rounded-md border-neutral-300 w-fit">
+      <h1 className="w-full mb-3 font-weight300 text-neutral-800 text-size17">
+        ساخت حساب کاربری
+      </h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
           name="name"
-          placeholder="name"
-          className="border"
+          placeholder="نام"
+          className="border border-neutral-300 rounded-md p-2"
           onChange={handleChange}
         />
         <input
           type="text"
           name="email"
-          placeholder="email"
-          className="border"
+          placeholder="ایمیل"
+          className="border border-neutral-300 rounded-md p-2"
           onChange={handleChange}
         />
         <input
           type="text"
           name="password"
-          placeholder="password"
-          className="border"
+          placeholder="رمز عبور"
+          className="border border-neutral-300 rounded-md p-2"
           onChange={handleChange}
         />
         <ReCAPTCHA
