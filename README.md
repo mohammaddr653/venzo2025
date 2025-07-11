@@ -1,4 +1,4 @@
-# Venzo2025 🛠 working 🔨
+# Venzo2025 🛠working🔨
 
 # Back-end Setup Guide
 
@@ -14,51 +14,51 @@ This server works with a MongoDB database, so make sure MongoDB is installed on 
 git clone <repository-url>
 ```
 
-### Navigate to the Back-End Folder
-
-Open a terminal and move to the `back-end` directory:
-
-```sh
-cd back-end
-```
-
 ### Install Dependencies
 
-Run the following command to install the necessary dependencies and create the `node_modules` folder:
+Run the following command in the project root to install all `dependencies` and `devDependencies`.
 
 ```sh
-npm i
+npm run install:all
 ```
 
 ## 🔧 Environment Variables
 
-1. Copy the `.env.example` file and rename it to `.env`.
+1. Rename the `.env.example` file in the `back-end` folder to `.env` and configure the environment variables according to the provided comments.
 
-2. Fill in the required environment variables as described in the comments.
+2. Rename the `.env.example` file in the `front-end` folder to `.env` and configure the environment variables according to the provided comments.
 
-3. Set a strong `JWT_KEY`:
+## Running in Development Mode
 
-   - Must be a random string of letters and numbers.
-   - Minimum **32 characters**.
-   - Example:
-     ```
-     f9J$kL#2!bVtY*eQ@z1X^aW6%UjN&p3R
-     ```
+### Back-end Setup
 
-4. Obtain your `SECRET_KEY` from [Google reCAPTCHA](https://developers.google.com/recaptcha).
+1. Navigate to the `back-end` folder.
+2. Make sure the following environment variable is set:
 
-5. To disable reCAPTCHA (e.g., in local development), set the following in your `.env` file:
    ```env
-   RECAPTCHA=false
+   NODE_ENV=development
    ```
 
-## Running the Server
+3. In the `/back-end` directory, run the following command to start the server:
 
-Once everything is set up, start the server using:
+   ```bash
+   npm run dev
+   ```
 
-```sh
-npm start
-```
+### Front-end Setup
+
+1. Navigate to the `front-end` folder.
+2. Make sure the following environment variable is set:
+
+   ```env
+   VITE_NODE_ENV=development
+   ```
+
+3. In the `/front-end` directory, run the following command to start the server:
+
+   ```bash
+   npm run dev
+   ```
 
 ## Additional Notes
 

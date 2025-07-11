@@ -1,0 +1,14 @@
+{
+  "name": "venzo2025",
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm i && cd front-end && npm i && cd ../back-end && npm i",
+    "build": "npm run build:frontend && npm run copy:build",
+    "build:frontend": "cd front-end && npm run build",
+    "copy:build": "rimraf back-end/client && cpx \"front-end/dist/**\" back-end/client"
+  },
+  "dependencies": {
+    "cpx": "^1.5.0",
+    "rimraf": "^6.0.1"
+  }
+}
