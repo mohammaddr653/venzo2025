@@ -166,8 +166,7 @@ const ProductsPage = () => {
 
           {/* note:need to be modify for uploads */}
           <Editor
-            tinymceScriptSrc="/tinymce/js/tinymce/tinymce.min.js"
-            licenseKey="gpl"
+            apiKey="ajfufhhbmu74o5t6nn4o9rj4ba4wwrhp3gxd6lk3k668y54x"
             onInit={(_evt, editor) => (editorRef.current = editor)}
             onEditorChange={(content) =>
               setFormData({ ...formData, description: content })

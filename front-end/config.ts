@@ -4,7 +4,7 @@ const site_key = import.meta.env.VITE_SITE_KEY;
 
 export const SERVER_URL =
   mode === "development"
-    ? "back-end" //این عبارت توسط پراکسی در مود توسعه با آدرس سرور جایگزین می شود
+    ? "/back-end" //این عبارت توسط پراکسی در مود توسعه با آدرس سرور جایگزین می شود
     : "";
 
 export const SERVER_API = SERVER_URL + "/api";
