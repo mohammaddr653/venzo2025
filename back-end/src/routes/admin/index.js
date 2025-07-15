@@ -6,11 +6,13 @@ const validator = require("./validator");
 const uploadHandler = require("../../helpers/uploadHandler");
 const pageRouter = require("./page");
 const fileToReqBodyHandler = require("../../middlewares/fileToReqBody");
+const compressor = require("../../middlewares/compressor");
 
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
-  uploadHandler("./uploads/avatars", "avatar", /jpeg|jpg/),
+  uploadHandler("avatar", /jpeg|jpg/, false, 1),
+  compressor("./uploads/avatars"),
   fileToReqBodyHandler("avatar"),
   validator.updateProfileCheck(),
   controller.validate.bind(controller),
@@ -199,7 +201,8 @@ router.get(
 );
 router.post(
   "/dashboard/medias",
-  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/, true),
+  uploadHandler("media", /jpeg|jpg|png/, true, 1000),
+  compressor("./uploads/medias"),
   fileToReqBodyHandler("media", true),
   validator.mediaValidator(),
   controller.validate.bind(controller),
@@ -207,7 +210,8 @@ router.post(
 );
 router.put(
   "/dashboard/medias/:mediaId",
-  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/),
+  uploadHandler("media", /jpeg|jpg|png/, false, 1000),
+  compressor("./uploads/medias"),
   fileToReqBodyHandler("media"),
   controller.updateMedia.bind(controller)
 );

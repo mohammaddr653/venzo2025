@@ -24,7 +24,7 @@ module.exports = new (class extends controller {
       });
 
     if (result.status === 404) {
-      if (req.file)
+      if (req.file && req.file.path)
         //if some files uploaded with this req , delete them
         deleteFile(req.file.path, req.file.path);
 

@@ -19,10 +19,12 @@ class MediaServices {
     //اضافه کردن رسانه
     let medias = [];
     for (let file of req.files) {
-      const newMedia = {
-        media: "/" + file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-      };
-      medias.push(newMedia);
+      if (file.path) {
+        const newMedia = {
+          media: "/" + file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+        };
+        medias.push(newMedia);
+      }
     }
 
     const saveOp = await Media.create(medias);
@@ -33,7 +35,7 @@ class MediaServices {
   async updateMedia(req, res) {
     const media = await Media.findById(req.params.mediaId);
     if (media) {
-      if (req.file) {
+      if (req.file && req.file.path) {
         media.media
           ? deleteFile(media.media.substring(1), media.media.substring(1))
           : null;

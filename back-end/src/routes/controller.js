@@ -36,7 +36,7 @@ module.exports = class {
   //this method works with 'validationBody()' & checks if it returns true or false
   validate(req, res, next) {
     if (!this.validationBody(req, res)) {
-      if (req.file)
+      if (req.file && req.file.path)
         //if some files uploaded with this req , delete them
         deleteFile(req.file.path, req.file.path);
       return; //operation stops here

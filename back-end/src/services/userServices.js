@@ -89,7 +89,7 @@ class UserServices {
     let data = {
       name: req.body.name,
     };
-    if (req.file) {
+    if (req.file && req.file.path) {
       req.user.avatar
         ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
         : null;
@@ -107,7 +107,7 @@ class UserServices {
     let data = {
       name: req.body.name,
     };
-    if (req.file) {
+    if (req.file && req.file.path) {
       req.user.avatar
         ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
         : null;
