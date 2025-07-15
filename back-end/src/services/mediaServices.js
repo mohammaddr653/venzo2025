@@ -17,11 +17,15 @@ class MediaServices {
 
   async createMedia(req, res) {
     //اضافه کردن رسانه
-    const newMedia = new Media({
-      media: "/" + req.file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-    });
+    let medias = [];
+    for (let file of req.files) {
+      const newMedia = {
+        media: "/" + file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+      };
+      medias.push(newMedia);
+    }
 
-    const saveOp = await newMedia.save();
+    const saveOp = await Media.create(medias);
     return serviceResponse(200, saveOp);
   }
 

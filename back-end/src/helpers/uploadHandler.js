@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const pathManager = require("./pathManager");
 
-const uploadHandler = (dir, fieldName, regExp) => {
+const uploadHandler = (dir, fieldName, regExp, multiple = false) => {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       const destination = pathManager(dir);
@@ -32,6 +32,9 @@ const uploadHandler = (dir, fieldName, regExp) => {
     },
   });
 
+  if (multiple) {
+    return upload.array(fieldName, 10);
+  }
   return upload.single(fieldName);
 };
 

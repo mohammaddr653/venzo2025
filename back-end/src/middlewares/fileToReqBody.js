@@ -1,9 +1,17 @@
-const fileToReqBodyHandler = (fieldName) => {
+const fileToReqBodyHandler = (fieldName, multiple = false) => {
   const fileToReqBody = (req, res, next) => {
-    if (!req.file) {
-      req.body[fieldName] = null;
+    if (multiple) {
+      if (!req.files || !req.files.length) {
+        req.body[fieldName] = null;
+      } else {
+        req.body[fieldName] = req.files;
+      }
     } else {
-      req.body[fieldName] = req.file.filename;
+      if (!req.file) {
+        req.body[fieldName] = null;
+      } else {
+        req.body[fieldName] = req.file.filename;
+      }
     }
     next();
   };

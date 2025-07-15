@@ -199,8 +199,8 @@ router.get(
 );
 router.post(
   "/dashboard/medias",
-  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/),
-  fileToReqBodyHandler("media"),
+  uploadHandler("./uploads/medias", "media", /jpeg|jpg|png/, true),
+  fileToReqBodyHandler("media", true),
   validator.mediaValidator(),
   controller.validate.bind(controller),
   controller.createMedia.bind(controller)

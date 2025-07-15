@@ -13,7 +13,7 @@ const MediasPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<any>({
-    media: "",
+    media: [],
   });
   const [updateFormData, setUpdateFormData] = useState<any>();
   const [selectedMediaId, setSelectedMediaId] = useState<any>(null);
@@ -23,7 +23,7 @@ const MediasPage = () => {
 
   async function refresh() {
     setFormData({
-      media: "",
+      media: [],
     });
     // Reset file input field
     fileInputRef.current ? (fileInputRef.current.value = "") : null;
@@ -37,7 +37,7 @@ const MediasPage = () => {
   }, []);
 
   const handleFileChange = (event: any) => {
-    setFormData({ ...formData, media: event.target.files[0] });
+    setFormData({ ...formData, media: event.target.files });
   };
 
   const handleUpdateFileChange = (event: any) => {
@@ -81,7 +81,6 @@ const MediasPage = () => {
       ),
       true
     );
-    console.log(response);
     refresh();
   };
 
@@ -95,7 +94,13 @@ const MediasPage = () => {
 
     // Append all form fields to FormData
     Object.entries(formData).forEach(([key, value]: any) => {
-      dataToSend.append(key, value);
+      if (key === "media") {
+        for (let file of value) {
+          dataToSend.append(key, file);
+        }
+      } else {
+        dataToSend.append(key, value);
+      }
     });
     const response = await call(
       axios.post(SERVER_API + "/admin/dashboard/medias", dataToSend),
@@ -115,6 +120,7 @@ const MediasPage = () => {
             name="media"
             accept=".png,.jpg"
             className="border"
+            multiple={true}
             onChange={handleFileChange}
             ref={fileInputRef}
           />
