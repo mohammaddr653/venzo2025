@@ -9,7 +9,7 @@ const SingleShopGallery = (props: SingleShopGalleryProps) => {
     <div>
       <img
         src={
-          props.product?.img ? SERVER_URL + props.product?.img : DEFAULT_PRODUCT
+          props.product?.img ? SERVER_URL + props.product?.img.media : DEFAULT_PRODUCT
         }
         alt=""
         className="aspect-square object-cover"

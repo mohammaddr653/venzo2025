@@ -20,7 +20,7 @@ const ProductsPage = () => {
   const { propertiesAndVals, loadPropertiesAndVals } =
     useLoadPropertiesAndVals();
   const [libShow, setLibShow] = useState(false);
-  const [selectedImgs, setSelectedImgs] = useState([]);
+  const [selectedImgs, setSelectedImgs] = useState<any>([]);
   const { products, loadProducts } = useLoadProducts();
   const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
@@ -48,7 +48,7 @@ const ProductsPage = () => {
   useEffect(() => {
     if (selectedImgs.length) {
       setFormData((prev: any) => {
-        return { ...prev, img: selectedImgs[0] };
+        return { ...prev, img: selectedImgs[0]._id };
       });
     } else {
       setFormData((prev: any) => {
@@ -206,7 +206,11 @@ const ProductsPage = () => {
           />
           <div className="flex flex-row items-center">
             <img
-              src={formData.img ? SERVER_URL + formData.img : DEFAULT_PRODUCT}
+              src={
+                selectedImgs.length
+                  ? SERVER_URL + selectedImgs[0].media
+                  : DEFAULT_PRODUCT
+              }
               alt=""
               className="aspect-square object-cover"
               width={100}
@@ -261,7 +265,9 @@ const ProductsPage = () => {
                   <td className="border">
                     <img
                       src={
-                        product.img ? SERVER_URL + product.img : DEFAULT_PRODUCT
+                        product.img
+                          ? SERVER_URL + product.img.media
+                          : DEFAULT_PRODUCT
                       }
                       alt=""
                       className="aspect-square object-cover"

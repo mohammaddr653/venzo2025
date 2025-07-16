@@ -10,12 +10,12 @@ const serviceResponse = require("../helpers/serviceResponse");
 class ProductServices {
   async getAllProducts(req, res) {
     //خواندن تمام محصولات از دیتابیس
-    const findOp = await Product.find({});
+    const findOp = await Product.find({}).populate("img"); //فیلد img که رفرنس دارد را جایگذاری میکند
     return serviceResponse(200, findOp);
   }
   async seeOneProduct(req, res) {
     // خواندن یک محصول از دیتابیس
-    const findOp = await Product.findById(req.params.productId);
+    const findOp = await Product.findById(req.params.productId).populate("img");
     return serviceResponse(200, findOp);
   }
 
@@ -86,7 +86,7 @@ class ProductServices {
       stock: req.body.stock,
       description: req.body.description,
       properties: JSON.parse(req.body.properties),
-      img: req.body.img,
+      img: req.body.img === "" ? null : req.body.img,
     });
     if (req.body.categoryId) {
       newProduct.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
@@ -104,7 +104,7 @@ class ProductServices {
     product.categoryId = req.body.categoryId === "" ? null : product.categoryId;
     product.description = req.body.description;
     product.properties = JSON.parse(req.body.properties);
-    product.img = req.body.img;
+    product.img = req.body.img === "" ? null : req.body.img;
     if (req.body.categoryId) {
       product.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }

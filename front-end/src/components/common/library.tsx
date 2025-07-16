@@ -18,11 +18,11 @@ const Library = (props: LibraryProps) => {
 
   const handleSelect = (media: any) => {
     props.setSelectedImgs((prev: any) => {
-      const exist = prev.includes(media.media);
+      const exist = prev.includes(media);
       if (exist) {
-        return [...prev.filter((item: any) => item !== media.media)];
+        return [...prev.filter((item: any) => item !== media)];
       } else {
-        return [...prev, media.media];
+        return [...prev, media];
       }
     });
   };
@@ -47,7 +47,7 @@ const Library = (props: LibraryProps) => {
                   className="aspect-square object-cover"
                   width={100}
                 />
-                {props.selectedImgs.includes(media.media) ? (
+                {props.selectedImgs.includes(media) ? (
                   <span className="flex absolute top-0 left-0 bg-red-500 w-[5px] aspect-square"></span>
                 ) : null}
               </div>

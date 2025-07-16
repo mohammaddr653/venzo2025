@@ -18,7 +18,11 @@ const productSchema = new mongoose.Schema({
     default: null,
   }, //دسته بندی میتواند خالی باشد ولی محصول هیچ جا نمایش داده نمی شود
   description: { type: String },
-  img: { type: String, default: "" },
+  img: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Media",
+    default: null,
+  },
 });
 
 productSchema.plugin(timestamp);

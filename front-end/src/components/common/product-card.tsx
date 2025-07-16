@@ -33,7 +33,7 @@ const ProductCard = (props: ProductCardProps) => {
             <img
               src={
                 props.product.img
-                  ? SERVER_URL + props.product.img
+                  ? SERVER_URL + props.product.img.media
                   : DEFAULT_PRODUCT
               }
               className="product-img relative aspect-284/170 object-cover w-full z-0"
