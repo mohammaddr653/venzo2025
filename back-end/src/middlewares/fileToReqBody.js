@@ -10,7 +10,7 @@ const fileToReqBodyHandler = (fieldName, multiple = false) => {
       if (!req.file) {
         req.body[fieldName] = null;
       } else {
-        req.body[fieldName] = req.file.filename;
+        req.body[fieldName] = req.file;
       }
     }
     next();
