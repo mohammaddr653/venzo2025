@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
+const urlsObjSchema = require("./urlsObj");
 
 const mediaSchema = new mongoose.Schema({
-  media: { type: String, required: true },
+  urls: { type: urlsObjSchema, required: true },
 });
 
 mediaSchema.plugin(timestamp);

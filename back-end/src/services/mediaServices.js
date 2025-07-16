@@ -19,10 +19,12 @@ class MediaServices {
     //اضافه کردن رسانه
     let medias = [];
     for (let file of req.files) {
-      if (file.path) {
-        const newMedia = {
-          media: "/" + file.path.replace(/\\/g, "/"), //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-        };
+      if (file.urls) {
+        const newMedia = {};
+        for (let key of Object.keys(file.urls)) {
+          file.urls[key] = file.urls[key].replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+        }
+        newMedia.urls = file.urls;
         medias.push(newMedia);
       }
     }
@@ -35,11 +37,16 @@ class MediaServices {
   async updateMedia(req, res) {
     const media = await Media.findById(req.params.mediaId);
     if (media) {
-      if (req.file && req.file.path) {
-        media.media
-          ? deleteFile(media.media.substring(1), media.media.substring(1))
-          : null;
-        media.media = "/" + req.file.path.replace(/\\/g, "/"); //تنظیم آدرس رسانه برای ذخیره در مونگو دی بی
+      if (req.file) {
+        const file = req.file;
+        for (let url of Object.values(media.urls))
+          deleteFile(url.substring(1), url.substring(1));
+        if (file.urls) {
+          for (let key of Object.keys(file.urls)) {
+            file.urls[key] = file.urls[key].replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
+          }
+          media.urls = file.urls;
+        }
       }
       const saveOp = await media.save();
       return serviceResponse(200, {});
