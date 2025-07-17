@@ -4,43 +4,56 @@ const pathManager = require("../helpers/pathManager");
 
 const compressor = (dir) => {
   const sharpHandler = async (req, res, next) => {
-    if (req.files && req.files.length) {
-      await Promise.all(
-        req.files.map((file) => {
-          const uniqueSuffix =
-            Date.now() + "-" + Math.round(Math.random() * 1e9);
-          const extName = path.extname(file.originalname);
-          const justName = path.parse(file.originalname).name;
-          const fileName = uniqueSuffix + "-" + justName;
-          const directory = pathManager(dir);
-          file.urls = {
-            original: directory + "/" + fileName + extName,
-            small: directory + "/" + fileName + "-small" + extName,
-            medium: directory + "/" + fileName + "-medium" + extName,
-            large: directory + "/" + fileName + "-large" + extName,
-          };
-          for (let url of Object.values(file.urls)) {
-            sharp(file.buffer).jpeg({ quality: 70 }).toFile(url);
-          }
-        })
-      );
-    }
-    if (req.file) {
-      const file = req.file;
+    async function compress(file) {
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
       const extName = path.extname(file.originalname);
       const justName = path.parse(file.originalname).name;
       const fileName = uniqueSuffix + "-" + justName;
       const directory = pathManager(dir);
-      file.urls = {
-        original: directory + "/" + fileName + extName,
-        small: directory + "/" + fileName + "-small" + extName,
-        medium: directory + "/" + fileName + "-medium" + extName,
-        large: directory + "/" + fileName + "-large" + extName,
+      const sizes = {
+        original: null, // بدون تغییر سایز
+        small: { width: 320 },
+        medium: { width: 640 },
+        large: { width: 1024 },
       };
-      for (let url of Object.values(file.urls)) {
-        sharp(file.buffer).jpeg({ quality: 70 }).toFile(url);
+      file.urls = {};
+      await Promise.all(
+        Object.entries(sizes).map(async ([key, size]) => {
+          const url =
+            directory +
+            "/" +
+            fileName +
+            (key === "original" ? extName : `-${key}${extName}`);
+
+          let pipeline = sharp(file.buffer).jpeg({ quality: 70 });
+
+          const metadata = await pipeline.metadata();
+
+          let width = metadata.width;
+          let height = metadata.height;
+
+          if (size) {
+            pipeline = pipeline.resize(size);
+            width = Math.round(size.width);
+            height = Math.round((width * height) / metadata.width);
+          }
+          await pipeline.toFile(url);
+          const urlObj = {
+            url: url.substring(1).replace(/\\/g, "/"), //تنظیم آدرس برای ذخیره در مونگو دی بی
+            width: width.toString(),
+            height: height.toString(),
+          };
+          file.urls[key] = urlObj;
+        })
+      );
+    }
+    if (req.files && req.files.length) {
+      for (let file of req.files) {
+        await compress(file);
       }
+    }
+    if (req.file) {
+      await compress(req.file);
     }
     next();
   };

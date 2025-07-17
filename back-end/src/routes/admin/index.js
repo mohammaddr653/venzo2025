@@ -11,9 +11,6 @@ const compressor = require("../../middlewares/compressor");
 router.get("/dashboard", controller.dashboard.bind(controller));
 router.put(
   "/dashboard",
-  uploadHandler("avatar", /jpeg|jpg/, false, 1),
-  compressor("./uploads/avatars"),
-  fileToReqBodyHandler("avatar"),
   validator.updateProfileCheck(),
   controller.validate.bind(controller),
   controller.updateProfile.bind(controller)

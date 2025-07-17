@@ -14,6 +14,7 @@ import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 import { NewProductFormData } from "../../types/objects/newProductFormData";
 import { PropertiesObj } from "../../types/objects/propertiesObj";
 import Library from "../../components/common/library";
+import Img from "../../components/common/img";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -263,16 +264,12 @@ const ProductsPage = () => {
               return (
                 <tr key={index}>
                   <td className="border">
-                    <img
-                      src={
-                        product.img
-                          ? SERVER_URL + product.img.media
-                          : DEFAULT_PRODUCT
-                      }
-                      alt=""
-                      className="aspect-square object-cover"
+                    <Img
+                      pic={product?.img}
+                      sizes={"100px"}
+                      className={"aspect-square object-cover"}
                       width={100}
-                    />
+                    ></Img>
                   </td>
                   <td className="border">{product.name}</td>
                   <td className="border">{product.price}</td>

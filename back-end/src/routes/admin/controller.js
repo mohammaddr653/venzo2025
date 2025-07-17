@@ -29,17 +29,12 @@ module.exports = new (class extends controller {
         message: " اکانت شما با موفقیت بروزرسانی شد",
       });
 
-    if (result.status === 404) {
-      if (req.file && req.file.path)
-        //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
-
+    if (result.status === 404)
       return this.response({
         res,
         code: result.status,
         message: "خطا در بروزرسانی",
       });
-    }
 
     throw Error;
   }

@@ -89,12 +89,6 @@ class UserServices {
     let data = {
       name: req.body.name,
     };
-    if (req.file && req.file.path) {
-      req.user.avatar
-        ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
-        : null;
-      data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
-    }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
     if (updateOp.matchedCount > 0) {
       return serviceResponse(200, {});
@@ -107,12 +101,6 @@ class UserServices {
     let data = {
       name: req.body.name,
     };
-    if (req.file && req.file.path) {
-      req.user.avatar
-        ? deleteFile(req.user.avatar.substring(1), req.user.avatar.substring(1))
-        : null;
-      data.avatar = "/" + req.file.path.replace(/\\/g, "/"); //some modifications on file address to store in db
-    }
     const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
     if (updateOp.matchedCount > 0) {
       return serviceResponse(200, {});

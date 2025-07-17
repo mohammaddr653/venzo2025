@@ -20,11 +20,9 @@ class MediaServices {
     let medias = [];
     for (let file of req.files) {
       if (file.urls) {
-        const newMedia = {};
-        for (let key of Object.keys(file.urls)) {
-          file.urls[key] = file.urls[key].replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-        }
-        newMedia.urls = file.urls;
+        const newMedia = {
+          urls: file.urls,
+        };
         medias.push(newMedia);
       }
     }
@@ -42,9 +40,6 @@ class MediaServices {
         for (let url of Object.values(media.urls))
           deleteFile(url.substring(1), url.substring(1));
         if (file.urls) {
-          for (let key of Object.keys(file.urls)) {
-            file.urls[key] = file.urls[key].replace(/\\/g, "/"); //تنظیم آدرس تصویر اعتماد برای ذخیره در مونگو دی بی
-          }
           media.urls = file.urls;
         }
       }

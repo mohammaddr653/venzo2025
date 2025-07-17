@@ -38,6 +38,7 @@ const Library = (props: LibraryProps) => {
           {medias?.map((media: any, index: any) => {
             return (
               <div
+                key={index}
                 onClick={() => handleSelect(media)}
                 className="w-[100px] relative"
               >
