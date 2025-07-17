@@ -7,13 +7,14 @@ import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import useLoadTrusts from "../../hooks/useLoadTrusts";
 import Library from "../../components/common/library";
+import Img from "../../components/common/img";
 const TrustsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const { trusts, loadTrusts } = useLoadTrusts();
   const navigate = useNavigate();
   const [libShow, setLibShow] = useState(false);
-  const [selectedImgs, setSelectedImgs] = useState([]);
+  const [selectedImgs, setSelectedImgs] = useState<any>([]);
 
   const [formData, setFormData] = useState<any>({
     image: "",
@@ -42,7 +43,7 @@ const TrustsPage = () => {
   useEffect(() => {
     if (selectedImgs.length) {
       setFormData((prev: any) => {
-        return { ...prev, image: selectedImgs[0] };
+        return { ...prev, image: selectedImgs[0]._id };
       });
     } else {
       setFormData((prev: any) => {
@@ -146,12 +147,12 @@ const TrustsPage = () => {
             onChange={handleFormChange}
           />
           <div className="flex flex-row items-center">
-            <img
-              src={formData.image ? SERVER_URL + formData.image : DEFAULT_PRODUCT}
-              alt=""
-              className="aspect-square object-cover"
+            <Img
+              pic={selectedImgs[0]}
+              sizes={"500px"}
+              className={"aspect-square object-cover"}
               width={100}
-            />
+            ></Img>
             <p
               className="cursor-pointer"
               onClick={() => {
@@ -209,12 +210,12 @@ const TrustsPage = () => {
               return (
                 <tr key={index}>
                   <td className="border">
-                    <img
-                      src={SERVER_URL + trust.image}
-                      alt=""
-                      className="aspect-square object-cover"
+                    <Img
+                      pic={trust?.image}
+                      sizes={"500px"}
+                      className={"aspect-square object-cover"}
                       width={100}
-                    />
+                    ></Img>
                   </td>
                   <td className="border">
                     {selectedTrustId === trust._id.toString() ? (

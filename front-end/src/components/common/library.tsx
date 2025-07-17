@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useLoadMedias from "../../hooks/useLoadMedias";
 import { SERVER_URL } from "../../../config";
+import Img from "./img";
 
 interface LibraryProps {
   libShow: boolean;
@@ -42,12 +43,12 @@ const Library = (props: LibraryProps) => {
                 onClick={() => handleSelect(media)}
                 className="w-[100px] relative"
               >
-                <img
-                  src={SERVER_URL + media.media}
-                  alt=""
-                  className="aspect-square object-cover"
+                <Img
+                  pic={media}
+                  sizes={"500px"}
+                  className={"aspect-square object-cover"}
                   width={100}
-                />
+                ></Img>
                 {props.selectedImgs.includes(media) ? (
                   <span className="flex absolute top-0 left-0 bg-red-500 w-[5px] aspect-square"></span>
                 ) : null}

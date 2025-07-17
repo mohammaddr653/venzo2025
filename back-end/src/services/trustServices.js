@@ -5,20 +5,20 @@ const Trust = require("../models/trust");
 class TrustServices {
   async getAllTrusts(req, res) {
     //خواندن تمام اعتماد ها از دیتابیس
-    const findOp = await Trust.find({});
+    const findOp = await Trust.find({}).populate("image");
     return serviceResponse(200, findOp);
   }
 
   async seeOneTrust(req, res) {
     // خواندن یک اعتماد از دیتابیس
-    const findOp = await Trust.findById(req.params.trustId);
+    const findOp = await Trust.findById(req.params.trustId).populate("image");
     return serviceResponse(200, findOp);
   }
 
   async createTrust(req, res) {
     //اضافه کردن اعتماد
     const newTrust = new Trust({
-      image: req.body.image,
+      image: req.body.image === "" ? null : req.body.image,
       title: req.body.title,
       caption: req.body.caption,
       show: req.body.show,
@@ -49,9 +49,6 @@ class TrustServices {
     //حذف اعتماد
     const deleteOp = await Trust.findOneAndDelete({ _id: req.params.trustId });
     if (deleteOp) {
-      deleteOp.image
-        ? deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1))
-        : null;
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});
