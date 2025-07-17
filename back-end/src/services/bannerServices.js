@@ -7,20 +7,20 @@ const serviceResponse = require("../helpers/serviceResponse");
 class BannerServices {
   async getAllBanners(req, res) {
     //خواندن تمام بنر ها از دیتابیس
-    const findOp = await Banner.find({});
+    const findOp = await Banner.find({}).populate("image");
     return serviceResponse(200, findOp);
   }
 
   async seeOneBanner(req, res) {
     // خواندن یک بنر از دیتابیس
-    const findOp = await Banner.findById(req.params.bannerId);
+    const findOp = await Banner.findById(req.params.bannerId).populate("image");
     return serviceResponse(200, findOp);
   }
 
   async createBanner(req, res) {
     //اضافه کردن بنر
     const newBanner = new Banner({
-      image: req.body.image,
+      image: req.body.image === "" ? null : req.body.image,
       location: req.body.location,
       show: req.body.show,
     });
@@ -50,9 +50,6 @@ class BannerServices {
       _id: req.params.bannerId,
     });
     if (deleteOp) {
-      deleteOp.image
-        ? deleteFile(deleteOp.image.substring(1), deleteOp.image.substring(1))
-        : null;
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import SwiperButtonPrev from "./swiper-button-prev";
 import SwiperButtonNext from "./swiper-button-next";
 import useLoadBanners from "../../hooks/useLoadBanners";
+import Img from "./img";
 
 const HomeBanner = () => {
   const { banners, loadBanners } = useLoadBanners();
@@ -61,11 +62,13 @@ const HomeBanner = () => {
           {banners.map((banner: any, index: any) => {
             return banner.show && banner.location === "main-banner" ? (
               <SwiperSlide>
-                <img
-                  src={SERVER_URL + banner.image}
-                  alt="banner-image"
-                  className="w-full aspect-1353/555 object-cover object-center"
-                />
+                <Img
+                  pic={banner?.image}
+                  sizes={"500px"}
+                  className={
+                    "w-full aspect-1353/555 object-cover object-center"
+                  }
+                ></Img>
               </SwiperSlide>
             ) : null;
           })}
