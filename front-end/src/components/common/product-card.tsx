@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import TitleCentral from "./title-central";
 import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
+import Img from "./img";
 
 interface ProductCardProps {
   product: any;
@@ -30,15 +31,14 @@ const ProductCard = (props: ProductCardProps) => {
       >
         <div className=" main-part w-full flex flex-col justify-start items-center h-full">
           <div className="relative w-full overflow-hidden">
-            <img
-              src={
-                props.product.img
-                  ? SERVER_URL + props.product.img.media
-                  : DEFAULT_PRODUCT
+            <Img
+              pic={props.product?.img}
+              sizes={"500px"}
+              className={
+                "product-img relative aspect-284/170 object-cover w-full z-0"
               }
-              className="product-img relative aspect-284/170 object-cover w-full z-0"
-              alt=""
-            />
+              width={100}
+            ></Img>
           </div>
           <div className="relative overflow-hidden w-full grow">
             <div className="relative flex flex-col items-center gap-4 h-full py-4 z-10">

@@ -1,3 +1,4 @@
+//note:this component needs to be set correctly everywhere it used . due to width of the image set the sizes property .
 import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
 
 const Img = ({ pic, ...props }: any) => {

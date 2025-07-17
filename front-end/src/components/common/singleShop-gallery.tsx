@@ -1,4 +1,5 @@
 import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
+import Img from "./img";
 
 interface SingleShopGalleryProps {
   product: any;
@@ -7,14 +8,12 @@ interface SingleShopGalleryProps {
 const SingleShopGallery = (props: SingleShopGalleryProps) => {
   return (
     <div>
-      <img
-        src={
-          props.product?.img ? SERVER_URL + props.product?.img.media : DEFAULT_PRODUCT
-        }
-        alt=""
+      <Img
+        pic={props.product?.img}
+        sizes={"500px"}
         className="aspect-square object-cover"
         width={700}
-      />
+      ></Img>
     </div>
   );
 };
