@@ -25,8 +25,24 @@ const compressor = (dir) => {
             fileName +
             (key === "original" ? extName : `-${key}${extName}`);
 
-          let pipeline = sharp(file.buffer).jpeg({ quality: 70 });
-
+          let pipeline = sharp(file.buffer).withMetadata();
+          const format = extName.substring(1).toLowerCase();
+          switch (format) {
+            case "png":
+              pipeline = pipeline.png({ quality: 70 });
+              break;
+            case "webp":
+              pipeline = pipeline.webp({ quality: 70 });
+              break;
+            case "jpg":
+            case "jpeg":
+              pipeline = pipeline.jpeg({ quality: 70 });
+              break;
+            default:
+              // اگر فرمت پشتیبانی نشده بود، به jpeg تبدیل کن
+              pipeline = pipeline.jpeg({ quality: 70 });
+              break;
+          }
           const metadata = await pipeline.metadata();
 
           let width = metadata.width;
