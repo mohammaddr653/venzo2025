@@ -11,32 +11,6 @@ const controller = require("./../controller");
 const _ = require("lodash");
 
 module.exports = new (class extends controller {
-  async dashboard(req, res) {
-    return this.response({
-      res,
-      message: "this is admin dashboard",
-      data: _.pick(req.user, ["name", "email", "isadmin"]),
-    });
-  }
-
-  async updateProfile(req, res) {
-    const result = await userServices.adminUpdateProfile(req, res);
-
-    if (result.status === 200)
-      return this.response({
-        res,
-        message: " اکانت شما با موفقیت بروزرسانی شد",
-      });
-
-    if (result.status === 404)
-      return this.response({
-        res,
-        code: result.status,
-        message: "خطا در بروزرسانی",
-      });
-
-    throw Error;
-  }
 
   async getUsers(req, res) {
     const result = await userServices.getAllUsers(req);

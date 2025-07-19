@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { DEFAULT_AVATAR, SERVER_URL } from "../../../config";
 import "../../assets/css/account-buttons.css";
+import Img from "./img";
 
 const AccountButtons = (props: any) => {
   return (
@@ -27,16 +28,13 @@ const AccountButtons = (props: any) => {
       ) : props.mode === "desktop" ? (
         <>
           <div className="account-hover relative shadow-sm shadow-cu-neutral-900 rounded-full flex justify-center items-center">
-            <img
-              src={
-                props.user?.avatar
-                  ? SERVER_URL + props.user.avatar
-                  : DEFAULT_AVATAR
-              }
+            <Img
+              pic={props.user?.avatar}
+              sizes={"500px"}
+              className={"rounded-full aspect-square object-cover"}
               width={40}
-              className="rounded-full aspect-square object-cover"
               alt="user-avatar"
-            />
+            ></Img>
             <div className="hidden-div py-3 absolute flex flex-column gap-2 rounded-xl bg-white shadow-sm shadow-cu-neutral-900 top-full left-full">
               {props.user?.isadmin ? (
                 <>
@@ -61,16 +59,12 @@ const AccountButtons = (props: any) => {
               className="flex flex-row w-full gap-2 justify-between items-center"
             >
               <div className="flex flex-row gap-2 items-center">
-                <img
-                  src={
-                    props.user?.avatar
-                      ? SERVER_URL + props.user.avatar
-                      : DEFAULT_AVATAR
-                  }
+                <Img
+                  pic={props.user?.avatar}
+                  sizes={"500px"}
+                  className={"rounded-full aspect-square object-cover"}
                   width={40}
-                  className="rounded-full aspect-square object-cover"
-                  alt="user-avatar"
-                />
+                ></Img>
                 <h4>{props.user?.name}</h4>
               </div>
               <p className="text-size13 text-cu-neutral-800 font-weight300">
@@ -84,16 +78,12 @@ const AccountButtons = (props: any) => {
                   className="flex flex-row w-full gap-2 justify-between items-center"
                 >
                   <div className="flex flex-row gap-2 items-center">
-                    <img
-                      src={
-                        props.user?.avatar
-                          ? SERVER_URL + props.user.avatar
-                          : DEFAULT_AVATAR
-                      }
+                    <Img
+                      pic={props.user?.avatar}
+                      sizes={"500px"}
+                      className={"rounded-full aspect-square object-cover"}
                       width={40}
-                      className="rounded-full aspect-square object-cover"
-                      alt="admin-avatar"
-                    />
+                    ></Img>
                     <h4>{props.user?.name}</h4>
                   </div>
                   <p className="text-size13 text-cu-neutral-800 font-weight300">

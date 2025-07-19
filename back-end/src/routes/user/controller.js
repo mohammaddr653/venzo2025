@@ -31,4 +31,41 @@ module.exports = new (class extends controller {
 
     throw Error;
   }
+
+  async addAvatar(req, res) {
+    const result = await userServices.addAvatar(req, res);
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "آواتار با موفقیت اضافه شد",
+      });
+
+    if (result.status === 404)
+      return this.response({
+        res,
+        message: "کاربر یافت نشد",
+        code: result.status,
+      });
+
+    throw Error;
+  }
+
+  async deleteAvatar(req, res) {
+    const result = await userServices.deleteAvatar(req, res);
+
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "آواتار با موفقیت حذف شد",
+      });
+
+    if (result.status === 404)
+      return this.response({
+        res,
+        message: "کاربر یافت نشد",
+        code: result.status,
+      });
+
+    throw Error;
+  }
 })();

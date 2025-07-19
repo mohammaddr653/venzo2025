@@ -5,13 +5,13 @@ import callManager from "../../hooks/callManager";
 import useLoadUser from "../../hooks/useLoadUser";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import AvatarSelector from "../../components/common/avatarSelector";
 
 const AdminPage = () => {
   const { call, loading } = callManager();
   const { user, userLoading, getAuthedUser } = useLoadUser();
   const [formData, setFormData] = useState({
     name: "",
-    avatar: "",
   });
   const fileInputRef = useRef<any>(null);
 
@@ -22,7 +22,6 @@ const AdminPage = () => {
     }
     setFormData({
       name: user ? user.name : "",
-      avatar: "",
     });
   }
 
@@ -30,9 +29,6 @@ const AdminPage = () => {
     refresh();
   }, [user]);
 
-  const handleFileChange = (event: any) => {
-    setFormData({ ...formData, avatar: event.target.files[0] });
-  };
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -43,14 +39,10 @@ const AdminPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dataToSend = new FormData();
 
     // Append all form fields to FormData
-    Object.entries(formData).forEach(([key, value]) => {
-      dataToSend.append(key, value);
-    });
     const response = await call(
-      axios.put(SERVER_API + "/admin/dashboard", dataToSend),
+      axios.put(SERVER_API + "/user/dashboard", formData),
       true
     );
     getAuthedUser();
@@ -63,12 +55,7 @@ const AdminPage = () => {
       <h1>{user?.email}</h1>
       <h1>{user?.isadmin ? "is admin" : "not admin"}</h1>
       <h1>admin page</h1>
-      <img
-        src={user?.avatar ? SERVER_URL + user.avatar : DEFAULT_AVATAR}
-        alt=""
-        className="aspect-square object-cover"
-        width={100}
-      />
+      <AvatarSelector user={user}></AvatarSelector>
       <div className="bg-green-300">
         <h1>ویرایش اکانت</h1>
         <form onSubmit={handleSubmit}>
@@ -79,15 +66,6 @@ const AdminPage = () => {
             value={formData.name}
             className="border"
             onChange={handleChange}
-          />
-          <br />
-          <input
-            type="file"
-            name="avatar"
-            accept=".jpg,.jpeg"
-            className="border"
-            onChange={handleFileChange}
-            ref={fileInputRef}
           />
           <br />
           <LoadingButton loading={loading}>ثبت تغییرات</LoadingButton>

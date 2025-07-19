@@ -6,6 +6,7 @@ const Cart = require("../models/cart");
 const deleteFile = require("../helpers/deleteFile");
 const withTransaction = require("../helpers/withTransaction");
 const serviceResponse = require("../helpers/serviceResponse");
+const deleteWrapper = require("../helpers/deleteWrapper");
 
 class UserServices {
   async getAllUsers(req) {
@@ -84,20 +85,41 @@ class UserServices {
     return serviceResponse(400, {});
   }
 
-  //update profile
-  async updateProfile(req, res) {
-    let data = {
-      name: req.body.name,
+  async addAvatar(req, res) {
+    //اضافه کردن آواتار
+    const newAvatar = {
+      urls: req.file.urls,
     };
-    const updateOp = await User.updateOne({ _id: req.user.id }, { $set: data });
-    if (updateOp.matchedCount > 0) {
+    const updateOp = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $set: { avatar: newAvatar } }
+    );
+    if (updateOp) {
+      if (updateOp.avatar && updateOp.avatar.urls) {
+        deleteWrapper(updateOp.avatar);
+      }
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});
   }
 
-  //admin update profile
-  async adminUpdateProfile(req, res) {
+  async deleteAvatar(req, res) {
+    //حذف کردن آواتار
+    const updateOp = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $set: { avatar: null } }
+    );
+    if (updateOp) {
+      if (updateOp.avatar && updateOp.avatar.urls) {
+        deleteWrapper(updateOp.avatar);
+      }
+      return serviceResponse(200, {});
+    }
+    return serviceResponse(404, {});
+  }
+
+  //update profile
+  async updateProfile(req, res) {
     let data = {
       name: req.body.name,
     };

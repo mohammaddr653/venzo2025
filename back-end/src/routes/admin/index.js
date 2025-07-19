@@ -8,14 +8,6 @@ const pageRouter = require("./page");
 const fileToReqBodyHandler = require("../../middlewares/fileToReqBody");
 const compressor = require("../../middlewares/compressor");
 
-router.get("/dashboard", controller.dashboard.bind(controller));
-router.put(
-  "/dashboard",
-  validator.updateProfileCheck(),
-  controller.validate.bind(controller),
-  controller.updateProfile.bind(controller)
-);
-
 //users
 
 router.get("/dashboard/users", controller.getUsers.bind(controller));

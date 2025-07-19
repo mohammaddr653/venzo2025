@@ -6,4 +6,7 @@ module.exports = new (class extends validator {
   updateCheck() {
     return [this.nameCheck];
   }
+  avatarCheck() {
+    return [check("avatar", "لطفا آواتار خود را انتخاب کنید").notEmpty()];
+  }
 })();
