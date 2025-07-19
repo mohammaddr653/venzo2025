@@ -206,16 +206,12 @@ const ProductsPage = () => {
             }}
           />
           <div className="flex flex-row items-center">
-            <img
-              src={
-                selectedImgs.length
-                  ? SERVER_URL + selectedImgs[0].media
-                  : DEFAULT_PRODUCT
-              }
-              alt=""
-              className="aspect-square object-cover"
+            <Img
+              pic={selectedImgs[0]}
+              sizes={"500px"}
+              className={"aspect-square object-cover"}
               width={100}
-            />
+            ></Img>
             <p
               className="cursor-pointer"
               onClick={() => {

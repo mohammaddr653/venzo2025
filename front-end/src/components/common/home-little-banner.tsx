@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import useLoadBanners from "../../hooks/useLoadBanners";
 import { SERVER_URL } from "../../../config";
+import Img from "./img";
 
 const HomeLittleBanner = () => {
   const { banners, loadBanners } = useLoadBanners();
@@ -19,11 +20,12 @@ const HomeLittleBanner = () => {
             className="overflow-hidden w-full bg-amber-600 rounded-xl"
             key={index}
           >
-            <img
-              src={SERVER_URL + banner.image}
-              className="w-full aspect-1353/555 object-cover"
+            <Img
+              pic={banner?.image}
+              sizes={"500px"}
+              className={"w-full aspect-1353/555 object-cover"}
               alt="little-banner"
-            />
+            ></Img>
           </Link>
         ) : null;
       })}

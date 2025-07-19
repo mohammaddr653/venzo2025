@@ -13,13 +13,8 @@ const AdminPage = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-  const fileInputRef = useRef<any>(null);
 
   function refresh() {
-    // Reset file input field
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     setFormData({
       name: user ? user.name : "",
     });
