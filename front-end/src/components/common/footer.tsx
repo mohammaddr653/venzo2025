@@ -38,13 +38,12 @@ const Footer = () => {
             </div>
             <div className=" w-full flex flex-row gap-3 justify-end">
               <div className="aspect-[14/16] border border-neutral-200 rounded-xl">
-                <img src="/images/icons/logo.png" alt="" />
+                <img src="#" alt="" />
               </div>
             </div>
           </div>
           <p className="text-size14 text-center  text-neutral-700">
-            کلیه حقوق این وب‌سایت متعلق به شرکت آینده گستران زرین وانیا (فروشگاه
-            آنلاین اگزو) است - Copyright 2015-2025© Exo.ir - All rights reserved
+            وانیمارت یک فروشگاه اینترنتی در حال توسعه توسط محمدامین درخشنده است
           </p>
         </div>
       </footer>
