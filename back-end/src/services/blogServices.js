@@ -1,6 +1,5 @@
 //note: used serviceResponse but I didnt checked it works properly or not
 const mongoose = require("mongoose");
-const deleteFile = require("../helpers/deleteFile");
 const Blog = require("../models/blog");
 const serviceResponse = require("../helpers/serviceResponse");
 
@@ -77,13 +76,11 @@ class BlogServices {
     return serviceResponse(200, {});
   }
 
+  //note: findOneAndDelete can be replaced with deleteOne for better performance
   async deleteBlog(req, res) {
     //حذف مقاله
     const deleteOp = await Blog.findOneAndDelete({ _id: req.params.blogId });
     if (deleteOp) {
-      deleteOp.img
-        ? deleteFile(deleteOp.img.substring(1), deleteOp.img.substring(1))
-        : null;
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});

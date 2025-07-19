@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const urlObj = new mongoose.Schema({
-  width: { type: String },
-  height: { type: String },
-  url: { type: String },
+  width: { type: String, required: true },
+  height: { type: String, required: true },
+  url: { type: String, required: true },
 });
 
 const urlsObjSchema = new mongoose.Schema(

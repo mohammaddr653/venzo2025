@@ -6,6 +6,7 @@ import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import useLoadMedias from "../../hooks/useLoadMedias";
+import Img from "../../components/common/img";
 const MediasPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -144,12 +145,12 @@ const MediasPage = () => {
               return (
                 <tr key={index}>
                   <td className="border">
-                    <img
-                      src={SERVER_URL + media.media}
-                      alt=""
-                      className="aspect-square object-cover"
+                    <Img
+                      pic={media}
+                      sizes={"500px"}
+                      className={"aspect-square object-cover"}
                       width={100}
-                    />
+                    ></Img>
                   </td>
                   <td className="border">
                     {selectedMediaId === media._id.toString() ? (

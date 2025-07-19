@@ -1,10 +1,10 @@
 //this function checks if a file exists deletes it
 const fs = require("fs");
 
-const deleteFile = (checkPath, deletePath) => {
-  fs.stat(checkPath, (err, stats) => {
+const deleteFile = (path) => {
+  fs.stat(path, (err, stats) => {
     if (!err) {
-      fs.unlink(deletePath, (err) => {});
+      fs.unlink(path, (err) => {});
     }
   });
 };

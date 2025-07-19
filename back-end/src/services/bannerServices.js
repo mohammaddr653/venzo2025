@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const deleteFile = require("../helpers/deleteFile");
 const Blog = require("../models/blog");
 const Banner = require("../models/banner");
 const serviceResponse = require("../helpers/serviceResponse");

@@ -2,8 +2,8 @@
 const debug = require("debug")("app");
 const { validationResult } = require("express-validator");
 const User = require("./../models/user");
-const deleteFile = require("../helpers/deleteFile");
 const serverResponse = require("../helpers/serverResponse");
+const deleteWrapper = require("../helpers/deleteWrapper");
 module.exports = class {
   constructor() {
     this.User = User; //so we can access the User model in all controllers that extend this controller
@@ -36,9 +36,15 @@ module.exports = class {
   //this method works with 'validationBody()' & checks if it returns true or false
   validate(req, res, next) {
     if (!this.validationBody(req, res)) {
-      if (req.file && req.file.path)
+      if (req.file)
         //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
+        deleteWrapper(req.file);
+
+      if (req.files) {
+        for (let file of req.files) {
+          deleteWrapper(file);
+        }
+      }
       return; //operation stops here
     }
     next(); //operation continues

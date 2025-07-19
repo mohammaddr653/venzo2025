@@ -1,4 +1,3 @@
-const deleteFile = require("../helpers/deleteFile");
 const serviceResponse = require("../helpers/serviceResponse");
 const Trust = require("../models/trust");
 

@@ -1,4 +1,4 @@
-const deleteFile = require("../helpers/deleteFile");
+const deleteWrapper = require("../helpers/deleteWrapper");
 const serviceResponse = require("../helpers/serviceResponse");
 const Media = require("../models/media");
 
@@ -36,12 +36,8 @@ class MediaServices {
     const media = await Media.findById(req.params.mediaId);
     if (media) {
       if (req.file) {
-        const file = req.file;
-        for (let url of Object.values(media.urls))
-          deleteFile(url.substring(1), url.substring(1));
-        if (file.urls) {
-          media.urls = file.urls;
-        }
+        deleteWrapper(req.file);
+        media.urls = req.file.urls;
       }
       const saveOp = await media.save();
       return serviceResponse(200, {});
@@ -53,9 +49,7 @@ class MediaServices {
     //حذف رسانه
     const deleteOp = await Media.findOneAndDelete({ _id: req.params.mediaId });
     if (deleteOp) {
-      deleteOp.media
-        ? deleteFile(deleteOp.media.substring(1), deleteOp.media.substring(1))
-        : null;
+      deleteWrapper(deleteOp);
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});

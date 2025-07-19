@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const deleteFile = require("../helpers/deleteFile");
 const Product = require("../models/product");
 const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
@@ -125,6 +124,7 @@ class ProductServices {
     return serviceResponse(200, {});
   }
 
+  //note: I think we can replace findOneAndDelete with deleteOne for better performance
   async deleteProduct(req, res) {
     //حذف محصول . محصول را همچنین از سبد خرید تمام کاربرانی که آن را دارند حذف میکند . تست شده برای یک سبد خرید . هنوز مطمئن نیستم اگر در چند سبد خرید این محصول موجود باشه چه نتیجه ای میده
     const transactionResult = await withTransaction(async (session) => {
@@ -144,12 +144,6 @@ class ProductServices {
       }
       return serviceResponse(404, {});
     });
-    if (transactionResult.status === 200 && transactionResult.data.img) {
-      deleteFile(
-        transactionResult.data.img.substring(1),
-        transactionResult.data.img.substring(1)
-      );
-    }
     return transactionResult;
   }
 

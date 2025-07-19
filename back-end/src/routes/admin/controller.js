@@ -1,6 +1,5 @@
 //controller
 const debug = require("debug")("app");
-const deleteFile = require("../../helpers/deleteFile");
 const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
 const mediaServices = require("../../services/mediaServices");
@@ -264,17 +263,12 @@ module.exports = new (class extends controller {
         message: "مقاله با موفقیت بروزرسانی شد",
       });
 
-    if (result.status === 404) {
-      if (req.file && req.file.path)
-        //if some files uploaded with this req , delete them
-        deleteFile(req.file.path, req.file.path);
-
+    if (result.status === 404)
       return this.response({
         res,
         message: "خطا در بروزرسانی مقاله",
         code: result.status,
       });
-    }
 
     throw Error;
   }
