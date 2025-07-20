@@ -50,6 +50,8 @@ function App() {
   }, []);
   useEffect(() => {
     getAuthedUser(); //if token exist , set the user
+  }, []);
+  useEffect(() => {
     handleGoUp("instant");
   }, [location.pathname]);
 

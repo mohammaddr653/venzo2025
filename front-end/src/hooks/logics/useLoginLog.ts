@@ -4,9 +4,11 @@ import callManager from "../callManager";
 import { useRef, useState } from "react";
 // @ts-ignore
 import ReCAPTCHA from "react-google-recaptcha";
+import useLoadUser from "../useLoadUser";
 
 const useLoginLog = () => {
   const { call, loading } = callManager();
+  const { getAuthedUser } = useLoadUser();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,6 +33,7 @@ const useLoginLog = () => {
       true,
       "/"
     );
+    getAuthedUser(); //if token exist , set the user
     reRef.current?.reset();
   };
 
