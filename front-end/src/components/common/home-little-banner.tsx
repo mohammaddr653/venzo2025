@@ -12,12 +12,12 @@ const HomeLittleBanner = () => {
   }, []);
 
   return banners?.length ? (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 flex-wrap [&>*]:grow">
       {banners.map((banner: any, index: any) => {
         return banner.show && banner.location === "little-banner" ? (
           <Link
             to={"/"}
-            className="overflow-hidden w-full bg-amber-600 rounded-xl"
+            className="overflow-hidden bg-amber-600 rounded-xl basis-76"
             key={index}
           >
             <Img

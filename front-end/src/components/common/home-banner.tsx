@@ -27,7 +27,7 @@ const HomeBanner = () => {
     loadBanners();
   }, []);
   return (
-    <div className="home-banner-container relative rounded-xl overflow-hidden">
+    <div className="home-banner-container relative rounded-0 lg:rounded-xl overflow-hidden">
       {banners.length ? (
         <Swiper
           modules={[Autoplay, Pagination, Navigation, Scrollbar, A11y]}

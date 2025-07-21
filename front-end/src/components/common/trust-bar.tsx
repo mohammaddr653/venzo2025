@@ -12,7 +12,7 @@ const TrustBar = () => {
   return (
     <>
       {trusts?.length ? (
-        <div className="flex flex-row gap-10 flex-wrap [&>*]:grow">
+        <div className="flex flex-row lg:gap-10 flex-wrap [&>*]:grow">
           {trusts.map((trust: any, index: any) => {
             return trust.show ? (
               <div
