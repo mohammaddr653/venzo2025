@@ -101,14 +101,19 @@ const OneCategoryPage = () => {
               }
             })}
           </select>
-          <input
-            type="text"
-            className="border rounded p-3"
-            placeholder="type"
+          <select
+            id="type"
             name="type"
             value={formData?.type}
             onChange={handleChange}
-          />
+            className="border"
+          >
+            <option value="">انتخاب کنید</option>
+            <option value="box">باکس</option>
+            <option value="link">لینک</option>
+            <option value="shop">فروشگاه</option>
+            <option value="archive">آرشیو</option>
+          </select>
           <h4>آدرس لینک تنها برای دسته بندی های نوع لینک بکار می آید</h4>
           <input
             type="text"

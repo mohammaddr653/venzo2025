@@ -98,14 +98,19 @@ const CategoriesPage = () => {
             {/* dynamic */}
           </select>
           <br />
-          <input
-            type="text"
+          <select
+            id="type"
             name="type"
-            placeholder="type"
             value={formData.type}
-            className="border"
             onChange={handleChange}
-          />
+            className="border"
+          >
+            <option value="">انتخاب کنید</option>
+            <option value="box">باکس</option>
+            <option value="link">لینک</option>
+            <option value="shop">فروشگاه</option>
+            <option value="archive">آرشیو</option>
+          </select>
           <br />
           <h4>آدرس لینک تنها برای دسته بندی های نوع لینک بکار می آید</h4>
           <input
