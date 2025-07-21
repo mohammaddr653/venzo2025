@@ -28,6 +28,16 @@ class ProductServices {
     const result = await Product.aggregate([
       { $match: { categoryId: { $in: categoryArr } } },
       {
+        $lookup: {           //شبیه به populate
+          from: "media",
+          localField: "img",
+          foreignField: "_id",
+          as: "img",
+        },
+      },
+      { $unwind: { path: "$img", preserveNullAndEmptyArrays: true } },
+      { $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"] },
+      {
         $facet: {
           products: [],
           filters: [

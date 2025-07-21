@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import TitleCentral from "./title-central";
-import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
 import Img from "./img";
 
 interface ProductCardProps {
