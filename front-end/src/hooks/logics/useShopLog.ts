@@ -12,7 +12,7 @@ const useShopLog = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<any[]>([]);
   const [allParams, setAllParams] = useSearchParams();
-  const [appliedFilters, setAppliedFilters] = useState<any>();
+  const [appliedQueries, setAppliedQueries] = useState<any>();
 
   async function load() {
     const response = await call(
@@ -33,28 +33,28 @@ const useShopLog = () => {
         filtersObj[key] = [value];
       }
     }
-    setAppliedFilters({ ...filtersObj });
+    setAppliedQueries({ ...filtersObj });
   }, [allParams]);
 
   useEffect(() => {
-    if (categoryId && appliedFilters) {
+    if (categoryId && appliedQueries) {
       load();
     }
-  }, [appliedFilters, categoryId]);
+  }, [appliedQueries, categoryId]);
 
   const handleFilterCheck = (e: ChangeEvent<HTMLInputElement>, name: any) => {
     let currentParams = new URLSearchParams(allParams);
     if (e.target.checked) {
-      currentParams.append(name, e.target.value);
+      currentParams.append(`attributes[${name}]`, e.target.value);
     } else {
-      currentParams.delete(name, e.target.value);
+      currentParams.delete(`attributes[${name}]`, e.target.value);
     }
     setAllParams(currentParams);
   };
 
   return {
     filters,
-    appliedFilters,
+    appliedQueries,
     handleFilterCheck,
     products,
   };

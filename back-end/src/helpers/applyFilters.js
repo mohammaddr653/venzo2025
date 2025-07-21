@@ -3,13 +3,13 @@
 const applyFilters = (req, products) => {
   const newProductArr = products.filter((item) => {
     let status = false;
-    for (const filter of Object.keys(req.query)) {
+    for (const filter of Object.keys(req.query.attributes)) {
       const haveFilter = item.properties.find(
         (property) => property.nameString === filter
       );
       if (haveFilter) {
         const haveValue = haveFilter.values.find((propertyval) =>
-          req.query[filter].includes(propertyval.valueString)
+          req.query.attributes[filter].includes(propertyval.valueString)
         );
         if (haveValue) {
           status = true;

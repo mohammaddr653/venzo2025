@@ -1,13 +1,10 @@
-import { Link } from "react-router-dom";
 import Header from "../components/common/header";
-import { DEFAULT_PRODUCT, SERVER_URL } from "../../config";
 import useShopLog from "../hooks/logics/useShopLog";
 import Footer from "../components/common/footer";
-import PropertySelector from "../components/common/propertySelector";
 import ProductCard from "../components/common/product-card";
 
 const ShopPage = () => {
-  const { filters, appliedFilters, handleFilterCheck, products } = useShopLog();
+  const { filters, appliedQueries, handleFilterCheck, products } = useShopLog();
 
   return (
     <>
@@ -34,9 +31,9 @@ const ShopPage = () => {
                                     name="selective"
                                     value={val.valueString}
                                     checked={
-                                      appliedFilters[item.nameString]?.includes(
-                                        val.valueString
-                                      )
+                                      appliedQueries[
+                                        `attributes[${item.nameString}]`
+                                      ]?.includes(val.valueString)
                                         ? true
                                         : false
                                     }

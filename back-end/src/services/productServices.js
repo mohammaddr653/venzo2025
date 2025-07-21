@@ -28,7 +28,8 @@ class ProductServices {
     const result = await Product.aggregate([
       { $match: { categoryId: { $in: categoryArr } } },
       {
-        $lookup: {           //شبیه به populate
+        $lookup: {
+          //شبیه به populate
           from: "media",
           localField: "img",
           foreignField: "_id",
@@ -81,7 +82,7 @@ class ProductServices {
     ]);
     let filters = result[0].filters;
     let products = result[0].products;
-    if (Object.keys(req.query).length) {
+    if (req.query?.attributes) {
       products = applyFilters(req, products);
     }
     return serviceResponse(200, { products, filters });
