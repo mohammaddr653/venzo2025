@@ -21,42 +21,48 @@ export const buildList = (
     const newLi = document.createElement("li");
 
     const liHead = document.createElement("div");
-    // liHead.classList.add(
-    //   "border",
-    //   "p-2",
-    //   "my-1",
-    //   "flex",
-    //   "justify-between",
-    //   "gap-4"
-    // );
 
-    const title = document.createElement("h4");
+    let title;
+    let link: string;
     if (menu && handleLink) {
       switch (item.type) {
         case "shop":
+          title = document.createElement("a");
+          link = `/shop/${item._id}`;
+          title.href = link;
           title.onclick = () => {
-            handleLink(`/shop/${item._id}`);
+            handleLink(link);
           };
           break;
         case "archive":
+          title = document.createElement("a");
+          link = `/archive/${item._id}`;
+          title.href = link;
           title.onclick = () => {
-            handleLink(`/archive/${item._id}`);
+            handleLink(link);
           };
           break;
         case "box": //note:need to be completed
+          title = document.createElement("h4");
           break;
         case "link":
+          title = document.createElement("a");
+          link = item.link;
+          title.href = link;
           title.onclick = () => {
-            window.open(item.link, "_blank");
+            handleLink(link);
           };
           break;
         default:
           break;
       }
+    } else {
+      title = document.createElement("h4");
     }
-    title.innerHTML = menu ? item.name : item.name + `${item.type}`;
-
-    liHead.appendChild(title);
+    if (title) {
+      title.innerHTML = menu ? item.name : item.name + `${item.type}`;
+      liHead.appendChild(title);
+    }
 
     if (handleDelete && handleUpdate) {
       const liButtons = document.createElement("div");

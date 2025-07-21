@@ -40,6 +40,7 @@ import BannersPage from "./pages/admin-page/banners-page";
 import TrustsPage from "./pages/admin-page/trusts-page";
 import { handleGoUp } from "./helpers/handleGoUp";
 import MediasPage from "./pages/admin-page/medias-page";
+import AboutUs from "./pages/about-us";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -60,6 +61,7 @@ function App() {
     <>
       <Toaster position="top-right" />
       <Routes>
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/single-shop/:productId" element={<SingleShopPage />} />
         <Route path="/shop/:categoryId" element={<ShopPage />} />
         <Route path="/single-archive" element={<SingleArchivePage />} />

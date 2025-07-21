@@ -29,7 +29,11 @@ const useHeaderLog = () => {
     buildList(list, categories, null, null, true, handleLink);
   }, [categories]);
 
-  function handleLink(pathString: string) {
+  function handleLink(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    pathString: string
+  ) {
+    e.preventDefault();
     navigate(pathString);
   }
 
