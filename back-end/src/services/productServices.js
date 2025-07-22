@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Product = require("../models/product");
-const applyFilters = require("../helpers/applyFilters");
 const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
 const getPriceAndStock = require("../helpers/getPriceAndStock");
@@ -25,22 +24,52 @@ class ProductServices {
 
   async getProductsByCategoryString(categoryArr, req, res) {
     //خواندن محصولات مخصوص دسته بندی انتخاب شده از دیتابیس
+    const limit = parseInt(req.query.limit) || 2;
+    const page = parseInt(req.query.page) - 1 || 0;
+    const skip = page * limit;
+    const rawAttributes = req.query?.attributes ?? {};
+    const filterConditions = Object.entries(rawAttributes).map(
+      ([name, values]) => {
+        const vals = Array.isArray(values) ? values : [values];
+        return {
+          properties: {
+            $elemMatch: {
+              nameString: name,
+              values: {
+                $elemMatch: {
+                  valueString: { $in: vals },
+                },
+              },
+            },
+          },
+        };
+      }
+    );
     const result = await Product.aggregate([
       { $match: { categoryId: { $in: categoryArr } } },
       {
-        $lookup: {
-          //شبیه به populate
-          from: "media",
-          localField: "img",
-          foreignField: "_id",
-          as: "img",
-        },
-      },
-      { $unwind: { path: "$img", preserveNullAndEmptyArrays: true } },
-      { $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"] },
-      {
         $facet: {
-          products: [],
+          products: [
+            {
+              $match:
+                filterConditions.length > 0 ? { $and: filterConditions } : {},
+            },
+            { $skip: skip },
+            { $limit: limit },
+            {
+              $lookup: {
+                //شبیه به populate
+                from: "media",
+                localField: "img",
+                foreignField: "_id",
+                as: "img",
+              },
+            },
+            { $unwind: { path: "$img", preserveNullAndEmptyArrays: true } },
+            {
+              $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"],
+            },
+          ],
           filters: [
             { $unwind: "$properties" },
             { $unwind: "$properties.values" },
@@ -77,15 +106,20 @@ class ProductServices {
             },
             { $sort: { nameString: 1 } },
           ],
+          totalCount: [
+            {
+              $match:
+                filterConditions.length > 0 ? { $and: filterConditions } : {},
+            },
+            { $count: "count" },
+          ],
         },
       },
     ]);
     let filters = result[0].filters;
     let products = result[0].products;
-    if (req.query?.attributes) {
-      products = applyFilters(req, products);
-    }
-    return serviceResponse(200, { products, filters });
+    let totalCount = result[0].totalCount;
+    return serviceResponse(200, { products, filters, totalCount });
   }
 
   async createProduct(req, res) {

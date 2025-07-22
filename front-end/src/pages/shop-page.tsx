@@ -2,9 +2,21 @@ import Header from "../components/common/header";
 import useShopLog from "../hooks/logics/useShopLog";
 import Footer from "../components/common/footer";
 import ProductCard from "../components/common/product-card";
+import { useEffect } from "react";
+import Pagination from "../components/common/pagination";
 
 const ShopPage = () => {
-  const { filters, appliedQueries, handleFilterCheck, products } = useShopLog();
+  const {
+    filters,
+    appliedQueries,
+    handleFilterCheck,
+    products,
+    totalPagesCount,
+    handleCountPerPage,
+    handleChangePage,
+    handleNext,
+    handlePrev,
+  } = useShopLog();
 
   return (
     <>
@@ -62,11 +74,33 @@ const ShopPage = () => {
                 })}
               </div>
             ) : null}
-            <div className=" w-full flex flex-col">
+            <div className=" w-full flex flex-col gap-5">
+              <div className="bg-red-300 mt-auto">
+                <select
+                  name="countPerPage"
+                  id="countPerPage"
+                  onChange={handleCountPerPage}
+                  value={appliedQueries.limit}
+                >
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {products?.map((item: any, index: any) => {
                   return <ProductCard key={index} product={item}></ProductCard>;
                 })}
+              </div>
+              <div className="bg-red-300 mt-auto">
+                <Pagination
+                  handleNext={handleNext}
+                  handlePrev={handlePrev}
+                  handleChangePage={handleChangePage}
+                  totalPagesCount={totalPagesCount}
+                  appliedQueries={appliedQueries}
+                ></Pagination>
               </div>
             </div>
           </div>

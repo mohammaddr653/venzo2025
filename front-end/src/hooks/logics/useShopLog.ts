@@ -12,7 +12,8 @@ const useShopLog = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<any[]>([]);
   const [allParams, setAllParams] = useSearchParams();
-  const [appliedQueries, setAppliedQueries] = useState<any>();
+  const [appliedQueries, setAppliedQueries] = useState<any>({});
+  const [totalPagesCount, setTotalPagesCount] = useState<any>();
 
   async function load() {
     const response = await call(
@@ -21,23 +22,33 @@ const useShopLog = () => {
     );
     setProducts([...response?.data.data.products]);
     setFilters([...response?.data.data.filters]);
+    setTotalPagesCount(
+      Math.ceil(response?.data.data.totalCount / appliedQueries.limit)
+    );
   }
 
   useEffect(() => {
-    let filtersObj: any = {};
+    let queries: any = {};
     for (const [key, value] of allParams.entries()) {
-      if (filtersObj[key] && !filtersObj[key].includes(value)) {
-        filtersObj[key] = [...filtersObj[key], value];
+      if (queries[key] && !queries[key].includes(value)) {
+        queries[key] = [...queries[key], value];
       }
-      if (!filtersObj[key]) {
-        filtersObj[key] = [value];
+      if (!queries[key]) {
+        queries[key] = [value];
       }
     }
-    setAppliedQueries({ ...filtersObj });
+    if (!queries.page) {
+      queries.page = [1];
+    }
+    if (!queries.limit) {
+      queries.limit = [2];
+    }
+
+    setAppliedQueries({ ...queries });
   }, [allParams]);
 
   useEffect(() => {
-    if (categoryId && appliedQueries) {
+    if (categoryId && Object.keys(appliedQueries).length) {
       load();
     }
   }, [appliedQueries, categoryId]);
@@ -49,7 +60,41 @@ const useShopLog = () => {
     } else {
       currentParams.delete(`attributes[${name}]`, e.target.value);
     }
+    currentParams.delete("page");
     setAllParams(currentParams);
+  };
+
+  const handleCountPerPage = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    let currentParams = new URLSearchParams(allParams);
+    currentParams.delete("page");
+    currentParams.set("limit", e.target.value);
+    setAllParams(currentParams);
+  };
+
+  const handleChangePage = (pageNum: number) => {
+    let currentParams = new URLSearchParams(allParams);
+    currentParams.set("page", pageNum.toString());
+    setAllParams(currentParams);
+  };
+
+  const handleNext = () => {
+    const currentPage = parseInt(appliedQueries.page);
+    if (currentPage === totalPagesCount) {
+      return handleChangePage(totalPagesCount);
+    }
+    return handleChangePage(currentPage + 1);
+  };
+
+  const handlePrev = () => {
+    const currentPage = parseInt(appliedQueries.page);
+    if (currentPage <= 1) {
+      return handleChangePage(1);
+    }
+    return handleChangePage(currentPage - 1);
   };
 
   return {
@@ -57,6 +102,11 @@ const useShopLog = () => {
     appliedQueries,
     handleFilterCheck,
     products,
+    totalPagesCount,
+    handleCountPerPage,
+    handleChangePage,
+    handleNext,
+    handlePrev,
   };
 };
 
