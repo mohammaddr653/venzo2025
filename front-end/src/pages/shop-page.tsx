@@ -2,15 +2,18 @@ import Header from "../components/common/header";
 import useShopLog from "../hooks/logics/useShopLog";
 import Footer from "../components/common/footer";
 import ProductCard from "../components/common/product-card";
-import { useEffect } from "react";
 import Pagination from "../components/common/pagination";
+import { Link } from "react-router-dom";
+import ChildCategories from "../components/common/childCategories";
 
 const ShopPage = () => {
   const {
     filters,
     appliedQueries,
     handleFilterCheck,
+    categoryId,
     products,
+    childCats,
     totalPagesCount,
     handleCountPerPage,
     handleChangePage,
@@ -22,7 +25,13 @@ const ShopPage = () => {
     <>
       <Header focus={true}></Header>
       <main className="pt-20 pb-15">
-        <div className="shopPage-container">
+        <div className="shopPage-container flex flex-col gap-5">
+          {childCats?.length ? (
+            <ChildCategories
+              childCats={childCats}
+              categoryId={categoryId}
+            ></ChildCategories>
+          ) : null}
           <div className="flex flex-row justify-between px-5 md:px-20 gap-5">
             {filters?.length ? (
               <div className=" w-[25%] border border-neutral-300 rounded-md">

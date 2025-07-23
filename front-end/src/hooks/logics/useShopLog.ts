@@ -11,6 +11,7 @@ const useShopLog = () => {
   const { call, loading } = callManager();
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<any[]>([]);
+  const [childCats, setChildCats] = useState<any[]>([]);
   const [allParams, setAllParams] = useSearchParams();
   const [appliedQueries, setAppliedQueries] = useState<any>({});
   const [totalPagesCount, setTotalPagesCount] = useState<any>();
@@ -22,6 +23,7 @@ const useShopLog = () => {
     );
     setProducts([...response?.data.data.products]);
     setFilters([...response?.data.data.filters]);
+    setChildCats([...response?.data.data.childCategories.slice(1)]);
     setTotalPagesCount(
       Math.ceil(response?.data.data.totalCount / appliedQueries.limit)
     );
@@ -101,7 +103,9 @@ const useShopLog = () => {
     filters,
     appliedQueries,
     handleFilterCheck,
+    categoryId,
     products,
+    childCats,
     totalPagesCount,
     handleCountPerPage,
     handleChangePage,
