@@ -16,15 +16,27 @@ module.exports = new (class extends controller {
   }
 
   async getShopByCategory(req, res) {
-    const { data: categoryArr } = await categoriesServices.createCategoryArr(
+    const { data: allCategories } = await categoriesServices.getAllCategories(
       req,
       res
+    ); //تمام دسته بندی ها
+    const { data: categoryArr } = await categoriesServices.createCategoryArr(
+      req,
+      res,
+      allCategories
     ); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const { data: result } = await productServices.getProductsByCategoryString(
       categoryArr,
       req,
       res
     ); //دریافت محصولات مطابق با آرایه دسته بندی
+    const { data: motherCategories } = await categoriesServices.motherCats(
+      req,
+      res,
+      allCategories,
+      req.params.categoryString
+    ); //دریافت آرایه motherCategories
+
     return this.response({
       res,
       message: "this is shop , products of specific category",
@@ -32,6 +44,7 @@ module.exports = new (class extends controller {
         products: result.products,
         filters: result.filters,
         totalCount: result.totalCount[0].count,
+        motherCategories: motherCategories,
       },
     });
   }

@@ -8,9 +8,14 @@ const _ = require("lodash");
 module.exports = new (class extends controller {
   //note: this function needs to be fixed maybe
   async getArchive(req, res) {
-    const { data: categoryArr } = await categoriesServices.createCategoryArr(
+    const { data: allCategories } = await categoriesServices.getAllCategories(
       req,
       res
+    ); //تمام دسته بندی ها
+    const { data: categoryArr } = await categoriesServices.createCategoryArr(
+      req,
+      res,
+      allCategories
     ); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const result = await blogServices.getBlogsByCategoryString(
       categoryArr,

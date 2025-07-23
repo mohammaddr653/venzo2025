@@ -84,7 +84,7 @@ const useSingleShopLog = () => {
       axios.get(SERVER_API + `/single-shop/withProperties/${productId}`),
       false
     );
-    setProduct(response.data.data);
+    setProduct(response.data.data.product);
   }
 
   async function handleAddToCart(id: string) {

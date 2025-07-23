@@ -30,6 +30,24 @@ class CategoriesServices {
     return serviceResponse(200, saveOp);
   }
 
+  async motherCats(req, res, categories, initialId) {
+    const motherCategories = [];
+    if (categories) {
+      const loop = (array, id) => {
+        if (id) {
+          id = id.toString();
+          const category = categories.find((item) => item.id === id);
+          motherCategories.push(category);
+          if (category.motherId !== "root") {
+            loop(array, category.motherId.toString());
+          }
+        }
+      };
+      loop(categories, initialId);
+    }
+    return serviceResponse(200, motherCategories);
+  }
+
   //بروزرسانی دسته بندی
   async updateCategory(req, res) {
     const { data: category } = await this.seeOneCategory(req, res);
@@ -73,10 +91,9 @@ class CategoriesServices {
   }
 
   //آیدی کتگوری سرچ شده رو میگیره و یک آرایه مشتق شده از این آیدی و تمام آیدی های زیرمجموعه اش بر میگردونه
-  async createCategoryArr(req, res) {
+  async createCategoryArr(req, res, categories) {
     const initialId = new mongoose.Types.ObjectId(req.params.categoryString);
     let categoryArr = [initialId];
-    const { data: categories } = await this.getAllCategories(req, res);
     if (categories) {
       const loop = (array, id) => {
         array.forEach((obj) => {
