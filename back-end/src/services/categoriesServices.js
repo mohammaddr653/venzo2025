@@ -48,6 +48,27 @@ class CategoriesServices {
     return serviceResponse(200, motherCategories);
   }
 
+  async childCats(req, res, categories, initialId) {
+    const childCategories = [];
+    if (categories) {
+      const loop = (array, id) => {
+        if (id) {
+          id = id.toString();
+          const category = categories.find((item) => item.id === id);
+          childCategories.push(category);
+
+          array.forEach((obj) => {
+            if (obj.motherId.toString() === id) {
+              loop(categories, obj._id);
+            }
+          });
+        }
+      };
+      loop(categories, initialId);
+    }
+    return serviceResponse(200, childCategories);
+  }
+
   //بروزرسانی دسته بندی
   async updateCategory(req, res) {
     const { data: category } = await this.seeOneCategory(req, res);
@@ -90,20 +111,13 @@ class CategoriesServices {
     return serviceResponse(404, {});
   }
 
-  //آیدی کتگوری سرچ شده رو میگیره و یک آرایه مشتق شده از این آیدی و تمام آیدی های زیرمجموعه اش بر میگردونه
+  //یک آرایه متشکل از کتگوری کلیک شده و تمام کتگوری های فرزندش
   async createCategoryArr(req, res, categories) {
-    const initialId = new mongoose.Types.ObjectId(req.params.categoryString);
-    let categoryArr = [initialId];
+    let categoryArr = [];
     if (categories) {
-      const loop = (array, id) => {
-        array.forEach((obj) => {
-          if (typeof obj.motherId !== "string" && obj.motherId.equals(id)) {
-            categoryArr.push(obj._id);
-            loop(categories, obj._id);
-          }
-        });
-      };
-      loop(categories, initialId);
+      categories.forEach((obj) => {
+        categoryArr.push(obj._id);
+      });
     }
     return serviceResponse(200, categoryArr);
   }

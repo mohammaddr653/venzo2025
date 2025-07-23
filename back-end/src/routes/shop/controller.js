@@ -20,10 +20,17 @@ module.exports = new (class extends controller {
       req,
       res
     ); //تمام دسته بندی ها
+    const { data: childCategories } = await categoriesServices.childCats(
+      req,
+      res,
+      allCategories,
+      req.params.categoryString
+    ); //دریافت آرایه childCats
+
     const { data: categoryArr } = await categoriesServices.createCategoryArr(
       req,
       res,
-      allCategories
+      childCategories
     ); //آرایه دسته بندی تولید میشه که شامل دسته بندی انتخاب شده و زیرمجموعه های آن است
     const { data: result } = await productServices.getProductsByCategoryString(
       categoryArr,
@@ -45,6 +52,7 @@ module.exports = new (class extends controller {
         filters: result.filters,
         totalCount: result.totalCount[0].count,
         motherCategories: motherCategories,
+        childCategories: childCategories,
       },
     });
   }
