@@ -10,6 +10,7 @@ const useSingleShopLog = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
   const [product, setProduct] = useState<any>();
+  const [motherCats, setMotherCats] = useState<any[]>([]);
   const [priceAndStock, setPriceAndStock] = useState({
     price: null,
     stock: null,
@@ -85,6 +86,7 @@ const useSingleShopLog = () => {
       false
     );
     setProduct(response.data.data.product);
+    setMotherCats([...response?.data.data.motherCategories.reverse()]);
   }
 
   async function handleAddToCart(id: string) {
@@ -106,6 +108,7 @@ const useSingleShopLog = () => {
 
   return {
     product,
+    motherCats,
     priceAndStock,
     formData,
     handleSelectProperty,

@@ -3,8 +3,8 @@ import useShopLog from "../hooks/logics/useShopLog";
 import Footer from "../components/common/footer";
 import ProductCard from "../components/common/product-card";
 import Pagination from "../components/common/pagination";
-import { Link } from "react-router-dom";
 import ChildCategories from "../components/common/childCategories";
+import BreadCrumb from "../components/common/breadCrumb";
 
 const ShopPage = () => {
   const {
@@ -14,6 +14,7 @@ const ShopPage = () => {
     categoryId,
     products,
     childCats,
+    motherCats,
     totalPagesCount,
     handleCountPerPage,
     handleChangePage,
@@ -26,6 +27,9 @@ const ShopPage = () => {
       <Header focus={true}></Header>
       <main className="pt-20 pb-15">
         <div className="shopPage-container flex flex-col gap-5">
+          {motherCats?.length ? (
+            <BreadCrumb motherCats={motherCats}></BreadCrumb>
+          ) : null}
           {childCats?.length ? (
             <ChildCategories
               childCats={childCats}

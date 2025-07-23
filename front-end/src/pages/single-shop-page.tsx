@@ -5,10 +5,12 @@ import SingleShopGallery from "../components/common/singleShop-gallery";
 import TitleRight from "../components/common/title-right";
 import NonSelectivePropertiesGrid from "../components/common/non-selective-properties-grid";
 import SelectiveProperties from "../components/common/selective-properties";
+import BreadCrumb from "../components/common/breadCrumb";
 
 const SingleShopPage = () => {
   const {
     product,
+    motherCats,
     priceAndStock,
     formData,
     handleSelectProperty,
@@ -20,7 +22,10 @@ const SingleShopPage = () => {
     <>
       <Header focus={true}></Header>
       <main className="pt-20 pb-15">
-        <div className="singleShopPage-container">
+        <div className="singleShopPage-container flex flex-col gap-5">
+          {motherCats?.length ? (
+            <BreadCrumb motherCats={motherCats}></BreadCrumb>
+          ) : null}
           <div className="flex flex-col md:flex-row gap-10 px-5 md:px-20">
             <div className="flex flex-row gap-4">
               <div className="flex flex-col gap-2">
