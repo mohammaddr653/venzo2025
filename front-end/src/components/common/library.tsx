@@ -35,18 +35,18 @@ const Library = (props: LibraryProps) => {
         onClick={() => props.setLibShow(false)}
       ></div>
       <div className="bg-pink-400 border fixed w-[90vw] h-[90vh] overflow-y-scroll rounded-lg top-[5vh] right-[5vw] z-20">
-        <div>
+        <div className="grid grid-cols-8 gap-2">
           {medias?.map((media: any, index: any) => {
             return (
               <div
                 key={index}
                 onClick={() => handleSelect(media)}
-                className="w-[100px] relative"
+                className="w-full relative"
               >
                 <Img
                   pic={media}
                   sizes={"500px"}
-                  className={"aspect-square object-cover"}
+                  className={"aspect-square object-cover w-full"}
                   width={100}
                 ></Img>
                 {props.selectedImgs.some(
