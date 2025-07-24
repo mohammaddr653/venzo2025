@@ -15,6 +15,18 @@ module.exports = new (class extends controller {
     });
   }
 
+  async getMostProducts(req, res) {
+    if (req.headers.type === "newest") {
+      const result = await productServices.getNewestProducts(req, res);
+      return this.response({
+        res,
+        message: "لیست جدیدترین محصولات",
+        data: result.data,
+      });
+    }
+    throw Error;
+  }
+
   async getShopByCategory(req, res) {
     const { data: allCategories } = await categoriesServices.getAllCategories(
       req,

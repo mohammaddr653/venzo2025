@@ -17,6 +17,15 @@ class ProductServices {
     return serviceResponse(200, findOp);
   }
 
+  async getNewestProducts(req, res) {
+    //خواندن جدیدترین محصولات از دیتابیس
+    const findOp = await Product.find({})
+      .populate("img")
+      .sort({ updatedAt: -1 })
+      .limit(15);
+    return serviceResponse(200, findOp);
+  }
+
   async getSingleShopWithProperties(req, res) {
     const { data: product } = await this.seeOneProduct(req, res);
     return serviceResponse(200, product);

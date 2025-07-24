@@ -40,11 +40,10 @@ const ProductCard = (props: ProductCardProps) => {
           </div>
           <div className="relative overflow-hidden w-full grow">
             <div className="relative flex flex-col items-center gap-4 h-full py-4 z-10">
-              <p className="px-4">پاپوش پودایران طرح خالدار قرمز</p>
+              <p className="px-4">{props.product?.name}</p>
               <p className="px-4 text-size14 text-justify text-neutral-600">
                 لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
-                استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله
-                در ستون و سطرآنچنان که لازم است،
+                استفاده از طراحان گرافیک است...
               </p>
               <div className="mt-auto px-4 flex flex-row gap-1 w-full justify-between items-center flex-wrap-reverse">
                 <button

@@ -6,6 +6,7 @@ import { useUserStore } from "../store";
 import HomeLittleBanner from "../components/common/home-little-banner";
 import ProductsArchive from "../components/common/productsArchive";
 import Footer from "../components/common/footer";
+import ProductsCarousel from "../components/common/productsCarousel";
 
 const HomePage = () => {
   return (
@@ -31,7 +32,7 @@ const HomePage = () => {
             <HeroCard></HeroCard>
           </div>
           <div className="px-5 md:px-20">
-            <ProductsArchive></ProductsArchive>
+            <ProductsCarousel></ProductsCarousel>
           </div>
         </div>
       </main>

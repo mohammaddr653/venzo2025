@@ -1,0 +1,48 @@
+div.products-carousel-container div.swiper.swiper-initialized {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+}
+div.products-carousel-container div.swiperjs-controlls {
+  background-color: yellow;
+  width: 100%;
+  visibility: hidden;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  position: absolute;
+  z-index: 10;
+}
+div.products-carousel-container button.swiper-prev,
+div.products-carousel-container button.swiper-next {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background-color: var(--color-secondary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0 0 5px 1px var(--color-neutral-500);
+  justify-content: center;
+  visibility: visible;
+  border: none;
+  padding: 0px;
+  transition: all;
+  transition-duration: 300ms;
+}
+div.products-carousel-container button:hover {
+  cursor: pointer;
+  background-color: var(--color-primary);
+}
+
+div.products-carousel-container button i {
+  color: var(--color-white);
+  /* font-size: 100%; */
+  height: 0;
+  width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 2px 2px 4px black;
+}
