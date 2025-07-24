@@ -239,17 +239,16 @@ const ProductsPage = () => {
               ></Library>
             ) : null}
           </div>
+          <br />
+          <PropertiesManager
+            properties={properties}
+            setProperties={setProperties}
+            propertiesAndVals={propertiesAndVals}
+            loadPropertiesAndVals={loadPropertiesAndVals}
+          ></PropertiesManager>
+          <br />
+          <LoadingButton loading={loading}>افزودن محصول</LoadingButton>
         </form>
-        <PropertiesManager
-          properties={properties}
-          setProperties={setProperties}
-          propertiesAndVals={propertiesAndVals}
-          loadPropertiesAndVals={loadPropertiesAndVals}
-        ></PropertiesManager>
-        <br />
-        <LoadingButton loading={loading} form={"newProduct"}>
-          افزودن محصول
-        </LoadingButton>
       </div>
       <div className="bg-blue-300">
         <button onClick={handleRefresh}>refresh</button>

@@ -100,9 +100,7 @@ const PropertiesManager = ({
     });
   };
 
-  const handleSubmitProperty = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSaveProperty = async () => {
     const matches = propertiesAndVals.find(
       (obj: any) => obj.name === property.nameString
     );
@@ -194,9 +192,7 @@ const PropertiesManager = ({
     }
   };
 
-  const handleSubmitPropertyval = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSavePropertyval = async () => {
     const matchedProperty = propertiesAndVals.find(
       (obj: any) => obj.name === selectedProperty
     );
@@ -291,59 +287,60 @@ const PropertiesManager = ({
   return (
     <div>
       <h1>مدیریت ویژگی ها</h1>
-      <form onSubmit={handleSubmitProperty} className="flex-column">
-        <div className="bg-green-500">
+      <div className="flex-column bg-green-500">
+        <input
+          type="text"
+          placeholder="ویژگی"
+          name="property"
+          onBlur={() => {
+            setTimeout(() => {
+              setProperty((prev) => {
+                return { ...prev, suggestions: [] };
+              });
+            }, 1000);
+          }}
+          value={property.nameString}
+          className="border"
+          onChange={handleproperty}
+          autoComplete="off"
+        />
+        <label>
           <input
-            type="text"
-            placeholder="ویژگی"
-            name="property"
-            onBlur={() => {
-              setTimeout(() => {
-                setProperty((prev) => {
-                  return { ...prev, suggestions: [] };
-                });
-              }, 1000);
-            }}
-            value={property.nameString}
-            className="border"
-            onChange={handleproperty}
-            autoComplete="off"
+            type="checkbox"
+            name="selective"
+            checked={property.selective ? true : false}
+            onChange={handleSelectiveCheck}
           />
-          <label>
-            <input
-              type="checkbox"
-              name="selective"
-              checked={property.selective ? true : false}
-              onChange={handleSelectiveCheck}
-            />
-            ویژگی انتخابی
-          </label>
-          {property.suggestions.length ? (
-            <ul className="border bg-amber-400">
-              {property.suggestions.map((suggest: any, index: any) => {
-                return (
-                  <li
-                    key={index}
-                    onClick={() =>
-                      setProperty({
-                        ...property,
-                        nameString: suggest.name,
-                        suggestions: [],
-                      })
-                    }
-                  >
-                    {suggest.name}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : null}
-          <br />
-          <button type="submit" disabled={property.nameString ? false : true}>
-            افزودن ویژگی
-          </button>
-        </div>
-      </form>
+          ویژگی انتخابی
+        </label>
+        {property.suggestions.length ? (
+          <ul className="border bg-amber-400">
+            {property.suggestions.map((suggest: any, index: any) => {
+              return (
+                <li
+                  key={index}
+                  onClick={() =>
+                    setProperty({
+                      ...property,
+                      nameString: suggest.name,
+                      suggestions: [],
+                    })
+                  }
+                >
+                  {suggest.name}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+        <br />
+        <button
+          onClick={handleSaveProperty}
+          disabled={property.nameString ? false : true}
+        >
+          افزودن ویژگی
+        </button>
+      </div>
       {properties.length
         ? properties.map((propertyObj: PropertiesObj, index: any) => {
             return (
@@ -355,10 +352,7 @@ const PropertiesManager = ({
                   حذف ویژگی
                 </button>
                 <h3>{propertyObj.nameString}</h3>
-                <form
-                  onSubmit={handleSubmitPropertyval}
-                  className="flex-column"
-                >
+                <div className="flex-column">
                   <input
                     type="text"
                     placeholder="مقدار ویژگی"
@@ -446,7 +440,7 @@ const PropertiesManager = ({
                   ) : null}
                   {propertyObj.selective ? (
                     <button
-                      type="submit"
+                      onClick={handleSavePropertyval}
                       disabled={
                         propertyObj.nameString &&
                         propertyval.valueString &&
@@ -461,7 +455,7 @@ const PropertiesManager = ({
                     </button>
                   ) : (
                     <button
-                      type="submit"
+                      onClick={handleSavePropertyval}
                       disabled={
                         propertyObj.nameString &&
                         propertyval.valueString &&
@@ -473,7 +467,7 @@ const PropertiesManager = ({
                       افزودن مقدار ویژگی
                     </button>
                   )}
-                </form>
+                </div>
                 {propertyObj.values.length ? (
                   <ul>
                     {propertyObj.values.map(
