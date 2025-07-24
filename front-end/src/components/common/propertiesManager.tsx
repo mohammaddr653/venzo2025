@@ -89,26 +89,14 @@ const PropertiesManager = ({
     }
   };
 
-  //note:handleslectivePrice and handleselectiveStock maybe can merged in one function
-  const handleSelectivePrice = (
+  const handleSelectiveChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     setPropertyval({
       ...propertyval,
-      price: e.target.value,
-    });
-  };
-
-  const handleSelectiveStock = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setPropertyval({
-      ...propertyval,
-      stock: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -400,7 +388,7 @@ const PropertiesManager = ({
                       <input
                         type="text"
                         placeholder="قیمت"
-                        name="selectivePrice"
+                        name="price"
                         onFocus={() => {
                           setSelectedProperty(propertyObj.nameString);
                         }}
@@ -409,7 +397,7 @@ const PropertiesManager = ({
                             ? propertyval.price
                             : ""
                         }
-                        onChange={handleSelectivePrice}
+                        onChange={handleSelectiveChange}
                         disabled={propertyObj.nameString ? false : true}
                         className="border"
                         autoComplete="off"
@@ -417,7 +405,7 @@ const PropertiesManager = ({
                       <input
                         type="text"
                         placeholder="موجودی انبار"
-                        name="selectiveStock"
+                        name="stock"
                         onFocus={() => {
                           setSelectedProperty(propertyObj.nameString);
                         }}
@@ -426,7 +414,7 @@ const PropertiesManager = ({
                             ? propertyval.stock
                             : ""
                         }
-                        onChange={handleSelectiveStock}
+                        onChange={handleSelectiveChange}
                         disabled={propertyObj.nameString ? false : true}
                         className="border"
                         autoComplete="off"
