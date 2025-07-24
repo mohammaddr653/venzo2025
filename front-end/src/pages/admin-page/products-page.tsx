@@ -15,7 +15,7 @@ import { NewProductFormData } from "../../types/objects/newProductFormData";
 import { PropertiesObj } from "../../types/objects/propertiesObj";
 import Library from "../../components/common/library";
 import Img from "../../components/common/img";
-import { discountObj } from "../../types/objects/discountObj";
+import DiscountManager from "../../components/common/discountManager";
 const ProductsPage = () => {
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -39,7 +39,7 @@ const ProductsPage = () => {
     img: "",
   });
   const [properties, setProperties] = useState<PropertiesObj[]>([]);
-  const [discount, setDiscount] = useState<discountObj>();
+  const [discount, setDiscount] = useState<any>();
 
   const editorRef = useRef<any>(null);
 
@@ -51,7 +51,10 @@ const ProductsPage = () => {
 
   useEffect(() => {
     setFormData((prev: any) => {
-      return { ...prev, discount: JSON.stringify(discount) };
+      return {
+        ...prev,
+        discount: discount ? JSON.stringify(discount) : "",
+      };
     });
   }, [discount]);
 
@@ -154,6 +157,8 @@ const ProductsPage = () => {
             className="border"
             onChange={handleChange}
           />
+          <br />
+          <DiscountManager setDiscount={setDiscount}></DiscountManager>
           <br />
           <input
             type="text"

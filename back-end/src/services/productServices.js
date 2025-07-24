@@ -136,7 +136,7 @@ class ProductServices {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
-      discount: req.body.discount || null,
+      discount: req.body.discount === "" ? null : JSON.parse(req.body.discount),
       stock: req.body.stock,
       description: req.body.description,
       properties: JSON.parse(req.body.properties),
