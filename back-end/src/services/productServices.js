@@ -136,6 +136,7 @@ class ProductServices {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
+      discount: req.body.discount || null,
       stock: req.body.stock,
       description: req.body.description,
       properties: JSON.parse(req.body.properties),
@@ -153,6 +154,7 @@ class ProductServices {
     const product = await Product.findById(req.params.productId);
     product.name = req.body.name;
     product.price = req.body.price;
+    product.discount = req.body.discount || null;
     product.stock = req.body.stock;
     product.categoryId = req.body.categoryId === "" ? null : product.categoryId;
     product.description = req.body.description;

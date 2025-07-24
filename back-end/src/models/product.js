@@ -4,10 +4,12 @@ const { JSDOM } = require("jsdom");
 const htmlPurify = domPurifier(new JSDOM().window);
 const timestamp = require("mongoose-timestamp");
 const propertyObjSchema = require("./propertyObj");
+const discountObjSchema = require("./discountObj");
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
+  discount: { type: discountObjSchema, default: null },
   stock: { type: Number, required: true },
   properties: {
     type: [propertyObjSchema],
