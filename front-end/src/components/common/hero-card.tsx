@@ -4,7 +4,7 @@ const HeroCard = () => {
   return (
     <Link
       to={"/shop"}
-      className="bg-[url(/images/icons/paper-background.jpg)] bg-cover rounded-xl relative h-full w-full flex flex-col items-center gap-4 p-4"
+      className="bg-[url(/images/paper-background.jpg)] bg-cover rounded-xl relative h-full w-full flex flex-col items-center gap-4 p-4"
     >
       <img
         src="/images/icons/d0i713732ffa55576e36d0dd32dd1c74068.png"
