@@ -1,6 +1,7 @@
 //در فاز بعدی توسعه ، با این مدل کار داریم
 
 const mongoose = require("mongoose");
+const discountObjSchema = require("./discountObj");
 
 const propertyvalObjSchema = new mongoose.Schema(
   {
@@ -14,6 +15,7 @@ const propertyvalObjSchema = new mongoose.Schema(
     price: {
       type: Number,
     },
+    discount: { type: discountObjSchema},
     stock: {
       type: Number,
     },

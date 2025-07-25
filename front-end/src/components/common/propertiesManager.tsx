@@ -12,6 +12,10 @@ import {
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
 import callManager from "../../hooks/callManager";
+import DiscountManager from "./discountManager";
+import { discountObj } from "../../types/objects/discountObj";
+import PropertyvalSuggestions from "./propertyvalSuggestions";
+import PropertySuggestions from "./propertySuggestions";
 
 interface PropertiesManagerProps {
   properties: PropertiesObj[];
@@ -28,8 +32,9 @@ interface propertyObj {
 
 interface propertyvalObj {
   valueString: string;
-  price: string | "";
-  stock: string | "";
+  price: string;
+  discount: discountObj | null;
+  stock: string;
   suggestions: string[];
 }
 
@@ -50,11 +55,22 @@ const PropertiesManager = ({
   const [propertyval, setPropertyval] = useState<propertyvalObj>({
     valueString: "",
     price: "",
+    discount: null,
     stock: "",
     suggestions: [],
   });
 
   const [selectedProperty, setSelectedProperty] = useState<any>("");
+  const [discount, setDiscount] = useState<any>(null);
+
+  useEffect(() => {
+    setPropertyval((prev: any) => {
+      return {
+        ...prev,
+        discount: discount,
+      };
+    });
+  }, [discount]);
 
   const handleproperty = (
     e: React.ChangeEvent<
@@ -229,8 +245,11 @@ const PropertiesManager = ({
     };
 
     propertyval.price ? (propertyvalue.price = propertyval.price) : null;
+    propertyval.discount
+      ? (propertyvalue.discount = propertyval.discount)
+      : null;
     propertyval.stock ? (propertyvalue.stock = propertyval.stock) : null;
-
+    console.log(propertyvalue);
     if (matchedPropertyval) {
       propertyvalue.value = matchedPropertyval._id;
       if (matchedPropertyval.hex) propertyvalue.hex = matchedPropertyval.hex;
@@ -254,11 +273,23 @@ const PropertiesManager = ({
         return [...prev];
       }
     });
-    setPropertyval({ valueString: "", price: "", stock: "", suggestions: [] });
+    setPropertyval({
+      valueString: "",
+      price: "",
+      discount: null,
+      stock: "",
+      suggestions: [],
+    });
   };
 
   useEffect(() => {
-    setPropertyval({ valueString: "", price: "", stock: "", suggestions: [] });
+    setPropertyval({
+      valueString: "",
+      price: "",
+      discount: null,
+      stock: "",
+      suggestions: [],
+    });
   }, [selectedProperty]);
 
   const handleDeletePropertyval = (name: string, value: string) => {
@@ -288,22 +319,28 @@ const PropertiesManager = ({
     <div>
       <h1>مدیریت ویژگی ها</h1>
       <div className="flex-column bg-green-500">
-        <input
-          type="text"
-          placeholder="ویژگی"
-          name="property"
-          onBlur={() => {
-            setTimeout(() => {
-              setProperty((prev) => {
-                return { ...prev, suggestions: [] };
-              });
-            }, 1000);
-          }}
-          value={property.nameString}
-          className="border"
-          onChange={handleproperty}
-          autoComplete="off"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="ویژگی"
+            name="property"
+            onBlur={() => {
+              setTimeout(() => {
+                setProperty((prev) => {
+                  return { ...prev, suggestions: [] };
+                });
+              }, 1000);
+            }}
+            value={property.nameString}
+            className="border"
+            onChange={handleproperty}
+            autoComplete="off"
+          />
+          <PropertySuggestions
+            property={property}
+            setProperty={setProperty}
+          ></PropertySuggestions>
+        </div>
         <label>
           <input
             type="checkbox"
@@ -313,26 +350,6 @@ const PropertiesManager = ({
           />
           ویژگی انتخابی
         </label>
-        {property.suggestions.length ? (
-          <ul className="border bg-amber-400">
-            {property.suggestions.map((suggest: any, index: any) => {
-              return (
-                <li
-                  key={index}
-                  onClick={() =>
-                    setProperty({
-                      ...property,
-                      nameString: suggest.name,
-                      suggestions: [],
-                    })
-                  }
-                >
-                  {suggest.name}
-                </li>
-              );
-            })}
-          </ul>
-        ) : null}
         <br />
         <button
           onClick={handleSaveProperty}
@@ -352,122 +369,109 @@ const PropertiesManager = ({
                   حذف ویژگی
                 </button>
                 <h3>{propertyObj.nameString}</h3>
-                <div className="flex-column">
-                  <input
-                    type="text"
-                    placeholder="مقدار ویژگی"
-                    name="propertyval"
-                    onFocus={() => {
-                      setSelectedProperty(propertyObj.nameString);
-                    }}
-                    onBlur={() => {
-                      setTimeout(() => {
-                        setPropertyval((prev) => {
-                          return { ...prev, suggestions: [] };
-                        });
-                      }, 1000);
-                    }}
-                    value={
-                      selectedProperty === propertyObj.nameString
-                        ? propertyval.valueString
-                        : ""
-                    }
-                    onChange={handlepropertyval}
-                    disabled={propertyObj.nameString ? false : true}
-                    className="border"
-                    autoComplete="off"
-                  />
-                  {propertyObj.selective ? (
-                    <>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedProperty(propertyObj.nameString);
+                  }}
+                >
+                  افزودن مقدار
+                </button>
+                {selectedProperty === propertyObj.nameString ? (
+                  <div className="flex-column">
+                    <div className="relative">
                       <input
                         type="text"
-                        placeholder="قیمت"
-                        name="price"
-                        onFocus={() => {
-                          setSelectedProperty(propertyObj.nameString);
+                        placeholder="مقدار ویژگی"
+                        name="propertyval"
+                        onBlur={() => {
+                          setTimeout(() => {
+                            setPropertyval((prev) => {
+                              return { ...prev, suggestions: [] };
+                            });
+                          }, 1000);
                         }}
                         value={
                           selectedProperty === propertyObj.nameString
-                            ? propertyval.price
+                            ? propertyval.valueString
                             : ""
                         }
-                        onChange={handleSelectiveChange}
+                        onChange={handlepropertyval}
                         disabled={propertyObj.nameString ? false : true}
                         className="border"
                         autoComplete="off"
                       />
-                      <input
-                        type="text"
-                        placeholder="موجودی انبار"
-                        name="stock"
-                        onFocus={() => {
-                          setSelectedProperty(propertyObj.nameString);
-                        }}
-                        value={
+                      <PropertyvalSuggestions
+                        propertyval={propertyval}
+                        setPropertyval={setPropertyval}
+                      ></PropertyvalSuggestions>
+                    </div>
+                    {propertyObj.selective ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="قیمت"
+                          name="price"
+                          value={
+                            selectedProperty === propertyObj.nameString
+                              ? propertyval.price
+                              : ""
+                          }
+                          onChange={handleSelectiveChange}
+                          disabled={propertyObj.nameString ? false : true}
+                          className="border"
+                          autoComplete="off"
+                        />
+                        <DiscountManager
+                          setDiscount={setDiscount}
+                        ></DiscountManager>
+                        <input
+                          type="text"
+                          placeholder="موجودی انبار"
+                          name="stock"
+                          value={
+                            selectedProperty === propertyObj.nameString
+                              ? propertyval.stock
+                              : ""
+                          }
+                          onChange={handleSelectiveChange}
+                          disabled={propertyObj.nameString ? false : true}
+                          className="border"
+                          autoComplete="off"
+                        />
+                      </>
+                    ) : null}
+                    {propertyObj.selective ? (
+                      <button
+                        onClick={handleSavePropertyval}
+                        disabled={
+                          propertyObj.nameString &&
+                          propertyval.valueString &&
+                          propertyval.price &&
+                          propertyval.stock &&
                           selectedProperty === propertyObj.nameString
-                            ? propertyval.stock
-                            : ""
+                            ? false
+                            : true
                         }
-                        onChange={handleSelectiveChange}
-                        disabled={propertyObj.nameString ? false : true}
-                        className="border"
-                        autoComplete="off"
-                      />
-                    </>
-                  ) : null}
-                  {propertyval.suggestions.length &&
-                  selectedProperty === propertyObj.nameString ? (
-                    <ul className="border bg-amber-400">
-                      {propertyval.suggestions.map(
-                        (suggest: any, index: any) => {
-                          return (
-                            <li
-                              key={index}
-                              onClick={() => {
-                                setPropertyval({
-                                  ...propertyval,
-                                  valueString: suggest.value,
-                                  suggestions: [],
-                                });
-                              }}
-                            >
-                              {suggest.value}
-                            </li>
-                          );
+                      >
+                        افزودن مقدار ویژگی
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSavePropertyval}
+                        disabled={
+                          propertyObj.nameString &&
+                          propertyval.valueString &&
+                          selectedProperty === propertyObj.nameString
+                            ? false
+                            : true
                         }
-                      )}
-                    </ul>
-                  ) : null}
-                  {propertyObj.selective ? (
-                    <button
-                      onClick={handleSavePropertyval}
-                      disabled={
-                        propertyObj.nameString &&
-                        propertyval.valueString &&
-                        propertyval.price &&
-                        propertyval.stock &&
-                        selectedProperty === propertyObj.nameString
-                          ? false
-                          : true
-                      }
-                    >
-                      افزودن مقدار ویژگی
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleSavePropertyval}
-                      disabled={
-                        propertyObj.nameString &&
-                        propertyval.valueString &&
-                        selectedProperty === propertyObj.nameString
-                          ? false
-                          : true
-                      }
-                    >
-                      افزودن مقدار ویژگی
-                    </button>
-                  )}
-                </div>
+                      >
+                        افزودن مقدار ویژگی
+                      </button>
+                    )}
+                  </div>
+                ) : null}
                 {propertyObj.values.length ? (
                   <ul>
                     {propertyObj.values.map(

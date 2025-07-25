@@ -1,8 +1,11 @@
+import { discountObj } from "./discountObj";
+
 export interface PropertyvalsObj {
   value?: string;
   valueString: string;
   hex?: string;
   price?: string;
+  discount?: discountObj;
   stock?: string;
 }
 export interface PropertiesObj {
