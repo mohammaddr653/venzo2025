@@ -20,9 +20,44 @@ class ProductServices {
   async getNewestProducts(req, res) {
     //خواندن جدیدترین محصولات از دیتابیس
     const findOp = await Product.find({})
-      .populate("img")
       .sort({ updatedAt: -1 })
-      .limit(15);
+      .limit(15)
+      .populate("img");
+
+    return serviceResponse(200, findOp);
+  }
+
+  //note: این کوئری میتونه بعدا سنگین بشه . با اضافه کردن flag این مشکل رو حل کن
+  async getOfferProducts(req, res) {
+    //خواندن محصولات تخفیف دار از دیتابیس
+    const findOp = await Product.find({
+      $or: [
+        {
+          // شرط 1: property با selective: true و حداقل یک value با discount ≠ null
+          properties: {
+            $elemMatch: {
+              selective: true,
+              values: {
+                $elemMatch: {
+                  discount: { $ne: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          // شرط 2: هیچ property با selective: true وجود ندارد و خود محصول discount دارد
+          $and: [
+            { properties: { $not: { $elemMatch: { selective: true } } } },
+            { discount: { $ne: null } },
+          ],
+        },
+      ],
+    })
+      .sort({ updatedAt: -1 })
+      .limit(15)
+      .populate("img");
+
     return serviceResponse(200, findOp);
   }
 

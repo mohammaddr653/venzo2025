@@ -24,6 +24,15 @@ module.exports = new (class extends controller {
         data: result.data,
       });
     }
+    if (req.headers.type === "offers") {
+      const result = await productServices.getOfferProducts(req, res);
+      return this.response({
+        res,
+        message: "لیست محصولات تخفیف دار",
+        data: result.data,
+      });
+    }
+
     throw Error;
   }
 

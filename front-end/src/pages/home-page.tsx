@@ -6,7 +6,8 @@ import { useUserStore } from "../store";
 import HomeLittleBanner from "../components/common/home-little-banner";
 import ProductsArchive from "../components/common/productsArchive";
 import Footer from "../components/common/footer";
-import ProductsCarousel from "../components/common/productsCarousel";
+import ProductsCarousel from "../components/common/newestProductsCarousel";
+import OffProductsCarousel from "../components/common/offProductsCarousel";
 
 const HomePage = () => {
   return (
@@ -33,6 +34,9 @@ const HomePage = () => {
           </div>
           <div className="px-5 md:px-20">
             <ProductsCarousel></ProductsCarousel>
+          </div>
+          <div className="px-5 md:px-20">
+            <OffProductsCarousel></OffProductsCarousel>
           </div>
         </div>
       </main>
