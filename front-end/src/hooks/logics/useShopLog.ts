@@ -3,7 +3,7 @@ import { useUserStore } from "../../store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
-import callManager from "../../hooks/callManager";
+import callManager from "../callManager";
 
 const useShopLog = () => {
   const { categoryId } = useParams();

@@ -16,124 +16,32 @@ import { PropertiesObj } from "../../types/objects/propertiesObj";
 import Library from "../../components/common/library";
 import Img from "../../components/common/img";
 import DiscountManager from "../../components/common/discountManager";
+import useProductsPageLog from "../../hooks/logics/useProductsPageLog";
 const ProductsPage = () => {
-  const { call, loading } = callManager();
-  const { user } = useUserStore();
-  const { propertiesAndVals, loadPropertiesAndVals } =
-    useLoadPropertiesAndVals();
-  const [libShow, setLibShow] = useState(false);
-  const [selectedImgs, setSelectedImgs] = useState<any>([]);
-  const { products, loadProducts } = useLoadProducts();
-  const { categories, loadCategories } = useLoadCategories();
-  const selectionList = useRef<HTMLSelectElement>(null);
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState<NewProductFormData>({
-    name: "",
-    price: "",
-    discount: "",
-    stock: "",
-    categoryId: "",
-    description: "",
-    properties: [],
-    img: "",
-  });
-  const [properties, setProperties] = useState<PropertiesObj[]>([]);
-  const [discount, setDiscount] = useState<any>();
-
-  const editorRef = useRef<any>(null);
-
-  useEffect(() => {
-    setFormData((prev: any) => {
-      return { ...prev, properties: JSON.stringify([...properties]) };
-    });
-  }, [properties]);
-
-  useEffect(() => {
-    setFormData((prev: any) => {
-      return {
-        ...prev,
-        discount: discount ? JSON.stringify(discount) : "",
-      };
-    });
-  }, [discount]);
-
-  useEffect(() => {
-    if (selectedImgs.length) {
-      setFormData((prev: any) => {
-        return { ...prev, img: selectedImgs[0]._id };
-      });
-    } else {
-      setFormData((prev: any) => {
-        return { ...prev, img: "" };
-      });
-    }
-  }, [selectedImgs]);
-
-  useEffect(() => {
-    buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
-  }, [categories]);
-
-  async function loadProductsAndCats() {
-    setFormData({
-      name: "",
-      price: "",
-      discount: "",
-      stock: "",
-      categoryId: "",
-      description: "",
-      properties: [],
-      img: "",
-    });
-    setSelectedImgs([]);
-    setProperties([]);
-    loadCategories();
-    loadProducts();
-    loadPropertiesAndVals();
-  }
-
-  useEffect(() => {
-    loadProductsAndCats();
-  }, []);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleDelete = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    productId: any
-  ) => {
-    const response = await call(
-      axios.delete(SERVER_API + `/admin/dashboard/products/${productId}`),
-      true
-    );
-    loadProductsAndCats();
-  };
-
-  const handleUpdate = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    productId: any
-  ) => {
-    navigate("/admin/update-product", { state: { productId } });
-  };
-
-  const handleRefresh = () => {
-    loadProductsAndCats();
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const response = await call(
-      axios.post(SERVER_API + "/admin/dashboard/products", formData),
-      true
-    );
-    loadProductsAndCats();
-  };
+  const {
+    handleSubmit,
+    formData,
+    setFormData,
+    handleChange,
+    setDiscount,
+    selectionList,
+    editorRef,
+    selectedImgs,
+    setSelectedImgs,
+    libShow,
+    setLibShow,
+    properties,
+    loading,
+    user,
+    setProperties,
+    propertiesAndVals,
+    loadPropertiesAndVals,
+    handleRefresh,
+    products,
+    categories,
+    handleDelete,
+    handleUpdate,
+  } = useProductsPageLog();
 
   return (
     <div>
@@ -286,7 +194,7 @@ const ProductsPage = () => {
                   <td className="border">{product.stock}</td>
                   <td className="border">
                     {product.categoryId
-                      ? categories.map((category) => {
+                      ? categories.map((category: any) => {
                           return category._id === product.categoryId
                             ? category.name
                             : null;
