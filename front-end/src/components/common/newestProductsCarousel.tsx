@@ -47,8 +47,21 @@ const ProductsCarousel = () => {
       </div>
       <div className="carousel">
         <Swiper
-          slidesPerView={4}
-          spaceBetween={30}
+          breakpoints={{
+            0: {
+              slidesPerView: 1.5,
+            },
+            640: {
+              slidesPerView: 2.5,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 4,
+            },
+          }}
+          spaceBetween={20}
           initialSlide={0}
           className="mySwiper"
         >
