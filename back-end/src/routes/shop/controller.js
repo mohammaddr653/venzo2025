@@ -71,7 +71,7 @@ module.exports = new (class extends controller {
       data: {
         products: result.products,
         filters: result.filters,
-        totalCount: result.totalCount[0].count,
+        totalCount: result.totalCount[0]?.count,
         motherCategories: motherCategories,
         childCategories: childCategories,
       },
