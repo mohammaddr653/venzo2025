@@ -6,6 +6,8 @@ import TitleRight from "../components/common/title-right";
 import NonSelectivePropertiesGrid from "../components/common/non-selective-properties-grid";
 import SelectiveProperties from "../components/common/selective-properties";
 import BreadCrumb from "../components/common/breadCrumb";
+import Offpercent from "../components/common/offpercent";
+import PriceUnit from "../components/common/priceUnit";
 
 const SingleShopPage = () => {
   const {
@@ -46,11 +48,32 @@ const SingleShopPage = () => {
                   handleSelectProperty={handleSelectProperty}
                 ></SelectiveProperties>
                 <div className=" flex flex-col gap-2 items-end">
-                  <div className="flex flex-row gap-1 items-center flex-nowrap">
-                    <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
-                      {priceAndStock.price}
-                    </span>
-                    <span className="text-neutral-700 text-size14">تومان</span>
+                  <div>
+                    {priceAndStock.discount ? (
+                      <>
+                        <div className="flex flex-row gap-1">
+                          <span className="text-nowrap line-through text-neutral-600 text-size14">
+                            {priceAndStock.price}
+                          </span>
+                          <Offpercent
+                            percent={priceAndStock.percent}
+                          ></Offpercent>
+                        </div>
+                        <div className="flex flex-row gap-1 items-center flex-nowrap">
+                          <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
+                            {priceAndStock.discount.offer}
+                          </span>
+                          <PriceUnit></PriceUnit>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-row gap-1 items-center flex-nowrap">
+                        <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
+                          {priceAndStock.price}
+                        </span>
+                        <PriceUnit></PriceUnit>
+                      </div>
+                    )}
                   </div>
                   <button
                     onClick={() => handleAddToCart(product._id)}

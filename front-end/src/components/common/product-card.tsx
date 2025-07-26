@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Img from "./img";
+import PriceUnit from "./priceUnit";
 
 interface ProductCardProps {
   product: any;
@@ -57,7 +58,7 @@ const ProductCard = (props: ProductCardProps) => {
                 </button>
                 <p className=" text-primary font-weight300 text-size17 flex flex-row gap-1 items-center">
                   <span className="">{props.product.price}</span>
-                  <span className="text-size14">تومان</span>
+                  <PriceUnit></PriceUnit>
                 </p>
               </div>
             </div>

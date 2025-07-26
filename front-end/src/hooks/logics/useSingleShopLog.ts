@@ -11,8 +11,10 @@ const useSingleShopLog = () => {
   const { user } = useUserStore();
   const [product, setProduct] = useState<any>();
   const [motherCats, setMotherCats] = useState<any[]>([]);
-  const [priceAndStock, setPriceAndStock] = useState({
+  const [priceAndStock, setPriceAndStock] = useState<any>({
     price: null,
+    discount: null,
+    percent: null,
     stock: null,
   });
   const [defaultSelectiveProperty, setDefaultSelectiveProperty] = useState<any>(
@@ -43,7 +45,7 @@ const useSingleShopLog = () => {
     }
   }
 
-  function handlePriceAndStock() {
+  function findSelectedPropertyval() {
     const selectiveProperty = product.properties.find(
       (property: any) => property.selective
     );
@@ -53,19 +55,34 @@ const useSingleShopLog = () => {
           propertyval.value.toString()
         )
     );
-    setPriceAndStock({
-      price: selectedPropertyval.price,
-      stock: selectedPropertyval.stock,
-    });
+    return selectedPropertyval;
+  }
+
+  function handlePriceAndStock(obj: any) {
+    const priceAndStockObj: any = {
+      price: obj.price,
+      discount: null,
+      percent: null,
+      stock: obj.stock,
+    };
+    if (obj.discount) {
+      priceAndStockObj.discount = obj.discount;
+      priceAndStockObj.percent = Math.round(
+        ((obj.price - obj.discount.offer) * 100) / obj.price
+      );
+    }
+
+    setPriceAndStock({ ...priceAndStockObj });
   }
 
   useEffect(() => {
     if (product) {
       if (formData.selectedPropertyvalString === "") {
-        setPriceAndStock({ price: product.price, stock: product.stock });
+        handlePriceAndStock(product);
         setDefault();
       } else {
-        handlePriceAndStock();
+        const selectedPropertyval = findSelectedPropertyval();
+        handlePriceAndStock(selectedPropertyval);
       }
     }
   }, [product, formData]);
