@@ -35,7 +35,6 @@ const ProductsPage = () => {
     user,
     setProperties,
     propertiesAndVals,
-    loadPropertiesAndVals,
     handleRefresh,
     products,
     categories,
@@ -157,7 +156,6 @@ const ProductsPage = () => {
             properties={properties}
             setProperties={setProperties}
             propertiesAndVals={propertiesAndVals}
-            loadPropertiesAndVals={loadPropertiesAndVals}
           ></PropertiesManager>
           <br />
           <LoadingButton loading={loading}>افزودن محصول</LoadingButton>

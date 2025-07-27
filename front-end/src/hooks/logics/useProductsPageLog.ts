@@ -151,7 +151,6 @@ const useProductsPageLog = () => {
     user,
     setProperties,
     propertiesAndVals,
-    loadPropertiesAndVals,
     handleRefresh,
     products,
     categories,

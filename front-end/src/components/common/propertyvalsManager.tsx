@@ -1,0 +1,139 @@
+import usePropertyvalsManagerLog from "../../hooks/logics/usePropertyvalsManagerLog";
+import {
+  PropertiesObj,
+  PropertyvalsObj,
+} from "../../types/objects/propertiesObj";
+import DiscountManager from "./discountManager";
+import PropertyvalSuggestions from "./propertyvalSuggestions";
+
+interface PropertyvalsManagerProps {
+  properties: PropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  propertiesAndVals: any;
+  selectedProperty: any;
+  propertyObj: PropertiesObj;
+}
+
+const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
+  const propertyObj = props.propertyObj;
+  const { properties, setProperties, propertiesAndVals, selectedProperty } =
+    props;
+  const {
+    handlepropertyval,
+    handleSavePropertyval,
+    handleDeletePropertyval,
+    propertyval,
+    setPropertyval,
+    handleSelectiveChange,
+    setDiscount,
+  } = usePropertyvalsManagerLog({
+    properties,
+    setProperties,
+    propertiesAndVals,
+    selectedProperty,
+  });
+
+  return (
+    <div className="bg-pink-400">
+      <div className="flex-column">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="مقدار ویژگی"
+            name="propertyval"
+            onBlur={() => {
+              setTimeout(() => {
+                setPropertyval((prev: any) => {
+                  return { ...prev, suggestions: [] };
+                });
+              }, 1000);
+            }}
+            value={propertyval.valueString}
+            onChange={handlepropertyval}
+            disabled={propertyObj.nameString ? false : true}
+            className="border"
+            autoComplete="off"
+          />
+          <PropertyvalSuggestions
+            propertyval={propertyval}
+            setPropertyval={setPropertyval}
+          ></PropertyvalSuggestions>
+        </div>
+        {propertyObj.selective ? (
+          <>
+            <input
+              type="text"
+              placeholder="قیمت"
+              name="price"
+              value={propertyval.price}
+              onChange={handleSelectiveChange}
+              disabled={propertyObj.nameString ? false : true}
+              className="border"
+              autoComplete="off"
+            />
+            <DiscountManager setDiscount={setDiscount}></DiscountManager>
+            <input
+              type="text"
+              placeholder="موجودی انبار"
+              name="stock"
+              value={propertyval.stock}
+              onChange={handleSelectiveChange}
+              disabled={propertyObj.nameString ? false : true}
+              className="border"
+              autoComplete="off"
+            />
+          </>
+        ) : null}
+        <button
+          onClick={handleSavePropertyval}
+          disabled={
+            propertyObj.nameString &&
+            propertyval.valueString &&
+            (!propertyObj.selective || (propertyval.price && propertyval.stock))
+              ? false
+              : true
+          }
+        >
+          افزودن مقدار ویژگی
+        </button>
+      </div>
+      {propertyObj.values.length ? (
+        <ul>
+          {propertyObj.values.map(
+            (propertyvalObj: PropertyvalsObj, index: any) => {
+              return (
+                <li key={index} className="flex flex-row justify-between">
+                  <div>
+                    <button
+                      className="bg-red-600"
+                      onClick={() =>
+                        handleDeletePropertyval(
+                          propertyObj.nameString,
+                          propertyvalObj.valueString
+                        )
+                      }
+                    >
+                      x
+                    </button>
+                    {propertyvalObj.valueString}
+                  </div>
+                  {propertyObj.selective ? (
+                    <div className="flex flex-row gap-2">
+                      <span className="bg-amber-300">
+                        تومان {propertyvalObj.price}
+                      </span>
+                      <span className="bg-amber-300">
+                        عدد {propertyvalObj.stock}
+                      </span>
+                    </div>
+                  ) : null}
+                </li>
+              );
+            }
+          )}
+        </ul>
+      ) : null}
+    </div>
+  );
+};
+export default PropertyvalsManager;
