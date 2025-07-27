@@ -34,8 +34,6 @@ const usePropertiesManagerLog = ({
   propertiesAndVals,
   loadPropertiesAndVals,
 }: PropertiesManagerProps) => {
-  const { user } = useUserStore();
-  const { call, loading } = callManager();
   const [property, setProperty] = useState<propertyObj>({
     nameString: "",
     selective: false,

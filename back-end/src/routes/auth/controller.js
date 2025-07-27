@@ -87,7 +87,7 @@ module.exports = new (class extends controller {
       path: "/",
       secure: mode === "production" ? true : false,
       sameSite: mode === "production" ? "None" : "Strict",
-      maxAge: 3600000,
+      maxAge: 604800000,
     });
     this.response({ res, message: "با موفقیت وارد شدید", data: { token } });
   }
