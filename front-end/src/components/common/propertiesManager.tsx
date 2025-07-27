@@ -159,35 +159,20 @@ const PropertiesManager = (props: PropertiesManagerProps) => {
                         />
                       </>
                     ) : null}
-                    {propertyObj.selective ? (
-                      <button
-                        onClick={handleSavePropertyval}
-                        disabled={
-                          propertyObj.nameString &&
-                          propertyval.valueString &&
-                          propertyval.price &&
-                          propertyval.stock &&
-                          selectedProperty === propertyObj.nameString
-                            ? false
-                            : true
-                        }
-                      >
-                        افزودن مقدار ویژگی
-                      </button>
-                    ) : (
-                      <button
-                        onClick={handleSavePropertyval}
-                        disabled={
-                          propertyObj.nameString &&
-                          propertyval.valueString &&
-                          selectedProperty === propertyObj.nameString
-                            ? false
-                            : true
-                        }
-                      >
-                        افزودن مقدار ویژگی
-                      </button>
-                    )}
+                    <button
+                      onClick={handleSavePropertyval}
+                      disabled={
+                        propertyObj.nameString &&
+                        propertyval.valueString &&
+                        (!propertyObj.selective ||
+                          (propertyval.price && propertyval.stock)) &&
+                        selectedProperty === propertyObj.nameString
+                          ? false
+                          : true
+                      }
+                    >
+                      افزودن مقدار ویژگی
+                    </button>
                   </div>
                 ) : null}
                 {propertyObj.values.length ? (
