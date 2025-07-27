@@ -16,7 +16,7 @@ module.exports = new (class extends controller {
   }
 
   async getMostProducts(req, res) {
-    if (req.headers.type === "newest") {
+    if (req.query.type === "newest") {
       const result = await productServices.getNewestProducts(req, res);
       return this.response({
         res,
@@ -24,7 +24,7 @@ module.exports = new (class extends controller {
         data: result.data,
       });
     }
-    if (req.headers.type === "offers") {
+    if (req.query.type === "offers") {
       const result = await productServices.getOfferProducts(req, res);
       return this.response({
         res,

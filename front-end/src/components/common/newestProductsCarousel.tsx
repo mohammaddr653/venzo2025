@@ -20,15 +20,13 @@ import { Pagination } from "swiper/modules";
 import SwiperButtonPrev from "./swiper-button-prev";
 import SwiperButtonNext from "./swiper-button-next";
 
-const ProductsCarousel = () => {
+const NewestProductsCarousel = () => {
   const { call, loading } = callManager();
   const [products, setProducts] = useState<any[]>([]);
 
   async function load() {
     const response = await call(
-      axios.get(SERVER_API + "/shop/most-products", {
-        headers: { type: "newest" },
-      }),
+      axios.get(SERVER_API + "/shop/most-products?type=newest"),
       false
     );
     setProducts([...response?.data.data]);
@@ -37,9 +35,10 @@ const ProductsCarousel = () => {
   useEffect(() => {
     load();
   }, []);
+
   return products?.length ? (
     <div className="products-carousel-container">
-      <div className="py-10">
+      <div className="py-5">
         <TitleCentral
           title={"جدیدترین محصولات"}
           class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
@@ -82,4 +81,4 @@ const ProductsCarousel = () => {
     </div>
   ) : null;
 };
-export default ProductsCarousel;
+export default NewestProductsCarousel;

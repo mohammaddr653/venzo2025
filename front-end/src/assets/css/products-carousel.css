@@ -4,6 +4,9 @@ div.products-carousel-container div.swiper.swiper-initialized {
   align-items: center;
   padding: 0 5px;
 }
+div.products-carousel-container div.swiper.swiper-initialized div.swiper-slide {
+  padding: 5px 0;
+}
 div.products-carousel-container div.swiperjs-controlls {
   background-color: yellow;
   width: 100%;

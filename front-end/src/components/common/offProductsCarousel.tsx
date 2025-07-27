@@ -26,9 +26,7 @@ const OffProductsCarousel = () => {
 
   async function load() {
     const response = await call(
-      axios.get(SERVER_API + "/shop/most-products", {
-        headers: { type: "offers" },
-      }),
+      axios.get(SERVER_API + "/shop/most-products?type=offers"),
       false
     );
     setProducts([...response?.data.data]);
@@ -39,7 +37,7 @@ const OffProductsCarousel = () => {
   }, []);
   return products?.length ? (
     <div className="products-carousel-container">
-      <div className="py-10">
+      <div className="py-5">
         <TitleCentral
           title={"خرید با تخفیف"}
           class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
