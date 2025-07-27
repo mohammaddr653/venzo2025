@@ -1,23 +1,9 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { useUserStore } from "../../store";
-import callManager from "../callManager";
-import { discountObj } from "../../types/objects/discountObj";
-import {
-  PropertiesObj,
-  PropertyvalsObj,
-} from "../../types/objects/propertiesObj";
+import { ChangeEvent, useState } from "react";
+import { PropertiesObj } from "../../types/objects/propertiesObj";
 
 interface propertyObj {
   nameString: string;
   selective: boolean;
-  suggestions: string[];
-}
-
-interface propertyvalObj {
-  valueString: string;
-  price: string;
-  discount: discountObj | null;
-  stock: string;
   suggestions: string[];
 }
 

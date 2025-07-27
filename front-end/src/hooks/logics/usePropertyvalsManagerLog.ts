@@ -5,12 +5,11 @@ import {
   PropertyvalsObj,
 } from "../../types/objects/propertiesObj";
 
-
 interface propertyvalObj {
   valueString: string;
-  price: string;
-  discount: discountObj | null;
-  stock: string;
+  price?: string;
+  discount?: discountObj | null;
+  stock?: string;
   suggestions: string[];
 }
 
@@ -36,6 +35,8 @@ const usePropertyvalsManagerLog = ({
   });
 
   const [discount, setDiscount] = useState<any>(null);
+
+  const [selectedPropertyval, setSelectedPropertyval] = useState<any>("");
 
   useEffect(() => {
     setPropertyval((prev: any) => {
@@ -126,6 +127,7 @@ const usePropertyvalsManagerLog = ({
     }
   };
 
+  //note: نیاز نیست hex یا valueString داده شود . فقط آیدی بده و در اسکیما با ref بقیه مقادیر بگیر
   const addPropertyval = (matchedPropertyval?: any) => {
     let propertyvalue: PropertyvalsObj = {
       valueString: propertyval.valueString,
@@ -143,40 +145,48 @@ const usePropertyvalsManagerLog = ({
     setProperties((prev) => {
       const exist = prev.find((item) => item.nameString === selectedProperty);
       if (exist) {
-        const existingVal = exist.values.find(
-          (item) => item.valueString === propertyval.valueString
+        const updatedValues = exist.values.filter(
+          (item) =>
+            item.valueString !== propertyval.valueString &&
+            item.valueString !== selectedPropertyval
         );
-        if (!existingVal) {
-          return prev.map((item) =>
-            item.nameString === selectedProperty
-              ? { ...item, values: [...item.values, propertyvalue] }
-              : item
-          );
-        } else {
-          return [...prev];
-        }
+        return prev.map((item) =>
+          item.nameString === selectedProperty
+            ? { ...item, values: [...updatedValues, propertyvalue] }
+            : item
+        );
       } else {
         return [...prev];
       }
     });
+    resetPropertyval();
+  };
+
+  function resetPropertyval() {
     setPropertyval({
       valueString: "",
       price: "",
       discount: null,
       stock: "",
+      suggestions: [],
+    });
+    setSelectedPropertyval("");
+  }
+
+  useEffect(() => {
+    resetPropertyval();
+  }, [selectedProperty]);
+
+  const handleUpdatePropertyval = (propertyvalObj: PropertyvalsObj) => {
+    setSelectedPropertyval(propertyvalObj.valueString);
+    setPropertyval({
+      valueString: propertyvalObj.valueString,
+      price: propertyvalObj.price ?? "",
+      discount: propertyvalObj.discount ?? null,
+      stock: propertyvalObj.stock ?? "",
       suggestions: [],
     });
   };
-
-  useEffect(() => {
-    setPropertyval({
-      valueString: "",
-      price: "",
-      discount: null,
-      stock: "",
-      suggestions: [],
-    });
-  }, [selectedProperty]);
 
   const handleDeletePropertyval = (name: string, value: string) => {
     const property = properties.find(
@@ -202,6 +212,7 @@ const usePropertyvalsManagerLog = ({
     setPropertyval,
     handleSelectiveChange,
     setDiscount,
+    handleUpdatePropertyval,
   };
 };
 

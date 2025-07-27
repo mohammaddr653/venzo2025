@@ -26,6 +26,7 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
     setPropertyval,
     handleSelectiveChange,
     setDiscount,
+    handleUpdatePropertyval,
   } = usePropertyvalsManagerLog({
     properties,
     setProperties,
@@ -122,11 +123,21 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
                       <span className="bg-amber-300">
                         تومان {propertyvalObj.price}
                       </span>
+                      {propertyvalObj.discount ? (
+                        <span className="bg-amber-300">
+                          تومان {propertyvalObj.discount.offer} قیمت در تخفیف
+                        </span>
+                      ) : null}
                       <span className="bg-amber-300">
                         عدد {propertyvalObj.stock}
                       </span>
                     </div>
                   ) : null}
+                  <button
+                    onClick={() => handleUpdatePropertyval(propertyvalObj)}
+                  >
+                    ویرایش
+                  </button>
                 </li>
               );
             }
