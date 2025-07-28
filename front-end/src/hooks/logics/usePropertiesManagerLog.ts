@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { PropertiesObj } from "../../types/objects/propertiesObj";
+import { ProductPropertiesObj, Property } from "../../types/objects/properties";
 
 interface propertyObj {
   nameString: string;
@@ -8,8 +8,8 @@ interface propertyObj {
 }
 
 interface PropertiesManagerProps {
-  properties: PropertiesObj[];
-  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  properties: ProductPropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<ProductPropertiesObj[]>>;
   propertiesAndVals: any;
 }
 
@@ -49,7 +49,7 @@ const usePropertiesManagerLog = ({
     const existAlready = properties.find((item) => item.selective);
     if (existAlready) {
       alert(
-        `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.nameString}`
+        `شما فقط میتوانید یک ویژگی انتخابی اضافه کنید . ویژگی انتخابی فعلی : ${existAlready.property.name}`
       );
     } else {
       setProperty({
@@ -87,18 +87,20 @@ const usePropertiesManagerLog = ({
     // }
   };
 
-  const addProperty = (matchedProperty: any) => {
-    let propertyObj: PropertiesObj = {
-      name: matchedProperty._id,
-      nameString: property.nameString,
+  const addProperty = (matchedProperty: Property) => {
+    let propertyObj: ProductPropertiesObj = {
+      property: {
+        _id: matchedProperty._id!, //دیتابیس مانگو فقط انتظار دارد یک آیدی بفرستی اما این مشکلی ایجاد نمیکند چون مانگو هوشمند است
+        name: matchedProperty.name,
+        specifiedVals: matchedProperty.specifiedVals,
+        type: matchedProperty.type,
+      },
       selective: property.selective,
-      specifiedVals: matchedProperty.specifiedVals,
-      type: matchedProperty.type,
       values: [],
     };
     setProperties((prev) => {
       const exist = prev.find(
-        (item) => item.nameString === property.nameString
+        (item) => item.property._id === matchedProperty._id
       );
       if (!exist) {
         return [...prev, propertyObj];
@@ -113,9 +115,9 @@ const usePropertiesManagerLog = ({
     });
   };
 
-  const handleDeleteProperty = (name: string) => {
+  const handleDeleteProperty = (id: string) => {
     const filteredProperties = properties?.filter(
-      (property) => property.nameString !== name
+      (item) => item.property._id !== id
     );
     setProperties([...filteredProperties]);
   };

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { discountObj } from "../../types/objects/discountObj";
 import {
-  PropertiesObj,
+  ProductPropertiesObj,
   PropertyvalsObj,
-} from "../../types/objects/propertiesObj";
+} from "../../types/objects/properties";
 
 interface propertyvalObj {
   valueString: string;
@@ -14,8 +14,8 @@ interface propertyvalObj {
 }
 
 interface PropertyvalsManagerProps {
-  properties: PropertiesObj[];
-  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  properties: ProductPropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<ProductPropertiesObj[]>>;
   propertiesAndVals: any;
   selectedProperty: any;
 }
@@ -143,7 +143,9 @@ const usePropertyvalsManagerLog = ({
       if (matchedPropertyval.hex) propertyvalue.hex = matchedPropertyval.hex;
     }
     setProperties((prev) => {
-      const exist = prev.find((item) => item.nameString === selectedProperty);
+      const exist = prev.find(
+        (item) => item.property.name === selectedProperty
+      );
       if (exist) {
         const updatedValues = exist.values.filter(
           (item) =>
@@ -151,7 +153,7 @@ const usePropertyvalsManagerLog = ({
             item.valueString !== selectedPropertyval
         );
         return prev.map((item) =>
-          item.nameString === selectedProperty
+          item.property.name === selectedProperty
             ? { ...item, values: [...updatedValues, propertyvalue] }
             : item
         );
@@ -190,14 +192,14 @@ const usePropertyvalsManagerLog = ({
 
   const handleDeletePropertyval = (name: string, value: string) => {
     const property = properties.find(
-      (property) => property.nameString === name
+      (property) => property.property.name === name
     );
     const filteredVals = property?.values.filter(
       (propertyval) => propertyval.valueString !== value
     );
     setProperties((prev) => {
       return prev.map((item) =>
-        item.nameString === name
+        item.property.name === name
           ? { ...item, values: filteredVals ? filteredVals : [] }
           : item
       );

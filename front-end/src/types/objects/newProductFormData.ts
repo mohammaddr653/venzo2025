@@ -1,4 +1,4 @@
-import { PropertiesObj } from "./propertiesObj";
+import { ProductPropertiesObj } from "./properties";
 
 export interface NewProductFormData {
   name: string;
@@ -7,6 +7,6 @@ export interface NewProductFormData {
   stock: string;
   categoryId: string;
   description: string;
-  properties: PropertiesObj[];
+  properties: ProductPropertiesObj[];
   img: string;
 }

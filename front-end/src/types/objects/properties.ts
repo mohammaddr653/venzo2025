@@ -1,5 +1,12 @@
 import { discountObj } from "./discountObj";
 
+export interface Property {
+  _id?: string; //اگر از قبل ساخته شده باشد آیدی دارد
+  name: string;
+  specifiedVals: Boolean;
+  type: string;
+}
+
 export interface PropertyvalsObj {
   value?: string;
   valueString: string;
@@ -8,11 +15,8 @@ export interface PropertyvalsObj {
   discount?: discountObj;
   stock?: string;
 }
-export interface PropertiesObj {
-  name: string;
-  nameString: string;
+export interface ProductPropertiesObj {
+  property: Property;
   selective: boolean;
-  specifiedVals: boolean;
-  type: string;
   values: PropertyvalsObj[];
 }

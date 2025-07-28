@@ -8,7 +8,7 @@ import useLoadPropertiesAndVals from "../useLoadPropertiesAndVals";
 import useLoadProducts from "../useLoadProducts";
 import useLoadCategories from "../useLoadCategories";
 import { NewProductFormData } from "../../types/objects/newProductFormData";
-import { PropertiesObj } from "../../types/objects/propertiesObj";
+import { ProductPropertiesObj } from "../../types/objects/properties";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 
 const useProductsPageLog = () => {
@@ -33,7 +33,7 @@ const useProductsPageLog = () => {
     properties: [],
     img: "",
   });
-  const [properties, setProperties] = useState<PropertiesObj[]>([]);
+  const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
   const [discount, setDiscount] = useState<any>();
 
   const editorRef = useRef<any>(null);

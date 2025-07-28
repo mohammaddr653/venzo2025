@@ -1,18 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { useUserStore } from "../../store";
-import { useNavigate } from "react-router-dom";
-import callManager from "../../hooks/callManager";
-import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
-import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
-import { buildSelectionList } from "../../helpers/buildSelectionList";
-import useLoadCategories from "../../hooks/useLoadCategories";
-import useLoadProducts from "../../hooks/useLoadProducts";
 import { Editor } from "@tinymce/tinymce-react";
 import PropertiesManager from "../../components/common/propertiesManager";
-import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
-import { NewProductFormData } from "../../types/objects/newProductFormData";
-import { PropertiesObj } from "../../types/objects/propertiesObj";
 import Library from "../../components/common/library";
 import Img from "../../components/common/img";
 import DiscountManager from "../../components/common/discountManager";

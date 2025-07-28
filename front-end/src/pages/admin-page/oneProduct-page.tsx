@@ -7,7 +7,7 @@ import callManager from "../../hooks/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../hooks/useLoadCategories";
-import { PropertiesObj } from "../../types/objects/propertiesObj";
+import { ProductPropertiesObj } from "../../types/objects/properties";
 import PropertiesManager from "../../components/common/propertiesManager";
 import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 
@@ -27,7 +27,7 @@ const OneProductPage = () => {
     properties: [],
     img: "",
   });
-  const [properties, setProperties] = useState<PropertiesObj[]>([]);
+  const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
   const { state } = useLocation();
   const { productId } = state || null;
 
@@ -159,7 +159,6 @@ const OneProductPage = () => {
           properties={properties}
           setProperties={setProperties}
           propertiesAndVals={propertiesAndVals}
-          loadPropertiesAndVals={loadPropertiesAndVals}
         ></PropertiesManager>
       </div>
       <div className="bg-sky-600">this is tailwind</div>

@@ -10,12 +10,13 @@ const propertyvalObjSchema = new mongoose.Schema(
       ref: "Propertyval",
     },
     valueString: {
+      //اگر ویژگی مقادیر مشخص نداشت مثل وزن ، ابعاد
       type: String,
     },
     price: {
       type: Number,
     },
-    discount: { type: discountObjSchema},
+    discount: { type: discountObjSchema },
     stock: {
       type: Number,
     },
@@ -28,17 +29,12 @@ const propertyvalObjSchema = new mongoose.Schema(
 
 const propertyObjSchema = new mongoose.Schema(
   {
-    name: {
+    property: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Property",
     },
-    nameString: {
-      type: String,
-      ref: "Property",
-    },
     selective: { type: Boolean, required: true },
-    type: { type: String, required: true, enum: ["ordinary", "color"] },
     values: [propertyvalObjSchema],
   },
   { _id: false }

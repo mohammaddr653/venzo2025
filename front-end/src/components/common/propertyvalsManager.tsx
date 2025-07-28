@@ -1,17 +1,17 @@
 import usePropertyvalsManagerLog from "../../hooks/logics/usePropertyvalsManagerLog";
 import {
-  PropertiesObj,
+  ProductPropertiesObj,
   PropertyvalsObj,
-} from "../../types/objects/propertiesObj";
+} from "../../types/objects/properties";
 import DiscountManager from "./discountManager";
 import PropertyvalSuggestions from "./propertyvalSuggestions";
 
 interface PropertyvalsManagerProps {
-  properties: PropertiesObj[];
-  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  properties: ProductPropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<ProductPropertiesObj[]>>;
   propertiesAndVals: any;
   selectedProperty: any;
-  propertyObj: PropertiesObj;
+  propertyObj: ProductPropertiesObj;
 }
 
 const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
@@ -51,7 +51,6 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
             }}
             value={propertyval.valueString}
             onChange={handlepropertyval}
-            disabled={propertyObj.nameString ? false : true}
             className="border"
             autoComplete="off"
           />
@@ -68,7 +67,6 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
               name="price"
               value={propertyval.price}
               onChange={handleSelectiveChange}
-              disabled={propertyObj.nameString ? false : true}
               className="border"
               autoComplete="off"
             />
@@ -79,7 +77,6 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
               name="stock"
               value={propertyval.stock}
               onChange={handleSelectiveChange}
-              disabled={propertyObj.nameString ? false : true}
               className="border"
               autoComplete="off"
             />
@@ -88,7 +85,6 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
         <button
           onClick={handleSavePropertyval}
           disabled={
-            propertyObj.nameString &&
             propertyval.valueString &&
             (!propertyObj.selective || (propertyval.price && propertyval.stock))
               ? false
@@ -109,7 +105,7 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
                       className="bg-red-600"
                       onClick={() =>
                         handleDeletePropertyval(
-                          propertyObj.nameString,
+                          propertyObj.property.name,
                           propertyvalObj.valueString
                         )
                       }

@@ -1,13 +1,11 @@
-import {
-  PropertiesObj,
-} from "../../types/objects/propertiesObj";
+import { ProductPropertiesObj } from "../../types/objects/properties";
 import PropertySuggestions from "./propertySuggestions";
 import usePropertiesManagerLog from "../../hooks/logics/usePropertiesManagerLog";
 import PropertyvalsManager from "./propertyvalsManager";
 
 interface PropertiesManagerProps {
-  properties: PropertiesObj[];
-  setProperties: React.Dispatch<React.SetStateAction<PropertiesObj[]>>;
+  properties: ProductPropertiesObj[];
+  setProperties: React.Dispatch<React.SetStateAction<ProductPropertiesObj[]>>;
   propertiesAndVals: any;
 }
 
@@ -73,36 +71,40 @@ const PropertiesManager = (props: PropertiesManagerProps) => {
         </button>
       </div>
       {props.properties.length
-        ? props.properties.map((propertyObj: PropertiesObj, index: any) => {
-            return (
-              <div className="bg-amber-500 p-5" key={index}>
-                <button
-                  className="bg-red-500"
-                  onClick={() => handleDeleteProperty(propertyObj.nameString)}
-                >
-                  حذف ویژگی
-                </button>
-                <h3>{propertyObj.nameString}</h3>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setSelectedProperty(propertyObj.nameString);
-                  }}
-                >
-                  مدیریت مقادیر ویژگی
-                </button>
-                {selectedProperty === propertyObj.nameString ? (
-                  <PropertyvalsManager
-                    properties={properties}
-                    setProperties={setProperties}
-                    propertiesAndVals={propertiesAndVals}
-                    selectedProperty={selectedProperty}
-                    propertyObj={propertyObj}
-                  ></PropertyvalsManager>
-                ) : null}
-              </div>
-            );
-          })
+        ? props.properties.map(
+            (propertyObj: ProductPropertiesObj, index: any) => {
+              return (
+                <div className="bg-amber-500 p-5" key={index}>
+                  <button
+                    className="bg-red-500"
+                    onClick={() =>
+                      handleDeleteProperty(propertyObj.property._id!)
+                    }
+                  >
+                    حذف ویژگی
+                  </button>
+                  <h3>{propertyObj.property.name}</h3>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedProperty(propertyObj.property.name);
+                    }}
+                  >
+                    مدیریت مقادیر ویژگی
+                  </button>
+                  {selectedProperty === propertyObj.property.name ? (
+                    <PropertyvalsManager
+                      properties={properties}
+                      setProperties={setProperties}
+                      propertiesAndVals={propertiesAndVals}
+                      selectedProperty={selectedProperty}
+                      propertyObj={propertyObj}
+                    ></PropertyvalsManager>
+                  ) : null}
+                </div>
+              );
+            }
+          )
         : null}
     </div>
   );

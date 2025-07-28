@@ -8,12 +8,16 @@ const serviceResponse = require("../helpers/serviceResponse");
 class ProductServices {
   async getAllProducts(req, res) {
     //خواندن تمام محصولات از دیتابیس
-    const findOp = await Product.find({}).populate("img"); //فیلد img که رفرنس دارد را جایگذاری میکند
+    const findOp = await Product.find({})
+      .populate("img")
+      .populate({ path: "properties.property", model: "Property" })
     return serviceResponse(200, findOp);
   }
   async seeOneProduct(req, res) {
     // خواندن یک محصول از دیتابیس
-    const findOp = await Product.findById(req.params.productId).populate("img");
+    const findOp = await Product.findById(req.params.productId)
+      .populate("img")
+      .populate({ path: "properties.property", model: "Property" })
     return serviceResponse(200, findOp);
   }
 
@@ -22,8 +26,8 @@ class ProductServices {
     const findOp = await Product.find({})
       .sort({ updatedAt: -1 })
       .limit(15)
-      .populate("img");
-
+      .populate("img")
+      .populate({ path: "properties.property", model: "Property" })
     return serviceResponse(200, findOp);
   }
 
@@ -56,8 +60,8 @@ class ProductServices {
     })
       .sort({ updatedAt: -1 })
       .limit(15)
-      .populate("img");
-
+      .populate("img")
+      .populate({ path: "properties.property", model: "Property" })
     return serviceResponse(200, findOp);
   }
 
@@ -112,6 +116,14 @@ class ProductServices {
             { $unwind: { path: "$img", preserveNullAndEmptyArrays: true } },
             {
               $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"],
+            },
+            {
+              $lookup: {
+                from: "property",
+                localField: "property",
+                foreignField: "_id",
+                as: "property",
+              },
             },
           ],
           filters: [
