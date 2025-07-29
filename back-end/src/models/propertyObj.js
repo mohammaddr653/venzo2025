@@ -5,7 +5,7 @@ const discountObjSchema = require("./discountObj");
 
 const propertyvalObjSchema = new mongoose.Schema(
   {
-    value: {
+    propertyval: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Propertyval",
     },
@@ -19,9 +19,6 @@ const propertyvalObjSchema = new mongoose.Schema(
     discount: { type: discountObjSchema },
     stock: {
       type: Number,
-    },
-    hex: {
-      type: String,
     },
   },
   { _id: false }

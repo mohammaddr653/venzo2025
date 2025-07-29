@@ -64,7 +64,10 @@ const PropertiesManager = (props: PropertiesManagerProps) => {
         </label>
         <br />
         <button
-          onClick={handleSaveProperty}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSaveProperty();
+          }}
           disabled={property.nameString ? false : true}
         >
           افزودن ویژگی

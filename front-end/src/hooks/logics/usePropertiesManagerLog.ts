@@ -65,11 +65,11 @@ const usePropertiesManagerLog = ({
     );
 
     if (matches) {
-      if (!matches.specifiedVals && property.selective)
-        return alert(
-          "تنها ویژگی های با مقادیر مشخص می توانند ویژگی انتخابی باشند"
-        );
-      addProperty(matches);
+      if (!matches.specifiedVals && property.selective) {
+        alert("تنها ویژگی های با مقادیر مشخص می توانند ویژگی انتخابی باشند");
+      } else {
+        addProperty(matches);
+      }
     }
     //note:if the property not exist then it wont be added
     // else {

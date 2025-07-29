@@ -11,6 +11,10 @@ class ProductServices {
     const findOp = await Product.find({})
       .populate("img")
       .populate({ path: "properties.property", model: "Property" })
+      .populate({
+        path: "properties.values.propertyval",
+        model: "Propertyval",
+      });
     return serviceResponse(200, findOp);
   }
   async seeOneProduct(req, res) {
@@ -18,6 +22,11 @@ class ProductServices {
     const findOp = await Product.findById(req.params.productId)
       .populate("img")
       .populate({ path: "properties.property", model: "Property" })
+      .populate({
+        path: "properties.values.propertyval",
+        model: "Propertyval",
+      });
+
     return serviceResponse(200, findOp);
   }
 
@@ -28,6 +37,11 @@ class ProductServices {
       .limit(15)
       .populate("img")
       .populate({ path: "properties.property", model: "Property" })
+      .populate({
+        path: "properties.values.propertyval",
+        model: "Propertyval",
+      });
+
     return serviceResponse(200, findOp);
   }
 
@@ -62,6 +76,11 @@ class ProductServices {
       .limit(15)
       .populate("img")
       .populate({ path: "properties.property", model: "Property" })
+      .populate({
+        path: "properties.values.propertyval",
+        model: "Propertyval",
+      });
+
     return serviceResponse(200, findOp);
   }
 
@@ -118,11 +137,43 @@ class ProductServices {
               $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"],
             },
             {
+              $unwind: {
+                path: "$properties",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
               $lookup: {
-                from: "property",
-                localField: "property",
+                from: "properties",
+                localField: "properties.property",
                 foreignField: "_id",
                 as: "property",
+              },
+            },
+            {
+              $unwind: {
+                path: "$properties.property",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $unwind: {
+                path: "$properties.values",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $lookup: {
+                from: "propertyvals",
+                localField: "properties.values.propertyval",
+                foreignField: "_id",
+                as: "propertyval",
+              },
+            },
+            {
+              $unwind: {
+                path: "$properties.values.propertyval",
+                preserveNullAndEmptyArrays: true,
               },
             },
           ],

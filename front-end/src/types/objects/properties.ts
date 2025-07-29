@@ -7,10 +7,16 @@ export interface Property {
   type: string;
 }
 
-export interface PropertyvalsObj {
-  value?: string;
-  valueString: string;
-  hex?: string;
+export interface Propertyval {
+  _id?: string; //اگر از قبل ساخته شده باشد آیدی دارد
+  propertyId: string;
+  value: string;
+  hex: string;
+}
+
+export interface ProductPropertyvalsObj {
+  propertyval?: Propertyval;
+  valueString?: string;
   price?: string;
   discount?: discountObj;
   stock?: string;
@@ -18,5 +24,5 @@ export interface PropertyvalsObj {
 export interface ProductPropertiesObj {
   property: Property;
   selective: boolean;
-  values: PropertyvalsObj[];
+  values: ProductPropertyvalsObj[];
 }

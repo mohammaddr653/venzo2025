@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { discountObj } from "../../types/objects/discountObj";
 import {
   ProductPropertiesObj,
-  PropertyvalsObj,
+  ProductPropertyvalsObj,
 } from "../../types/objects/properties";
 
 interface propertyvalObj {
-  valueString: string;
+  valueString?: string;
   price?: string;
   discount?: discountObj | null;
   stock?: string;
@@ -90,7 +90,7 @@ const usePropertyvalsManagerLog = ({
     } else {
       setPropertyval({
         ...propertyval,
-        valueString: e.target.value,
+        valueString: "",
         suggestions: [],
       });
     }
@@ -129,29 +129,49 @@ const usePropertyvalsManagerLog = ({
 
   //note: نیاز نیست hex یا valueString داده شود . فقط آیدی بده و در اسکیما با ref بقیه مقادیر بگیر
   const addPropertyval = (matchedPropertyval?: any) => {
-    let propertyvalue: PropertyvalsObj = {
-      valueString: propertyval.valueString,
-    };
+    let propertyvalue: ProductPropertyvalsObj = {};
 
+    if (matchedPropertyval) {
+      propertyvalue = {
+        propertyval: {
+          _id: matchedPropertyval._id,
+          value: matchedPropertyval.value,
+          propertyId: matchedPropertyval.propertyId,
+          hex: matchedPropertyval.hex,
+        },
+      };
+      matchedPropertyval.hex
+        ? (propertyvalue.propertyval!.hex = matchedPropertyval.hex)
+        : null;
+    } else {
+      propertyvalue = {
+        valueString: propertyval.valueString,
+      };
+    }
     propertyval.price ? (propertyvalue.price = propertyval.price) : null;
     propertyval.discount
       ? (propertyvalue.discount = propertyval.discount)
       : null;
     propertyval.stock ? (propertyvalue.stock = propertyval.stock) : null;
-    if (matchedPropertyval) {
-      propertyvalue.value = matchedPropertyval._id;
-      if (matchedPropertyval.hex) propertyvalue.hex = matchedPropertyval.hex;
-    }
+
     setProperties((prev) => {
       const exist = prev.find(
         (item) => item.property.name === selectedProperty
       );
       if (exist) {
-        const updatedValues = exist.values.filter(
-          (item) =>
-            item.valueString !== propertyval.valueString &&
-            item.valueString !== selectedPropertyval
-        );
+        const updatedValues = exist.values.filter((item) => {
+          if (exist.property.specifiedVals) {
+            return (
+              item.propertyval?.value !== propertyval.valueString &&
+              item.propertyval?.value !== selectedPropertyval
+            );
+          } else {
+            return (
+              item.valueString !== propertyval.valueString &&
+              item.valueString !== selectedPropertyval
+            );
+          }
+        });
         return prev.map((item) =>
           item.property.name === selectedProperty
             ? { ...item, values: [...updatedValues, propertyvalue] }
@@ -179,10 +199,13 @@ const usePropertyvalsManagerLog = ({
     resetPropertyval();
   }, [selectedProperty]);
 
-  const handleUpdatePropertyval = (propertyvalObj: PropertyvalsObj) => {
-    setSelectedPropertyval(propertyvalObj.valueString);
+  const handleUpdatePropertyval = (propertyvalObj: ProductPropertyvalsObj) => {
+    setSelectedPropertyval(
+      propertyvalObj.valueString ?? propertyvalObj.propertyval?.value
+    );
     setPropertyval({
-      valueString: propertyvalObj.valueString,
+      valueString:
+        propertyvalObj.valueString ?? propertyvalObj.propertyval?.value,
       price: propertyvalObj.price ?? "",
       discount: propertyvalObj.discount ?? null,
       stock: propertyvalObj.stock ?? "",
@@ -190,16 +213,20 @@ const usePropertyvalsManagerLog = ({
     });
   };
 
-  const handleDeletePropertyval = (name: string, value: string) => {
-    const property = properties.find(
-      (property) => property.property.name === name
-    );
-    const filteredVals = property?.values.filter(
-      (propertyval) => propertyval.valueString !== value
+  const handleDeletePropertyval = (
+    property: ProductPropertiesObj,
+    value: string
+  ) => {
+    let filteredVals: ProductPropertyvalsObj[] = property?.values.filter(
+      (propertyval) => {
+        property.property.specifiedVals
+          ? propertyval.propertyval?.value !== value
+          : propertyval.valueString !== value;
+      }
     );
     setProperties((prev) => {
       return prev.map((item) =>
-        item.property.name === name
+        item.property.name === property.property.name
           ? { ...item, values: filteredVals ? filteredVals : [] }
           : item
       );

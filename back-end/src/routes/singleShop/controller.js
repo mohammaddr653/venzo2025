@@ -30,7 +30,7 @@ module.exports = new (class extends controller {
       req,
       res,
       allCategories,
-      product.categoryId
+      product?.categoryId
     ); //دریافت آرایه motherCategories
     return this.response({
       res,

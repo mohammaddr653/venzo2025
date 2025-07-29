@@ -1,7 +1,7 @@
 import usePropertyvalsManagerLog from "../../hooks/logics/usePropertyvalsManagerLog";
 import {
   ProductPropertiesObj,
-  PropertyvalsObj,
+  ProductPropertyvalsObj,
 } from "../../types/objects/properties";
 import DiscountManager from "./discountManager";
 import PropertyvalSuggestions from "./propertyvalSuggestions";
@@ -97,22 +97,26 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
       {propertyObj.values.length ? (
         <ul>
           {propertyObj.values.map(
-            (propertyvalObj: PropertyvalsObj, index: any) => {
+            (propertyvalObj: ProductPropertyvalsObj, index: any) => {
               return (
                 <li key={index} className="flex flex-row justify-between">
                   <div>
                     <button
                       className="bg-red-600"
-                      onClick={() =>
+                      onClick={() => {
                         handleDeletePropertyval(
-                          propertyObj.property.name,
-                          propertyvalObj.valueString
-                        )
-                      }
+                          propertyObj,
+                          propertyObj.property.specifiedVals
+                            ? propertyvalObj.propertyval?.value!
+                            : propertyvalObj.valueString!
+                        );
+                      }}
                     >
                       x
                     </button>
-                    {propertyvalObj.valueString}
+                    {propertyObj.property.specifiedVals
+                      ? propertyvalObj.propertyval?.value!
+                      : propertyvalObj.valueString!}
                   </div>
                   {propertyObj.selective ? (
                     <div className="flex flex-row gap-2">
