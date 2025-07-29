@@ -1,8 +1,5 @@
-import { useRef, useState } from "react";
 import LoadingButton from "./loadingButton";
-import axios from "axios";
 import { SERVER_API, SITE_KEY } from "../../../config";
-import callManager from "../../hooks/callManager";
 // @ts-ignore
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";

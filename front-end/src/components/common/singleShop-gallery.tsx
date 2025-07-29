@@ -1,4 +1,3 @@
-import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
 import Img from "./img";
 
 interface SingleShopGalleryProps {

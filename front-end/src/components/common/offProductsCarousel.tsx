@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import useLoadProducts from "../../hooks/useLoadProducts";
 import "../../assets/css/products-archive.css";
 import TitleCentral from "./title-central";
 import ProductCard from "./product-card";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
 import callManager from "../../hooks/callManager";
-import React, { useRef } from "react";
 import "../../assets/css/products-carousel.css";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,7 +14,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 // import required modules
-import { Pagination } from "swiper/modules";
 import SwiperButtonPrev from "./swiper-button-prev";
 import SwiperButtonNext from "./swiper-button-next";
 

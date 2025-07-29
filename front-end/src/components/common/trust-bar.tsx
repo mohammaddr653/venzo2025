@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import useLoadTrusts from "../../hooks/useLoadTrusts";
-import { SERVER_URL } from "../../../config";
 import Img from "./img";
 
 const TrustBar = () => {

@@ -1,5 +1,4 @@
 import PropertySelector from "./propertySelector";
-import TitleCentral from "./title-central";
 
 interface SelectivePropertiesGridProps {
   formData: any;

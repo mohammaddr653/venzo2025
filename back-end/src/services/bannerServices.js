@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-const Blog = require("../models/blog");
 const Banner = require("../models/banner");
 const serviceResponse = require("../helpers/serviceResponse");
 
