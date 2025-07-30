@@ -113,7 +113,12 @@ const shopAggregation = (categoryArr, filterConditions, skip, limit) => {
     {
       $project: {
         products: {
-          $concatArrays: ["$withProperties", "$withoutProperties"],
+          $sortArray: {
+            input: {
+              $concatArrays: ["$withProperties", "$withoutProperties"],
+            },
+            sortBy: { updatedAt: -1 },
+          },
         },
       },
     },

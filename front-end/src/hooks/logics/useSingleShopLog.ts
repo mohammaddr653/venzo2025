@@ -40,8 +40,8 @@ const useSingleShopLog = () => {
     );
     if (selectiveProperty) {
       setDefaultSelectiveProperty({
-        id: selectiveProperty?.values[0].value.toString(),
-        valueString: selectiveProperty?.values[0].valueString,
+        id: selectiveProperty?.values[0].propertyval._id.toString(),
+        valueString: selectiveProperty?.values[0].propertyval.value,
       });
     }
   }
@@ -53,7 +53,7 @@ const useSingleShopLog = () => {
     const selectedPropertyval = selectiveProperty.values.find(
       (propertyval: any) =>
         formData.selectedPropertyvalString.includes(
-          propertyval.value.toString()
+          propertyval.propertyval._id.toString()
         )
     );
     return selectedPropertyval;

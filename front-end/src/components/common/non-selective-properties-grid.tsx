@@ -20,7 +20,7 @@ const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
                     className="flex flex-col bg-neutral-200 rounded-md p-2"
                   >
                     <h5 className="text-neutral-500 text-size14">
-                      {property.nameString}
+                      {property.property.name}
                     </h5>
                     <ul className="flex flex-row gap-1">
                       {property.values.map((propertyval: any, index: any) => {
@@ -37,7 +37,11 @@ const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
                                 key={index}
                                 className="flex flex-row gap-0.5 items-center"
                               >
-                                <h4>{propertyval.valueString}</h4>
+                                <h4>
+                                  {propertyval.propertyval
+                                    ? propertyval.propertyval.value
+                                    : propertyval.valueString}
+                                </h4>
                               </li>
                             );
                           } else {
@@ -46,7 +50,11 @@ const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
                                 key={index}
                                 className="flex flex-row gap-0.5 items-center"
                               >
-                                <h4>{propertyval.valueString}</h4>
+                                <h4>
+                                  {propertyval.propertyval
+                                    ? propertyval.propertyval.value
+                                    : propertyval.valueString}
+                                </h4>
                                 <span>,</span>
                               </li>
                             );

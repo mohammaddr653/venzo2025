@@ -17,7 +17,7 @@ const SelectiveProperties = (props: SelectivePropertiesGridProps) => {
                 <div key={index} className=" flex flex-col gap-2">
                   <h4 className="flex flex-row gap-1">
                     <span className="font-weight300 text-neutral-900">
-                      {property.nameString} :
+                      {property.property.name} :
                     </span>
                     <span>{props.selectedPropertyvalString}</span>
                   </h4>
@@ -28,24 +28,24 @@ const SelectiveProperties = (props: SelectivePropertiesGridProps) => {
                           <input
                             type="radio"
                             name="selectiveProperty"
-                            value={propertyval.value.toString()}
+                            value={propertyval.propertyval._id.toString()}
                             className="hidden property-selector-input"
                             checked={
                               props.formData.selectedPropertyvalString ===
-                              propertyval.value
+                              propertyval.propertyval._id
                                 ? true
                                 : false
                             }
                             onChange={(e) =>
                               props.handleSelectProperty(
                                 e,
-                                propertyval.valueString
+                                propertyval.propertyval.value
                               )
                             }
                           />
                           <PropertySelector
                             propertyval={propertyval}
-                            type={property.type}
+                            type={property.property.type}
                             formData={props.formData}
                           ></PropertySelector>
                         </label>
