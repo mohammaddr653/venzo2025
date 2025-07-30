@@ -65,24 +65,6 @@ class PropertyServices {
 
     const transactionResult = await withTransaction(async (session) => {
       const updateOp = await property.save({ session });
-      const updateProducts = await Product.updateMany(
-        {
-          properties: {
-            $elemMatch: {
-              name: property._id,
-            },
-          },
-        },
-        {
-          $set: {
-            "properties.$[outer].nameString": req.body.name,
-          },
-        },
-        {
-          arrayFilters: [{ "outer.name": property._id }],
-          session,
-        }
-      );
       return serviceResponse(200, {});
     });
     return transactionResult;

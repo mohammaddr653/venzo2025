@@ -61,33 +61,6 @@ class PropertyvalServices {
     propertyval.value = req.body.value;
     const transactionResult = await withTransaction(async (session) => {
       const updateOp = await propertyval.save({ session });
-      //note:the next line can be a module it repeats in propertyServices too
-      const updateProducts = await Product.updateMany(
-        {
-          properties: {
-            $elemMatch: {
-              name: propertyval.propertyId,
-              values: {
-                $elemMatch: {
-                  value: propertyval._id,
-                },
-              },
-            },
-          },
-        },
-        {
-          $set: {
-            "properties.$[outer].values.$[inner].valueString": req.body.value,
-          },
-        },
-        {
-          arrayFilters: [
-            { "outer.name": propertyval.propertyId },
-            { "inner.value": propertyval._id },
-          ],
-          session,
-        }
-      );
       return serviceResponse(200, {});
     });
     return transactionResult;

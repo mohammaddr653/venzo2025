@@ -1,4 +1,5 @@
 //gets the products to show in shop page
+//note: I think this query is unnessesary . cause we can do it without aggregation . I can do it like this product.find({})...
 
 const shopAggregation = (categoryArr, filterConditions, skip, limit) => {
   const query = [
