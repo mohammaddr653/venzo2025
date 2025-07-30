@@ -4,6 +4,9 @@ const withTransaction = require("../helpers/withTransaction");
 const Cart = require("../models/cart");
 const getPriceAndStock = require("../helpers/getPriceAndStock");
 const serviceResponse = require("../helpers/serviceResponse");
+const shopAggregation = require("../helpers/queries/shopAggregation");
+const filtersAggregation = require("../helpers/queries/filtersAggregation");
+const filterConditionsQuery = require("../helpers/queries/filterConditionsQuery");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -94,139 +97,28 @@ class ProductServices {
     const limit = parseInt(req.query.limit) || 2;
     const page = parseInt(req.query.page) - 1 || 0;
     const skip = page * limit;
-    const rawAttributes = req.query?.attributes ?? {};
-    const filterConditions = Object.entries(rawAttributes).map(
-      ([name, values]) => {
-        const vals = Array.isArray(values) ? values : [values];
-        return {
-          properties: {
-            $elemMatch: {
-              nameString: name,
-              values: {
-                $elemMatch: {
-                  valueString: { $in: vals },
-                },
-              },
-            },
-          },
-        };
-      }
+    const filterConditions = filterConditionsQuery(req);
+    const result = await Product.aggregate(
+      shopAggregation(categoryArr, filterConditions, skip, limit)
     );
-    const result = await Product.aggregate([
-      { $match: { categoryId: { $in: categoryArr } } },
-      {
-        $facet: {
-          products: [
-            {
-              $match:
-                filterConditions.length > 0 ? { $and: filterConditions } : {},
-            },
-            { $skip: skip },
-            { $limit: limit },
-            {
-              $lookup: {
-                //شبیه به populate
-                from: "media",
-                localField: "img",
-                foreignField: "_id",
-                as: "img",
-              },
-            },
-            { $unwind: { path: "$img", preserveNullAndEmptyArrays: true } },
-            {
-              $unset: ["img.createdAt", "img.updatedAt", "img._id", "img.__v"],
-            },
-            {
-              $unwind: {
-                path: "$properties",
-                preserveNullAndEmptyArrays: true,
-              },
-            },
-            {
-              $lookup: {
-                from: "properties",
-                localField: "properties.property",
-                foreignField: "_id",
-                as: "property",
-              },
-            },
-            {
-              $unwind: {
-                path: "$properties.property",
-                preserveNullAndEmptyArrays: true,
-              },
-            },
-            {
-              $unwind: {
-                path: "$properties.values",
-                preserveNullAndEmptyArrays: true,
-              },
-            },
-            {
-              $lookup: {
-                from: "propertyvals",
-                localField: "properties.values.propertyval",
-                foreignField: "_id",
-                as: "propertyval",
-              },
-            },
-            {
-              $unwind: {
-                path: "$properties.values.propertyval",
-                preserveNullAndEmptyArrays: true,
-              },
-            },
-          ],
-          filters: [
-            { $unwind: "$properties" },
-            { $unwind: "$properties.values" },
-            {
-              $group: {
-                _id: "$properties.nameString",
-                values: {
-                  $addToSet: {
-                    $cond: [
-                      { $ifNull: ["$properties.values.hex", false] },
-                      {
-                        valueString: "$properties.values.valueString",
-                        hex: "$properties.values.hex",
-                      },
-                      {
-                        valueString: "$properties.values.valueString",
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-            {
-              $project: {
-                _id: 0,
-                values: {
-                  $sortArray: {
-                    input: "$values",
-                    sortBy: { valueString: 1 },
-                  },
-                },
-                nameString: "$_id",
-              },
-            },
-            { $sort: { nameString: 1 } },
-          ],
-          totalCount: [
-            {
-              $match:
-                filterConditions.length > 0 ? { $and: filterConditions } : {},
-            },
-            { $count: "count" },
-          ],
-        },
-      },
-    ]);
-    let filters = result[0].filters;
     let products = result[0].products;
-    let totalCount = result[0].totalCount;
-    return serviceResponse(200, { products, filters, totalCount });
+    return serviceResponse(200, products);
+  }
+
+  async getTotalCount(categoryArr, req, res) {
+    //تعداد محصولات مطابق با دسته بندی و فیلتر ها
+    const filterConditions = filterConditionsQuery(req);
+    const totalCount = await Product.find({
+      categoryId: { $in: categoryArr },
+      ...(filterConditions.length > 0 ? { $and: filterConditions } : {}),
+    }).countDocuments();
+    return serviceResponse(200, totalCount);
+  }
+
+  async getFiltersByCategoryString(categoryArr, req, res) {
+    //خواندن فیلتر ها مطابق با دسته بندی
+    const filters = await Product.aggregate(filtersAggregation(categoryArr));
+    return serviceResponse(200, filters);
   }
 
   async createProduct(req, res) {

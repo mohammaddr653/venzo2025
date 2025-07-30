@@ -23,12 +23,19 @@ const useShopLog = () => {
       false
     );
     setProducts([...response?.data.data.products]);
-    setFilters([...response?.data.data.filters]);
-    setChildCats([...response?.data.data.childCategories.slice(1)]);
-    setMotherCats([...response?.data.data.motherCategories.reverse()]);
     setTotalPagesCount(
       Math.ceil(response?.data.data.totalCount / appliedQueries.limit)
     );
+    setChildCats([...response?.data.data.childCategories.slice(1)]);
+    setMotherCats([...response?.data.data.motherCategories.reverse()]);
+  }
+
+  async function loadFilters() {
+    const response = await call(
+      axios.get(SERVER_API + `/shop/filters/${categoryId}`),
+      false
+    );
+    setFilters([...response?.data.data]);
   }
 
   useEffect(() => {
@@ -56,6 +63,12 @@ const useShopLog = () => {
       load();
     }
   }, [appliedQueries, categoryId]);
+
+  useEffect(() => {
+    if (categoryId) {
+      loadFilters();
+    }
+  }, [categoryId]);
 
   const handleFilterCheck = (e: ChangeEvent<HTMLInputElement>, name: any) => {
     let currentParams = new URLSearchParams(allParams);

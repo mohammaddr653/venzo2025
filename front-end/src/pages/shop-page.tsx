@@ -42,7 +42,7 @@ const ShopPage = () => {
                 {filters.map((item: any, index: any) => {
                   return (
                     <form className="flex flex-col gap-2 p-4" key={index}>
-                      <h4 className="font-weight300">{item.nameString}</h4>
+                      <h4 className="font-weight300">{item.property.name}</h4>
                       <div className="flex flex-col gap-1 ms-1">
                         {item.values.length
                           ? item.values.map((val: any, index: any) => {
@@ -54,28 +54,28 @@ const ShopPage = () => {
                                   <input
                                     type="checkbox"
                                     name="selective"
-                                    value={val.valueString}
+                                    value={val.propertyval?._id}
                                     checked={
                                       appliedQueries[
-                                        `attributes[${item.nameString}]`
-                                      ]?.includes(val.valueString)
+                                        `attributes[${item.property._id}]`
+                                      ]?.includes(val.propertyval?._id)
                                         ? true
                                         : false
                                     }
                                     onChange={(e) =>
-                                      handleFilterCheck(e, item.nameString)
+                                      handleFilterCheck(e, item.property._id)
                                     }
                                   />
-                                  {val.hex ? (
+                                  {val.propertyval?.hex ? (
                                     <span
                                       style={{
                                         backgroundColor:
-                                          "#" + val.hex.toString(),
+                                          "#" + val.propertyval.hex.toString(),
                                       }}
                                       className="w-5 h-5 aspect-square rounded-full"
                                     ></span>
                                   ) : (
-                                    val.valueString
+                                    val.propertyval.value
                                   )}
                                 </label>
                               );

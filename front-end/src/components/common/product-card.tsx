@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import PriceUnit from "./priceUnit";
 import Offpercent from "./offpercent";
 import { createPriceAndStockObj } from "../../helpers/createPriceAndStockObj";
+import {
+  ProductPropertiesObj,
+  ProductPropertyvalsObj,
+} from "../../types/objects/properties";
 
 interface ProductCardProps {
   product: any;
@@ -53,13 +57,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="flex flex-col gap-1.5 h-full">
       <div className="flex flex-row gap-1 h-2.5">
         {product?.properties
-          .find((property: any) => property.type === "color")
-          ?.values.map((color: any, index: any) => {
-            return color.hex ? (
+          .find(
+            (property: ProductPropertiesObj) =>
+              property.property.type === "color"
+          )
+          ?.values.map((color: ProductPropertyvalsObj, index: any) => {
+            return color.propertyval?.hex ? (
               <span
                 key={index}
                 style={{
-                  backgroundColor: "#" + color.hex.toString(),
+                  backgroundColor: "#" + color.propertyval.hex.toString(),
                 }}
                 className="h-full aspect-square rounded-full border border-neutral-300"
               ></span>
