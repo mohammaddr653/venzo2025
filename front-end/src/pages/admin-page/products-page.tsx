@@ -5,6 +5,7 @@ import Library from "../../components/common/library";
 import Img from "../../components/common/img";
 import DiscountManager from "../../components/common/discountManager";
 import useProductsPageLog from "../../hooks/logics/useProductsPageLog";
+import { TMCE_API_KEY } from "../../../config";
 const ProductsPage = () => {
   const {
     handleSubmit,
@@ -77,7 +78,7 @@ const ProductsPage = () => {
 
           {/* note:need to be modify for uploads */}
           <Editor
-            apiKey="ajfufhhbmu74o5t6nn4o9rj4ba4wwrhp3gxd6lk3k668y54x"
+            apiKey={TMCE_API_KEY}
             onInit={(_evt, editor) => (editorRef.current = editor)}
             onEditorChange={(content) =>
               setFormData({ ...formData, description: content })

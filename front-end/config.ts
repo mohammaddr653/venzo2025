@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 const mode = import.meta.env.VITE_NODE_ENV;
 const site_key = import.meta.env.VITE_SITE_KEY;
+const tinymce_key = import.meta.env.VITE_TMCE_API_KEY;
 
 export const SERVER_URL =
   mode === "development"
@@ -24,3 +25,5 @@ export const DEFAULT_AVATAR =
 export const Logo = SERVER_URL + "/public/static-images/logo.png";
 
 export const SITE_KEY = site_key;
+
+export const TMCE_API_KEY = tinymce_key;
