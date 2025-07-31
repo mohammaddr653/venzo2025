@@ -11,6 +11,7 @@ const ProductsPage = () => {
     formData,
     setFormData,
     handleChange,
+    discount,
     setDiscount,
     selectionList,
     editorRef,
@@ -53,7 +54,7 @@ const ProductsPage = () => {
             onChange={handleChange}
           />
           <br />
-          <DiscountManager setDiscount={setDiscount}></DiscountManager>
+          <DiscountManager discount={discount} setDiscount={setDiscount}></DiscountManager>
           <br />
           <input
             type="text"

@@ -34,7 +34,7 @@ const useProductsPageLog = () => {
     img: "",
   });
   const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
-  const [discount, setDiscount] = useState<any>();
+  const [discount, setDiscount] = useState<any>(null);
 
   const editorRef = useRef<any>(null);
 
@@ -85,6 +85,7 @@ const useProductsPageLog = () => {
       img: "",
     });
     setSelectedImgs([]);
+    setDiscount(null);
     setProperties([]);
     loadCategories();
     loadProducts();
@@ -139,6 +140,7 @@ const useProductsPageLog = () => {
     formData,
     setFormData,
     handleChange,
+    discount,
     setDiscount,
     selectionList,
     editorRef,

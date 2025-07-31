@@ -193,6 +193,7 @@ const usePropertyvalsManagerLog = ({
       suggestions: [],
     });
     setSelectedPropertyval("");
+    setDiscount(null);
   }
 
   useEffect(() => {
@@ -207,10 +208,11 @@ const usePropertyvalsManagerLog = ({
       valueString:
         propertyvalObj.valueString ?? propertyvalObj.propertyval?.value,
       price: propertyvalObj.price ?? "",
-      discount: propertyvalObj.discount ?? null,
+      discount: null,
       stock: propertyvalObj.stock ?? "",
       suggestions: [],
     });
+    if (propertyvalObj.discount) setDiscount({...propertyvalObj.discount});
   };
 
   const handleDeletePropertyval = (
@@ -240,6 +242,7 @@ const usePropertyvalsManagerLog = ({
     propertyval,
     setPropertyval,
     handleSelectiveChange,
+    discount,
     setDiscount,
     handleUpdatePropertyval,
   };

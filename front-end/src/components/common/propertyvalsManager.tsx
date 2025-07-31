@@ -25,6 +25,7 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
     propertyval,
     setPropertyval,
     handleSelectiveChange,
+    discount,
     setDiscount,
     handleUpdatePropertyval,
   } = usePropertyvalsManagerLog({
@@ -70,7 +71,10 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
               className="border"
               autoComplete="off"
             />
-            <DiscountManager setDiscount={setDiscount}></DiscountManager>
+            <DiscountManager
+              discount={discount}
+              setDiscount={setDiscount}
+            ></DiscountManager>
             <input
               type="text"
               placeholder="موجودی انبار"
@@ -134,7 +138,10 @@ const PropertyvalsManager = (props: PropertyvalsManagerProps) => {
                     </div>
                   ) : null}
                   <button
-                    onClick={() => handleUpdatePropertyval(propertyvalObj)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleUpdatePropertyval(propertyvalObj);
+                    }}
                   >
                     ویرایش
                   </button>

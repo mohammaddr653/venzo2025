@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useUserStore } from "../../store";
-import callManager from "../../hooks/callManager";
 import { discountObj } from "../../types/objects/discountObj";
 
 interface DiscountManagerProps {
+  discount: discountObj;
   setDiscount: React.Dispatch<React.SetStateAction<discountObj>>;
 }
 
-const DiscountManager = ({ setDiscount }: DiscountManagerProps) => {
+const DiscountManager = ({ discount, setDiscount }: DiscountManagerProps) => {
   const [discountObj, setDiscountObj] = useState<discountObj>({
     offer: "",
     startedAt: "",
@@ -32,7 +31,7 @@ const DiscountManager = ({ setDiscount }: DiscountManagerProps) => {
 
   return (
     <div>
-      <h1>اعمال تخفیف</h1>
+      <h1>مدیریت تخفیف ها</h1>
       <div className="flex-column bg-green-500">
         <input
           type="text"
@@ -47,9 +46,17 @@ const DiscountManager = ({ setDiscount }: DiscountManagerProps) => {
         <button
           onClick={handleSaveDiscount}
           disabled={discountObj.offer ? false : true}
+          className="border"
         >
           اعمال تخفیف
         </button>
+        {discount ? (
+          <div className="bg-violet-500 flex flex-col">
+            <span>{`قیمت در تخفیف : ${discount.offer}`}</span>
+            <span>{`تاریخ شروع : ${discount.startedAt ?? ""}`}</span>
+            <span>{`تاریخ پایان : ${discount.expiredAt ?? ""}`}</span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
