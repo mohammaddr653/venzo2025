@@ -13,6 +13,7 @@ import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 import Img from "../../components/common/img";
 import Library from "../../components/common/library";
 import RichTextEditor from "../../components/common/rich-text-editor";
+import DiscountManager from "../../components/common/discountManager";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();
@@ -27,6 +28,7 @@ const OneProductPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
+    discount: "",
     stock: "",
     categoryId: "",
     description: "",
@@ -37,6 +39,16 @@ const OneProductPage = () => {
   const { state } = useLocation();
   const { productId } = state || null;
   const editorRef = useRef<any>(null);
+  const [discount, setDiscount] = useState<any>(null);
+
+  useEffect(() => {
+    setFormData((prev: any) => {
+      return {
+        ...prev,
+        discount: discount ? JSON.stringify(discount) : "",
+      };
+    });
+  }, [discount]);
 
   useEffect(() => {
     if (selectedImgs.length) {
@@ -70,6 +82,7 @@ const OneProductPage = () => {
       setSelectedImgs((prev: any) => {
         return [...prev, matchedProduct.img];
       });
+    if (matchedProduct.discount) setDiscount({ ...matchedProduct.discount });
   }
 
   function refresh() {
@@ -139,6 +152,12 @@ const OneProductPage = () => {
             value={formData?.price}
             onChange={handleChange}
           />
+          <br />
+          <DiscountManager
+            discount={discount}
+            setDiscount={setDiscount}
+          ></DiscountManager>
+          <br />
           <input
             type="text"
             className="border rounded p-3"

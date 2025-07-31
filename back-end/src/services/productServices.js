@@ -144,7 +144,8 @@ class ProductServices {
     const product = await Product.findById(req.params.productId);
     product.name = req.body.name;
     product.price = req.body.price;
-    product.discount = req.body.discount || null;
+    product.discount =
+      req.body.discount === "" ? null : JSON.parse(req.body.discount);
     product.stock = req.body.stock;
     product.categoryId = req.body.categoryId === "" ? null : product.categoryId;
     product.description = req.body.description;
@@ -217,8 +218,6 @@ class ProductServices {
         path: "properties.values.propertyval",
         model: "Propertyval",
       });
-;
-
     const productsWithCounts = await Promise.all(
       products.map(async (product) => {
         const productInfo = cart.reservedProducts.find((p) =>
