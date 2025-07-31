@@ -9,6 +9,7 @@ const shopAggregation = (categoryArr, filterConditions, skip, limit) => {
         ...(filterConditions.length ? { $and: filterConditions } : {}),
       },
     },
+    { $sort: { updatedAt: -1 } },
     { $skip: skip },
     { $limit: limit },
     {

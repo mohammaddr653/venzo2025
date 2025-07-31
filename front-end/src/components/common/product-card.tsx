@@ -8,6 +8,7 @@ import {
   ProductPropertiesObj,
   ProductPropertyvalsObj,
 } from "../../types/objects/properties";
+import CartPlusSvg from "../icons/cart-plus-svgrepo-com";
 
 interface ProductCardProps {
   product: any;
@@ -92,15 +93,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <div className="relative flex flex-col justify-between items-center gap-4 min-h-[150px] py-4 z-10">
               <p className="px-4">{product?.name}</p>
               <div className="mt-auto px-4 flex flex-row gap-1 w-full justify-between items-end flex-nowrap">
-                <button
-                  className="add-to-card border"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("clicked");
-                  }}
-                >
-                  خرید
-                </button>
+                <CartPlusSvg color={"#525252"}></CartPlusSvg>
                 <div className="flex flex-col items-end">
                   {priceAndStock.discount ? (
                     <>
@@ -134,7 +127,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               src="/images/icons/jk4377d2c3969965e3b8e7e7dcdfc0be536.png"
               alt=""
               width={150}
-              className="pattern-part object-cover absolute bottom-0 left-0 opacity-[0.05] z-0"
+              className="pattern-part object-cover absolute bottom-0 right-0 opacity-[0.05] z-0"
             />
           </div>
         </div>
