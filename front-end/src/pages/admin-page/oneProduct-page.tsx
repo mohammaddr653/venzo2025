@@ -10,6 +10,8 @@ import useLoadCategories from "../../hooks/useLoadCategories";
 import { ProductPropertiesObj } from "../../types/objects/properties";
 import PropertiesManager from "../../components/common/propertiesManager";
 import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
+import Img from "../../components/common/img";
+import Library from "../../components/common/library";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();
@@ -18,6 +20,9 @@ const OneProductPage = () => {
   const { categories, loadCategories } = useLoadCategories();
   const { propertiesAndVals, loadPropertiesAndVals } =
     useLoadPropertiesAndVals();
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState<any>([]);
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -30,6 +35,18 @@ const OneProductPage = () => {
   const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
   const { state } = useLocation();
   const { productId } = state || null;
+
+  useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, img: selectedImgs[0]._id };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, img: "" };
+      });
+    }
+  }, [selectedImgs]);
 
   async function loadOneProduct() {
     const response = await call(
@@ -45,9 +62,12 @@ const OneProductPage = () => {
       categoryId: matchedProduct.categoryId ? matchedProduct.categoryId : "",
       description: matchedProduct.description,
       properties: matchedProduct.properties,
-      img: matchedProduct.img,
     });
     setProperties([...matchedProduct.properties]);
+    if (matchedProduct.img)
+      setSelectedImgs((prev: any) => {
+        return [...prev, matchedProduct.img];
+      });
   }
 
   function refresh() {
@@ -143,14 +163,31 @@ const OneProductPage = () => {
             id="default"
             className="border"
           ></textarea>
-          <input
-            type="text"
-            placeholder="img"
-            name="img"
-            value={formData.img}
-            className="border"
-            onChange={handleChange}
-          />
+          <div className="flex flex-row items-center">
+            <Img
+              pic={selectedImgs[0]}
+              sizes={"500px"}
+              className={"aspect-square object-cover"}
+              width={100}
+            ></Img>
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر محصول
+            </p>
+            {libShow ? (
+              <Library
+                libShow={libShow}
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
+
           <br />
 
           <LoadingButton loading={loading}>بروزرسانی</LoadingButton>
