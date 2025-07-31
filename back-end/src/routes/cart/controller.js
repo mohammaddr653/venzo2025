@@ -1,6 +1,5 @@
 //controller
 const debug = require("debug")("app");
-const mongoose = require("mongoose");
 const cartServices = require("../../services/cartServices");
 const productServices = require("../../services/productServices");
 const controller = require("./../controller");
@@ -42,8 +41,9 @@ module.exports = new (class extends controller {
   async addToCart(req, res) {
     const { data: cart } = await cartServices.seeOneCart(req, res);
     const { data: existing } = await cartServices.existOrNot(req, res, cart);
+    //تعدادی که از این محصول در سبد خرید موجود داریم
+
     if (!existing) {
-      //تعدادی که از این محصول در سبد خرید موجود داریم
       const stock = await productServices.stockCheck(
         req,
         res,

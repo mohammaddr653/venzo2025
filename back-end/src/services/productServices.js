@@ -210,7 +210,14 @@ class ProductServices {
     const productIds = cart.reservedProducts.map((item) =>
       item.productId.toString()
     );
-    const products = await Product.find({ _id: { $in: productIds } });
+    const products = await Product.find({ _id: { $in: productIds } })
+      .populate("img")
+      .populate({ path: "properties.property", model: "Property" })
+      .populate({
+        path: "properties.values.propertyval",
+        model: "Propertyval",
+      });
+;
 
     const productsWithCounts = await Promise.all(
       products.map(async (product) => {

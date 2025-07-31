@@ -8,12 +8,10 @@ const getPriceAndStock = (selectedPropertyvalString, product) => {
     const selectiveProperty = product.properties.find(
       (property) => property.selective
     );
-    if (!selectiveProperty) return;
     const selectedPropertyval = selectiveProperty.values.find((propertyval) =>
-      selectedPropertyvalString.includes(propertyval.value.toString())
+      selectedPropertyvalString.includes(propertyval.propertyval._id.toString())
     );
-    if (!selectedPropertyval) return;
-    selectionString = selectedPropertyval.valueString;
+    selectionString = selectedPropertyval?.propertyval?.value;
     price = selectedPropertyval.price;
     stock = selectedPropertyval.stock;
   }
