@@ -25,6 +25,12 @@ const productSchema = new mongoose.Schema({
     ref: "Media",
     default: null,
   },
+  gallery: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Media",
+    },
+  ],
 });
 
 productSchema.plugin(timestamp);

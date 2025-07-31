@@ -18,6 +18,8 @@ const useProductsPageLog = () => {
     useLoadPropertiesAndVals();
   const [libShow, setLibShow] = useState(false);
   const [selectedImgs, setSelectedImgs] = useState<any>([]);
+  const [galleryLibShow, setGalleryLibShow] = useState(false);
+  const [selectedGalleryImgs, setSelectedGalleryImgs] = useState<any>([]);
   const { products, loadProducts } = useLoadProducts();
   const { categories, loadCategories } = useLoadCategories();
   const selectionList = useRef<HTMLSelectElement>(null);
@@ -32,6 +34,7 @@ const useProductsPageLog = () => {
     description: "",
     properties: [],
     img: "",
+    gallery: [],
   });
   const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
   const [discount, setDiscount] = useState<any>(null);
@@ -70,6 +73,16 @@ const useProductsPageLog = () => {
   }, [selectedImgs]);
 
   useEffect(() => {
+    const gallery = selectedGalleryImgs.map((img: any) => img._id);
+    setFormData((prev: any) => {
+      return {
+        ...prev,
+        gallery: JSON.stringify([...gallery]),
+      };
+    });
+  }, [selectedGalleryImgs]);
+
+  useEffect(() => {
     buildSelectionList(selectionList, categories, "", "بدون دسته بندی", null);
   }, [categories]);
 
@@ -83,8 +96,10 @@ const useProductsPageLog = () => {
       description: "",
       properties: [],
       img: "",
+      gallery: [],
     });
     setSelectedImgs([]);
+    setSelectedGalleryImgs([]);
     setDiscount(null);
     setProperties([]);
     loadCategories();
@@ -146,8 +161,12 @@ const useProductsPageLog = () => {
     editorRef,
     selectedImgs,
     setSelectedImgs,
+    selectedGalleryImgs,
+    setSelectedGalleryImgs,
     libShow,
     setLibShow,
+    galleryLibShow,
+    setGalleryLibShow,
     properties,
     loading,
     user,

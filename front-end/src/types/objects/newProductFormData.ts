@@ -9,4 +9,5 @@ export interface NewProductFormData {
   description: string;
   properties: ProductPropertiesObj[];
   img: string;
+  gallery: string[];
 }

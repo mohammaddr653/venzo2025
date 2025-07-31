@@ -4,7 +4,6 @@ import { SERVER_URL } from "../../../config";
 import Img from "./img";
 
 interface LibraryProps {
-  libShow: boolean;
   setLibShow: any;
   selectedImgs: any; //useState with an empty array as intial val
   setSelectedImgs: any;

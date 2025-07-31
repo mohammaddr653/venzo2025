@@ -17,8 +17,12 @@ const ProductsPage = () => {
     editorRef,
     selectedImgs,
     setSelectedImgs,
+    selectedGalleryImgs,
+    setSelectedGalleryImgs,
     libShow,
     setLibShow,
+    galleryLibShow,
+    setGalleryLibShow,
     properties,
     loading,
     user,
@@ -54,7 +58,10 @@ const ProductsPage = () => {
             onChange={handleChange}
           />
           <br />
-          <DiscountManager discount={discount} setDiscount={setDiscount}></DiscountManager>
+          <DiscountManager
+            discount={discount}
+            setDiscount={setDiscount}
+          ></DiscountManager>
           <br />
           <input
             type="text"
@@ -99,10 +106,37 @@ const ProductsPage = () => {
             </p>
             {libShow ? (
               <Library
-                libShow={libShow}
                 setLibShow={setLibShow}
                 selectedImgs={selectedImgs}
                 setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
+          <div className="flex flex-row items-center">
+            {selectedGalleryImgs.map((img: any, index: any) => {
+              return (
+                <Img
+                  pic={img}
+                  sizes={"500px"}
+                  className={"aspect-square object-cover"}
+                  width={100}
+                  key={index}
+                ></Img>
+              );
+            })}
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setGalleryLibShow(true);
+              }}
+            >
+              گالری تصاویر محصول
+            </p>
+            {galleryLibShow ? (
+              <Library
+                setLibShow={setGalleryLibShow}
+                selectedImgs={selectedGalleryImgs}
+                setSelectedImgs={setSelectedGalleryImgs}
               ></Library>
             ) : null}
           </div>
