@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../store";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { SERVER_API, TMCE_API_KEY } from "../../../config";
+import { SERVER_API } from "../../../config";
 import callManager from "../../hooks/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
@@ -12,7 +12,7 @@ import PropertiesManager from "../../components/common/propertiesManager";
 import useLoadPropertiesAndVals from "../../hooks/useLoadPropertiesAndVals";
 import Img from "../../components/common/img";
 import Library from "../../components/common/library";
-import { Editor } from "@tinymce/tinymce-react";
+import RichTextEditor from "../../components/common/rich-text-editor";
 
 const OneProductPage = () => {
   const { call, loading } = callManager();
@@ -158,45 +158,11 @@ const OneProductPage = () => {
             {/* dynamic */}
           </select>
           {/* note:need to be modify for uploads */}
-          <Editor
-            apiKey={TMCE_API_KEY}
-            onInit={(_evt, editor) => (editorRef.current = editor)}
-            onEditorChange={(content) =>
-              setFormData({ ...formData, description: content })
-            }
-            value={formData.description}
-            init={{
-              height: 500,
-              menubar: false,
-              plugins: [
-                "advlist",
-                "autolink",
-                "lists",
-                "link",
-                "image",
-                "charmap",
-                "preview",
-                "anchor",
-                "searchreplace",
-                "visualblocks",
-                "code",
-                "fullscreen",
-                "insertdatetime",
-                "media",
-                "table",
-                "code",
-                "help",
-                "wordcount",
-              ],
-              toolbar:
-                "undo redo | blocks | " +
-                "bold italic forecolor | alignleft aligncenter " +
-                "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat | help",
-              content_style:
-                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-            }}
-          />
+          <RichTextEditor
+            editorRef={editorRef}
+            formData={formData}
+            setFormData={setFormData}
+          ></RichTextEditor>
           <div className="flex flex-row items-center">
             <Img
               pic={selectedImgs[0]}

@@ -1,11 +1,10 @@
 import LoadingButton from "../../components/common/loadingButton";
-import { Editor } from "@tinymce/tinymce-react";
 import PropertiesManager from "../../components/common/propertiesManager";
 import Library from "../../components/common/library";
 import Img from "../../components/common/img";
 import DiscountManager from "../../components/common/discountManager";
 import useProductsPageLog from "../../hooks/logics/useProductsPageLog";
-import { TMCE_API_KEY } from "../../../config";
+import RichTextEditor from "../../components/common/rich-text-editor";
 const ProductsPage = () => {
   const {
     handleSubmit,
@@ -77,45 +76,11 @@ const ProductsPage = () => {
           </select>
 
           {/* note:need to be modify for uploads */}
-          <Editor
-            apiKey={TMCE_API_KEY}
-            onInit={(_evt, editor) => (editorRef.current = editor)}
-            onEditorChange={(content) =>
-              setFormData({ ...formData, description: content })
-            }
-            value={formData.description}
-            init={{
-              height: 500,
-              menubar: false,
-              plugins: [
-                "advlist",
-                "autolink",
-                "lists",
-                "link",
-                "image",
-                "charmap",
-                "preview",
-                "anchor",
-                "searchreplace",
-                "visualblocks",
-                "code",
-                "fullscreen",
-                "insertdatetime",
-                "media",
-                "table",
-                "code",
-                "help",
-                "wordcount",
-              ],
-              toolbar:
-                "undo redo | blocks | " +
-                "bold italic forecolor | alignleft aligncenter " +
-                "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat | help",
-              content_style:
-                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-            }}
-          />
+          <RichTextEditor
+            editorRef={editorRef}
+            formData={formData}
+            setFormData={setFormData}
+          ></RichTextEditor>
           <div className="flex flex-row items-center">
             <Img
               pic={selectedImgs[0]}
