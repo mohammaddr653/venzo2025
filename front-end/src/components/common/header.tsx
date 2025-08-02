@@ -37,7 +37,7 @@ const Header = (props: HeaderProps) => {
 
   return (
     <>
-      <header className="fixed">
+      <header className="fixed z-50">
         {isScrolled ? <GoUp></GoUp> : null}
         <div
           id="header-container"

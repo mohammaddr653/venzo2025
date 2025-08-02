@@ -2,7 +2,6 @@ header {
   top: 0;
   width: 100%;
   max-width: inherit;
-  z-index: 1000;
 }
 div#header-container nav ul li div h4 {
   cursor: pointer;

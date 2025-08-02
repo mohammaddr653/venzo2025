@@ -29,13 +29,13 @@ const SingleShopPage = () => {
             <BreadCrumb motherCats={motherCats}></BreadCrumb>
           ) : null}
           <div className="flex flex-col md:flex-row gap-10 px-5 md:px-20">
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-4 flex-6">
               <div className="flex flex-col gap-2">
                 <i className="bi bi-heart text-size24"></i>
               </div>
               <SingleShopGallery product={product}></SingleShopGallery>
             </div>
-            <div className=" w-full flex flex-col gap-10">
+            <div className=" flex-11 w-full flex flex-col gap-10">
               <TitleRight title={product?.name}></TitleRight>
               <NonSelectivePropertiesGrid
                 product={product}

@@ -24,6 +24,7 @@ class ProductServices {
     // خواندن یک محصول از دیتابیس
     const findOp = await Product.findById(req.params.productId)
       .populate("img")
+      .populate("gallery")
       .populate({ path: "properties.property", model: "Property" })
       .populate({
         path: "properties.values.propertyval",
