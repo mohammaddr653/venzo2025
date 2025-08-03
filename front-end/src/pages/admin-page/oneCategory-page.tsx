@@ -18,6 +18,7 @@ const OneCategoryPage = () => {
     type: "",
     link: "",
     img: "",
+    display: "",
   });
   const { state } = useLocation();
   const { categoryId, categories } = state || null;
@@ -59,6 +60,7 @@ const OneCategoryPage = () => {
       motherId: matchedCategory.motherId,
       type: matchedCategory.type,
       link: matchedCategory.link,
+      display: matchedCategory.display,
     });
     if (matchedCategory.img)
       setSelectedImgs((prev: any) => {
@@ -144,6 +146,18 @@ const OneCategoryPage = () => {
             className="border"
             onChange={handleChange}
           />
+          <br />
+          <p>نمایش</p>
+          <select
+            name="display"
+            value={formData.display}
+            onChange={handleChange}
+            className="border"
+          >
+            <option value="ordinary">عادی</option>
+            <option value="mega-menu">مگامنو</option>
+          </select>
+          <br />
           <div className="flex flex-row items-center">
             <Img
               pic={selectedImgs[0]}

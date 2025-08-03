@@ -26,6 +26,7 @@ const CategoriesPage = () => {
     type: "",
     link: "",
     img: "",
+    display: "ordinary",
   });
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const CategoriesPage = () => {
       type: "",
       link: "",
       img: "",
+      display: "ordinary",
     });
     setSelectedImgs([]);
     loadCategories();
@@ -66,9 +68,7 @@ const CategoriesPage = () => {
 
   //نوع دسته بندی مادر بطور پیشفرض به عنوان نوع دسته بندی جدید قرار میگیرد
   useEffect(() => {
-    const motherCat = categories.find(
-      (item) => item._id === formData.motherId
-    );
+    const motherCat = categories.find((item) => item._id === formData.motherId);
     if (motherCat) setFormData({ ...formData, type: motherCat.type });
   }, [formData.motherId]);
 
@@ -149,6 +149,18 @@ const CategoriesPage = () => {
             className="border"
             onChange={handleChange}
           />
+          <br />
+          <p>نمایش</p>
+          <select
+            name="display"
+            value={formData.display}
+            onChange={handleChange}
+            className="border"
+          >
+            <option value="ordinary">عادی</option>
+            <option value="mega-menu">مگامنو</option>
+          </select>
+          <br />
           <div className="flex flex-row items-center">
             <Img
               pic={selectedImgs[0]}
