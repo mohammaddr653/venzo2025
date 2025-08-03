@@ -23,6 +23,7 @@ class CategoriesServices {
       type: req.body.type,
       link: req.body.link,
       img: req.body.img === "" ? null : req.body.img,
+      display: req.body.display,
     });
     if (req.body.motherId) {
       const exist = await Category.findById(req.body.motherId);
@@ -84,6 +85,7 @@ class CategoriesServices {
       category.type = req.body.type;
       category.link = req.body.link;
       category.img = req.body.img === "" ? null : req.body.img;
+      category.display = req.body.display;
 
       if (req.body.motherId !== category.id) {
         if (req.body.motherId !== "root") {

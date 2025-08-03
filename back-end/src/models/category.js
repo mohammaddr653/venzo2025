@@ -34,6 +34,12 @@ const categorySchema = new mongoose.Schema({
     ref: "Media",
     default: null,
   },
+  display: {
+    type: String,
+    enum: ["mega-menu", "ordinary"],
+    required: true,
+    default: "ordinary",
+  },
 });
 categorySchema.plugin(timestamp);
 module.exports = mongoose.model("Category", categorySchema);
