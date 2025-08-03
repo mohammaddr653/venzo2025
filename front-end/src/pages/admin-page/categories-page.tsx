@@ -64,6 +64,14 @@ const CategoriesPage = () => {
     refresh();
   }, []);
 
+  //نوع دسته بندی مادر بطور پیشفرض به عنوان نوع دسته بندی جدید قرار میگیرد
+  useEffect(() => {
+    const motherCat = categories.find(
+      (item) => item._id === formData.motherId
+    );
+    if (motherCat) setFormData({ ...formData, type: motherCat.type });
+  }, [formData.motherId]);
+
   useEffect(() => {
     buildList(list, categories, handleDelete, handleUpdate, false, null);
     buildSelectionList(selectionList, categories, "", "دسته بندی مادر", null);
