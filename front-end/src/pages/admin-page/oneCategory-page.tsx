@@ -6,6 +6,8 @@ import { SERVER_API } from "../../../config";
 import callManager from "../../hooks/callManager";
 import LoadingButton from "../../components/common/loadingButton";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
+import Library from "../../components/common/library";
+import Img from "../../components/common/img";
 
 const OneCategoryPage = () => {
   const { call, loading } = callManager();
@@ -15,10 +17,25 @@ const OneCategoryPage = () => {
     motherId: "",
     type: "",
     link: "",
+    img: "",
   });
   const { state } = useLocation();
   const { categoryId, categories } = state || null;
   const selectionList = useRef<HTMLSelectElement>(null);
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState<any>([]);
+
+  useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, img: selectedImgs[0]._id };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, img: "" };
+      });
+    }
+  }, [selectedImgs]);
 
   useEffect(() => {
     buildSelectionList(
@@ -43,6 +60,10 @@ const OneCategoryPage = () => {
       type: matchedCategory.type,
       link: matchedCategory.link,
     });
+    if (matchedCategory.img)
+      setSelectedImgs((prev: any) => {
+        return [...prev, matchedCategory.img];
+      });
   }
   useEffect(() => {
     loadOneCategory();
@@ -123,6 +144,29 @@ const OneCategoryPage = () => {
             className="border"
             onChange={handleChange}
           />
+          <div className="flex flex-row items-center">
+            <Img
+              pic={selectedImgs[0]}
+              sizes={"500px"}
+              className={"aspect-square object-cover"}
+              width={100}
+            ></Img>
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر محصول
+            </p>
+            {libShow ? (
+              <Library
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
 
           <LoadingButton loading={loading}>بروزرسانی</LoadingButton>
         </form>

@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { buildSelectionList } from "../../helpers/buildSelectionList";
 import useLoadCategories from "../../hooks/useLoadCategories";
 import { buildList } from "../../helpers/buildList";
+import Library from "../../components/common/library";
+import Img from "../../components/common/img";
 
 const CategoriesPage = () => {
   const { call, loading } = callManager();
@@ -16,12 +18,27 @@ const CategoriesPage = () => {
   const selectionList = useRef<HTMLSelectElement>(null);
   const { user } = useUserStore();
   const navigate = useNavigate();
+  const [libShow, setLibShow] = useState(false);
+  const [selectedImgs, setSelectedImgs] = useState<any>([]);
   const [formData, setFormData] = useState({
     name: "",
     motherId: "",
     type: "",
     link: "",
+    img: "",
   });
+
+  useEffect(() => {
+    if (selectedImgs.length) {
+      setFormData((prev: any) => {
+        return { ...prev, img: selectedImgs[0]._id };
+      });
+    } else {
+      setFormData((prev: any) => {
+        return { ...prev, img: "" };
+      });
+    }
+  }, [selectedImgs]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -37,9 +54,12 @@ const CategoriesPage = () => {
       motherId: "",
       type: "",
       link: "",
+      img: "",
     });
+    setSelectedImgs([]);
     loadCategories();
   }
+
   useEffect(() => {
     refresh();
   }, []);
@@ -121,6 +141,30 @@ const CategoriesPage = () => {
             className="border"
             onChange={handleChange}
           />
+          <div className="flex flex-row items-center">
+            <Img
+              pic={selectedImgs[0]}
+              sizes={"500px"}
+              className={"aspect-square object-cover"}
+              width={100}
+            ></Img>
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setLibShow(true);
+              }}
+            >
+              افزودن تصویر دسته بندی
+            </p>
+            {libShow ? (
+              <Library
+                setLibShow={setLibShow}
+                selectedImgs={selectedImgs}
+                setSelectedImgs={setSelectedImgs}
+              ></Library>
+            ) : null}
+          </div>
+
           <LoadingButton loading={loading}>ساخت دسته بندی</LoadingButton>
         </form>
       </div>

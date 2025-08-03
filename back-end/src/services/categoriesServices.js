@@ -5,12 +5,14 @@ const serviceResponse = require("../helpers/serviceResponse");
 class CategoriesServices {
   async getAllCategories(req, res) {
     //خواندن تمام دسته بندی ها از دیتابیس
-    const findOp = await Category.find({});
+    const findOp = await Category.find({}).populate("img");
     return serviceResponse(200, findOp);
   }
   async seeOneCategory(req, res) {
     // خواندن یک دسته بندی از دیتابیس
-    const findOp = await Category.findById(req.params.categoryId);
+    const findOp = await Category.findById(req.params.categoryId).populate(
+      "img"
+    );
     return serviceResponse(200, findOp);
   }
 
@@ -20,6 +22,7 @@ class CategoriesServices {
       name: req.body.name,
       type: req.body.type,
       link: req.body.link,
+      img: req.body.img === "" ? null : req.body.img,
     });
     if (req.body.motherId) {
       const exist = await Category.findById(req.body.motherId);
@@ -80,6 +83,8 @@ class CategoriesServices {
           : new mongoose.Types.ObjectId(req.body.motherId);
       category.type = req.body.type;
       category.link = req.body.link;
+      category.img = req.body.img === "" ? null : req.body.img;
+
       if (req.body.motherId !== category.id) {
         if (req.body.motherId !== "root") {
           const exist = await Category.findById(req.body.motherId);

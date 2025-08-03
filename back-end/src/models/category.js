@@ -29,6 +29,11 @@ const categorySchema = new mongoose.Schema({
       },
     },
   },
+  img: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Media",
+    default: null,
+  },
 });
 categorySchema.plugin(timestamp);
 module.exports = mongoose.model("Category", categorySchema);

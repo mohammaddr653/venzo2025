@@ -199,7 +199,6 @@ const OneProductPage = () => {
             </p>
             {libShow ? (
               <Library
-                libShow={libShow}
                 setLibShow={setLibShow}
                 selectedImgs={selectedImgs}
                 setSelectedImgs={setSelectedImgs}
