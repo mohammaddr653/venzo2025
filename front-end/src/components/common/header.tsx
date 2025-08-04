@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
-  const { user, list, userLogout } = useHeaderLog();
+  const { user, list, glassShow, userLogout } = useHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
   const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
 
@@ -41,7 +41,7 @@ const Header = (props: HeaderProps) => {
         {isScrolled ? <GoUp></GoUp> : null}
         <div
           id="header-container"
-          className={`relative flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 transition-all duration-300 ${
+          className={`relative z-50 flex flex-row gap-10 justify-between md:justify-start items-center px-5 md:px-20 transition-all duration-300 ${
             isScrolled || props.focus
               ? "bg-white/80 backdrop-blur-2xl shadow-b-lean-300"
               : "bg-transparent"
@@ -111,6 +111,11 @@ const Header = (props: HeaderProps) => {
             </div>
           </div>
         </div>
+        <div
+          className={`glass absolute w-[100vw] h-[100vh] bg-glass-shadow top-full right-0 z-30 transition-all duration-300 delay-150 ${
+            glassShow ? "visible opacity-100" : "invisible opacity-0"
+          }`}
+        ></div>
       </header>
     </>
   );

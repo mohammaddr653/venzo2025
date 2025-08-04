@@ -6,7 +6,8 @@ export const buildList = (
   handleDelete: Function | null,
   handleUpdate: Function | null,
   menu: boolean,
-  handleLink: Function | null
+  handleLink: Function | null,
+  setGlassShow: Function
 ) => {
   if (list.current) {
     list.current.innerHTML = "";
@@ -19,8 +20,17 @@ export const buildList = (
 
   function listLoop(item: any, parent: any) {
     const newLi = document.createElement("li");
-
+    if (item.display === "mega-menu") {
+      newLi.onmouseenter = () => setGlassShow(true);
+      newLi.onmouseleave = () => setGlassShow(false);
+    }
+    newLi.classList.add(item.display);
     const liHead = document.createElement("div");
+    liHead.classList.add("head");
+    const liChilds = document.createElement("div");
+    liChilds.classList.add("childs");
+    const newUl = document.createElement("ul");
+    liChilds.appendChild(newUl);
 
     let title;
     let link: string;
@@ -87,9 +97,8 @@ export const buildList = (
     parent.appendChild(newLi);
     categories.map((category: any) => {
       if (category.motherId === item._id) {
-        const newUl = document.createElement("ul");
-        newUl.classList.add("ps-5");
-        newLi.appendChild(newUl);
+        !menu ? liChilds.classList.add("ps-5") : null;
+        newLi.appendChild(liChilds);
         listLoop(category, newUl);
       }
     });
