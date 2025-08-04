@@ -4,7 +4,7 @@ import { SERVER_API } from "../../../config";
 import axios from "axios";
 import callManager from "../callManager";
 import useLoadCategories from "../useLoadCategories";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { buildList } from "../../helpers/buildList";
 
 const useHeaderLog = () => {
@@ -12,6 +12,8 @@ const useHeaderLog = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const { categories, loadCategories } = useLoadCategories();
+  const [glassShow, setGlassShow] = useState<any>(false);
+
   const list = useRef<HTMLUListElement>(null);
 
   async function userLogout() {
@@ -26,7 +28,7 @@ const useHeaderLog = () => {
   }, []);
 
   useEffect(() => {
-    buildList(list, categories, null, null, true, handleLink);
+    buildList(list, categories, null, null, true, handleLink, setGlassShow);
   }, [categories]);
 
   function handleLink(
@@ -37,7 +39,7 @@ const useHeaderLog = () => {
     navigate(pathString);
   }
 
-  return { user, list, userLogout };
+  return { user, list, glassShow, userLogout };
 };
 
 export default useHeaderLog;
