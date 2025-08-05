@@ -7,7 +7,6 @@ div#header-container.mobile-header nav ul li div h4 {
   cursor: pointer;
 }
 div#header-container.mobile-header div.hideMenu {
-  all: initial;
   background-color: white;
   position: absolute;
   height: 100dvh;

@@ -7,7 +7,6 @@ div#header-container.desktop-header nav ul li div h4 {
   cursor: pointer;
 }
 div#header-container.desktop-header div.menu {
-  all: initial;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -19,6 +18,11 @@ div#header-container.desktop-header div.menu {
 
 div#header-container.desktop-header nav li.mega-menu {
   position: relative;
+}
+
+div#header-container.desktop-header nav li.mega-menu:hover~div.glass {
+  visibility: visible;
+  opacity: 1;
 }
 
 div#header-container.desktop-header nav li.mega-menu a {
@@ -53,10 +57,23 @@ div#header-container.desktop-header nav li.mega-menu > div.childs > ul {
   flex-direction: column;
   height: 100%;
 }
-div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li > div.head {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.head {
   transition: background-color 300ms;
 }
-div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li > div.head a {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.head
+  a {
   display: block;
   padding: 5px 15px;
 }
@@ -67,7 +84,13 @@ div#header-container.desktop-header nav li.mega-menu:hover > div.childs {
 
 /* second column */
 
-div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li > div.childs {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.childs {
   visibility: hidden;
   opacity: 0;
   position: absolute;
@@ -82,10 +105,23 @@ div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li > di
   overflow-y: scroll;
   padding: 20px;
 }
-div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li > div.childs > ul {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.childs
+  > ul {
   columns: 3;
 }
-div#header-container.desktop-header nav li.mega-menu > div.childs > ul > li:hover > div.head {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li:hover
+  > div.head {
   background-color: var(--color-neutral-200);
 }
 div#header-container.desktop-header

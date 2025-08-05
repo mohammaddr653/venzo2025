@@ -7,13 +7,15 @@ import AccountButtons from "./account-buttons";
 import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
 import useDesktopHeaderLog from "../../hooks/logics/useDesktopHeaderLog";
+import MenuItem from "./menuItem";
 
 interface DesktopHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
-  const { user, list, glassShow, userLogout } = useDesktopHeaderLog();
+  const { user, categories, userLogout } =
+    useDesktopHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
 
   function handleScroll() {
@@ -50,10 +52,22 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
         </Link>
         <div className="menu">
           <nav>
-            <ul
-              ref={list}
-              className="flex px-0 flex-row gap-5 font-weight300 text-cu-neutral-900"
-            ></ul>
+            <ul className="flex px-0 flex-row gap-5 font-weight300 text-cu-neutral-900">
+              {categories?.length &&
+                categories.map((category: any, index: any) => {
+                  return (
+                    category.motherId === "root" && (
+                      <MenuItem
+                        item={category}
+                        categories={categories}
+                      ></MenuItem>
+                    )
+                  );
+                })}
+              <div
+                className={`glass absolute w-[100vw] h-[100vh] bg-glass-shadow top-full right-0 z-30 transition-all duration-300 delay-150 invisible opacity-0`}
+              ></div>
+            </ul>
           </nav>
           <div className="flex flex-row gap-2 items-center">
             <div className="w-full px-0">
@@ -73,11 +87,6 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
           </div>
         </div>
       </div>
-      <div
-        className={`glass absolute w-[100vw] h-[100vh] bg-glass-shadow top-full right-0 z-30 transition-all duration-300 delay-150 ${
-          glassShow ? "visible opacity-100" : "invisible opacity-0"
-        }`}
-      ></div>
     </header>
   );
 };
