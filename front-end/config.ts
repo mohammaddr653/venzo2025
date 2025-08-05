@@ -27,3 +27,12 @@ export const Logo = SERVER_URL + "/public/static-images/logo.png";
 export const SITE_KEY = site_key;
 
 export const TMCE_API_KEY = tinymce_key;
+
+//same on index.css
+export const BREAK_POINTS = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  xxl: 1536,
+};

@@ -14,7 +14,7 @@ import AdminRoute from "./components/private-route-components/adminRoute";
 import LoginPage from "./pages/login-page";
 import RegisterPage from "./pages/register-page";
 import { useEffect } from "react";
-import { useUserStore } from "./store";
+import { useUserStore, useWidthStore } from "./store";
 import axios from "axios";
 import UsersPage from "./pages/admin-page/users-page";
 import CategoriesPage from "./pages/admin-page/categories-page";
@@ -44,14 +44,20 @@ import AboutUs from "./pages/about-us";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
+  const { width, setWidth } = useWidthStore();
 
   const location = useLocation(); // Detects route changes
   useEffect(() => {
+    setWidth(window.innerWidth);
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
     axios.defaults.withCredentials = true; //sends httponly cookies to the server by default
-  }, []);
-  useEffect(() => {
     getAuthedUser(); //if token exist , set the user
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
   useEffect(() => {
     handleGoUp("instant");
   }, [location.pathname]);

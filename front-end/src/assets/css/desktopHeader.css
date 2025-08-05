@@ -3,38 +3,38 @@ header {
   width: 100%;
   max-width: inherit;
 }
-div#header-container nav ul li div h4 {
+div#header-container.desktop-header nav ul li div h4 {
   cursor: pointer;
 }
-/* some utilities used from index.css */
-div#header-container div.showMenu {
-  transform: translateX(0);
-}
-div#header-container div.mobileMenu-overlay {
-  background-color: var(--color-glass-shadow);
-  position: absolute;
+div#header-container.desktop-header div.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  right: 0;
-  top: 0;
-  height: 100dvh;
 }
 
 /* first column */
 
-div#header-container nav li.mega-menu {
+div#header-container.desktop-header nav li.mega-menu {
   position: relative;
 }
 
-div#header-container nav li.mega-menu a {
+div#header-container.desktop-header nav li.mega-menu:hover~div.glass {
+  visibility: visible;
+  opacity: 1;
+}
+
+div#header-container.desktop-header nav li.mega-menu a {
   color: var(--color-neutral-800);
   transition: color 300ms;
 }
-div#header-container nav li a:hover {
+div#header-container.desktop-header nav li a:hover {
   color: red;
   cursor: pointer;
 }
 
-div#header-container nav li.mega-menu > div.childs {
+div#header-container.desktop-header nav li.mega-menu > div.childs {
   visibility: hidden;
   opacity: 0;
   position: absolute;
@@ -49,7 +49,7 @@ div#header-container nav li.mega-menu > div.childs {
   transition-delay: 150ms;
   z-index: 101;
 }
-div#header-container nav li.mega-menu > div.childs > ul {
+div#header-container.desktop-header nav li.mega-menu > div.childs > ul {
   width: 20%;
   border-left: 1px solid var(--color-neutral-300);
   display: flex;
@@ -57,21 +57,40 @@ div#header-container nav li.mega-menu > div.childs > ul {
   flex-direction: column;
   height: 100%;
 }
-div#header-container nav li.mega-menu > div.childs > ul > li > div.head {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.head {
   transition: background-color 300ms;
 }
-div#header-container nav li.mega-menu > div.childs > ul > li > div.head a {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.head
+  a {
   display: block;
   padding: 5px 15px;
 }
-div#header-container nav li.mega-menu:hover > div.childs {
+div#header-container.desktop-header nav li.mega-menu:hover > div.childs {
   visibility: visible;
   opacity: 1;
 }
 
 /* second column */
 
-div#header-container nav li.mega-menu > div.childs > ul > li > div.childs {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.childs {
   visibility: hidden;
   opacity: 0;
   position: absolute;
@@ -86,13 +105,26 @@ div#header-container nav li.mega-menu > div.childs > ul > li > div.childs {
   overflow-y: scroll;
   padding: 20px;
 }
-div#header-container nav li.mega-menu > div.childs > ul > li > div.childs > ul {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li
+  > div.childs
+  > ul {
   columns: 3;
 }
-div#header-container nav li.mega-menu > div.childs > ul > li:hover > div.head {
+div#header-container.desktop-header
+  nav
+  li.mega-menu
+  > div.childs
+  > ul
+  > li:hover
+  > div.head {
   background-color: var(--color-neutral-200);
 }
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu:hover
   > div.childs
@@ -104,7 +136,7 @@ div#header-container
 }
 
 /* third column */
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu
   > div.childs
@@ -118,7 +150,7 @@ div#header-container
   width: fit-content;
   margin-bottom: 20px;
 }
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu
   > div.childs
@@ -131,7 +163,7 @@ div#header-container
   font-weight: 300;
   margin-bottom: 5px;
 }
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu
   > div.childs
@@ -148,7 +180,7 @@ div#header-container
   gap: 3px;
   justify-content: start;
 }
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu
   > div.childs
@@ -167,7 +199,7 @@ div#header-container
   height: 20px;
   background-color: red;
 }
-div#header-container
+div#header-container.desktop-header
   nav
   li.mega-menu
   > div.childs

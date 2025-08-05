@@ -7,14 +7,11 @@ import useLoadCategories from "../useLoadCategories";
 import { useEffect, useRef, useState } from "react";
 import { buildList } from "../../helpers/buildList";
 
-const useHeaderLog = () => {
+const useMobileHeaderLog = () => {
   const { call, loading } = callManager();
   const navigate = useNavigate();
   const { user } = useUserStore();
   const { categories, loadCategories } = useLoadCategories();
-  const [glassShow, setGlassShow] = useState<any>(false);
-
-  const list = useRef<HTMLUListElement>(null);
 
   async function userLogout() {
     const response = await call(
@@ -27,19 +24,7 @@ const useHeaderLog = () => {
     loadCategories();
   }, []);
 
-  useEffect(() => {
-    buildList(list, categories, null, null, true, handleLink, setGlassShow);
-  }, [categories]);
-
-  function handleLink(
-    e: React.MouseEvent<HTMLAnchorElement>,
-    pathString: string
-  ) {
-    e.preventDefault();
-    navigate(pathString);
-  }
-
-  return { user, list, glassShow, userLogout };
+  return { user, categories, userLogout };
 };
 
-export default useHeaderLog;
+export default useMobileHeaderLog;
