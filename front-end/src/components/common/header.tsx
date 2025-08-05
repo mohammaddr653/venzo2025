@@ -7,6 +7,7 @@ import SearchBar from "./search-bar";
 import AccountButtons from "./account-buttons";
 import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
+import { useWidthStore } from "../../store";
 
 interface HeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
@@ -16,6 +17,7 @@ const Header = (props: HeaderProps) => {
   const { user, list, glassShow, userLogout } = useHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
   const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
+  const { width, setWidth } = useWidthStore();
 
   function handleScroll() {
     let lastScrollTop = 0;
