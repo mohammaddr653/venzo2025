@@ -7,7 +7,7 @@ import useLoadCategories from "../useLoadCategories";
 import { useEffect, useRef, useState } from "react";
 import { buildList } from "../../helpers/buildList";
 
-const useHeaderLog = () => {
+const useDesktopHeaderLog = () => {
   const { call, loading } = callManager();
   const navigate = useNavigate();
   const { user } = useUserStore();
@@ -42,4 +42,4 @@ const useHeaderLog = () => {
   return { user, list, glassShow, userLogout };
 };
 
-export default useHeaderLog;
+export default useDesktopHeaderLog;

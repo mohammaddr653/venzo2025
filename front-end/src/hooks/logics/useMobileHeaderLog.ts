@@ -1,0 +1,45 @@
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store";
+import { SERVER_API } from "../../../config";
+import axios from "axios";
+import callManager from "../callManager";
+import useLoadCategories from "../useLoadCategories";
+import { useEffect, useRef, useState } from "react";
+import { buildList } from "../../helpers/buildList";
+
+const useMobileHeaderLog = () => {
+  const { call, loading } = callManager();
+  const navigate = useNavigate();
+  const { user } = useUserStore();
+  const { categories, loadCategories } = useLoadCategories();
+  const [glassShow, setGlassShow] = useState<any>(false);
+
+  const list = useRef<HTMLUListElement>(null);
+
+  async function userLogout() {
+    const response = await call(
+      axios.get(SERVER_API + "/token/logout"),
+      false,
+      "/"
+    ); //deletes the token cookie
+  }
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  useEffect(() => {
+    buildList(list, categories, null, null, true, handleLink, setGlassShow);
+  }, [categories]);
+
+  function handleLink(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    pathString: string
+  ) {
+    e.preventDefault();
+    navigate(pathString);
+  }
+
+  return { user, list, glassShow, userLogout };
+};
+
+export default useMobileHeaderLog;
