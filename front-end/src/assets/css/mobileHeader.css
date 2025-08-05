@@ -10,6 +10,7 @@ div#header-container.mobile-header div.hideMenu {
   background-color: white;
   position: absolute;
   height: 100dvh;
+  overflow-y: scroll;
   transform: translateX(-100%);
   top: 0;
   gap: 20px;

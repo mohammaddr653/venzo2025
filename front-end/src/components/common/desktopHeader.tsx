@@ -7,15 +7,14 @@ import AccountButtons from "./account-buttons";
 import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
 import useDesktopHeaderLog from "../../hooks/logics/useDesktopHeaderLog";
-import MenuItem from "./menuItem";
+import DeskMenuItem from "./desktop-menuItem";
 
 interface DesktopHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
-  const { user, categories, userLogout } =
-    useDesktopHeaderLog();
+  const { user, categories, userLogout } = useDesktopHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
 
   function handleScroll() {
@@ -57,10 +56,10 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
                 categories.map((category: any, index: any) => {
                   return (
                     category.motherId === "root" && (
-                      <MenuItem
+                      <DeskMenuItem
                         item={category}
                         categories={categories}
-                      ></MenuItem>
+                      ></DeskMenuItem>
                     )
                   );
                 })}

@@ -4,16 +4,16 @@ import "../../assets/css/mobileHeader.css";
 import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
 import AccountButtons from "./account-buttons";
-import CartCounter from "./cart-counter";
 import GoUp from "./goUp";
 import useMobileHeaderLog from "../../hooks/logics/useMobileHeaderLog";
+import MobMenuItem from "./mobile-menuItem";
 
 interface MobileHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const MobileHeader = ({ focus }: MobileHeaderProps) => {
-  const { user, list, glassShow, userLogout } = useMobileHeaderLog();
+  const { user, categories, userLogout } = useMobileHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
   const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
 
@@ -89,10 +89,19 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
               </div>
             </div>
             <nav>
-              <ul
-                ref={list}
-                className="flex px-4 flex-col gap-5 font-weight300 text-cu-neutral-900"
-              ></ul>
+              <ul className="flex px-4 flex-col gap-5 font-weight300 text-cu-neutral-900">
+                {categories?.length &&
+                  categories.map((category: any, index: any) => {
+                    return (
+                      category.motherId === "root" && (
+                        <MobMenuItem
+                          item={category}
+                          categories={categories}
+                        ></MobMenuItem>
+                      )
+                    );
+                  })}
+              </ul>
             </nav>
           </div>
         </div>

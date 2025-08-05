@@ -24,14 +24,6 @@ const useDesktopHeaderLog = () => {
     loadCategories();
   }, []);
 
-  function handleLink(
-    e: React.MouseEvent<HTMLAnchorElement>,
-    pathString: string
-  ) {
-    e.preventDefault();
-    navigate(pathString);
-  }
-
   return { user, categories, userLogout };
 };
 
