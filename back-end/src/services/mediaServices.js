@@ -36,7 +36,7 @@ class MediaServices {
     const media = await Media.findById(req.params.mediaId);
     if (media) {
       if (req.file) {
-        deleteWrapper(req.file);
+        deleteWrapper(media.urls._doc); //باید از _doc استفاده کنی چون مانگوز یک آبجکت سطح بالا رو برگردونده و صرفا چیزی که فکر میکنی نیست
         media.urls = req.file.urls;
       }
       const saveOp = await media.save();
@@ -49,7 +49,7 @@ class MediaServices {
     //حذف رسانه
     const deleteOp = await Media.findOneAndDelete({ _id: req.params.mediaId });
     if (deleteOp) {
-      deleteWrapper(deleteOp);
+      deleteWrapper(deleteOp.urls._doc);
       return serviceResponse(200, {});
     }
     return serviceResponse(404, {});

@@ -38,11 +38,11 @@ module.exports = class {
     if (!this.validationBody(req, res)) {
       if (req.file)
         //if some files uploaded with this req , delete them
-        deleteWrapper(req.file);
+        deleteWrapper(req.file.urls);
 
       if (req.files) {
         for (let file of req.files) {
-          deleteWrapper(file);
+          deleteWrapper(file.urls);
         }
       }
       return; //operation stops here

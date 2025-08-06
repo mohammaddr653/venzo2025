@@ -96,7 +96,7 @@ class UserServices {
     );
     if (updateOp) {
       if (updateOp.avatar && updateOp.avatar.urls) {
-        deleteWrapper(updateOp.avatar);
+        deleteWrapper(updateOp.avatar.urls._doc);
       }
       return serviceResponse(200, {});
     }
@@ -111,7 +111,7 @@ class UserServices {
     );
     if (updateOp) {
       if (updateOp.avatar && updateOp.avatar.urls) {
-        deleteWrapper(updateOp.avatar);
+        deleteWrapper(updateOp.avatar.urls._doc);
       }
       return serviceResponse(200, {});
     }
