@@ -101,7 +101,7 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
               </div>
             </div>
             <nav>
-              <ul className="flex px-4 flex-col gap-5 font-weight300 text-cu-neutral-900">
+              <ul className="flex pe-4 ps-2 flex-col font-weight300 text-cu-neutral-900">
                 {categories?.length &&
                   categories.map((category: any, index: any) => {
                     return (

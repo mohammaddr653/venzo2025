@@ -32,3 +32,25 @@ div#header-container.mobile-header div.mobileMenu-overlay {
   top: 0;
   height: 100dvh;
 }
+
+ div#header-container.mobile-header nav ul li > div.head{
+  padding: 10px;
+ }
+div#header-container.mobile-header nav ul li > div.childs {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition-property: grid-template-rows;
+  transition-duration: 300ms;
+}
+div#header-container.mobile-header nav ul li > div.head>i{
+  transform: rotate(0);
+}
+div#header-container.mobile-header nav ul li > div.childs > ul {
+  overflow: hidden;
+}
+div#header-container.mobile-header nav ul li.open > div.childs {
+  grid-template-rows: 1fr;
+}
+div#header-container.mobile-header nav ul li.open>div.head>i{
+  transform: rotate(-90deg);
+}
