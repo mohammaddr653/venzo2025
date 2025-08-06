@@ -21,6 +21,7 @@ const DeskMenuItem = ({ item, categories }: any) => {
                 if (category.motherId === item._id) {
                   return (
                     <DeskMenuItem
+                      key={category._id}
                       item={category}
                       categories={categories}
                     ></DeskMenuItem>

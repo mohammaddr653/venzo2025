@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { Logo } from "../../../config";
 import "../../assets/css/mobileHeader.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchBar from "./search-bar";
 import AccountButtons from "./account-buttons";
 import GoUp from "./goUp";
 import useMobileHeaderLog from "../../hooks/logics/useMobileHeaderLog";
 import MobMenuItem from "./mobile-menuItem";
+import { mobileMenuScripts } from "../../helpers/mobileMenuScripts";
 
 interface MobileHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
@@ -16,6 +17,7 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
   const { user, categories, userLogout } = useMobileHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
   const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
+  const listenerRef = useRef(false);
 
   function handleScroll() {
     let lastScrollTop = 0;
@@ -34,6 +36,16 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (!listenerRef.current) {
+      listenerRef.current = true;
+      mobileMenuScripts();
+      return () => {
+        listenerRef.current = false;
+      };
+    }
+  }, [categories]);
 
   return (
     <>
@@ -95,6 +107,7 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
                     return (
                       category.motherId === "root" && (
                         <MobMenuItem
+                          key={category._id}
                           item={category}
                           categories={categories}
                         ></MobMenuItem>

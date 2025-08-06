@@ -57,6 +57,7 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
                   return (
                     category.motherId === "root" && (
                       <DeskMenuItem
+                        key={category._id}
                         item={category}
                         categories={categories}
                       ></DeskMenuItem>

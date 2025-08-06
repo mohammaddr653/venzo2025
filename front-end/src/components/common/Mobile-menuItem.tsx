@@ -2,13 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const MobMenuItem = ({ item, categories }: any) => {
-  const [childsShow, setChildsShow] = useState(false);
   return (
     <li className={item.display}>
-      <div
-        className="head"
-        onClick={() => setChildsShow(childsShow ? false : true)}
-      >
+      <div className="head">
         {item.type === "shop" && (
           <Link to={`/shop/${item._id}`}>{item.name}</Link>
         )}
@@ -20,12 +16,13 @@ const MobMenuItem = ({ item, categories }: any) => {
       </div>
       {categories?.length &&
         categories.some((category: any) => category.motherId === item._id) && (
-          <div className={`childs ${childsShow ? "block" : "hidden"}`}>
+          <div className="childs">
             <ul>
               {categories.map((category: any, index: any) => {
                 if (category.motherId === item._id) {
                   return (
                     <MobMenuItem
+                      key={category._id}
                       item={category}
                       categories={categories}
                     ></MobMenuItem>
