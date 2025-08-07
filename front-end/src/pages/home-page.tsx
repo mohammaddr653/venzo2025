@@ -8,13 +8,17 @@ import ProductsArchive from "../components/common/productsArchive";
 import Footer from "../components/common/footer";
 import NewestProductsCarousel from "../components/common/newestProductsCarousel";
 import OffProductsCarousel from "../components/common/offProductsCarousel";
+import Greetings from "../components/common/greetings";
 
 const HomePage = () => {
   return (
     <>
       <Header></Header>
-      <main className="pt-17 pb-15">
+      <main className="pb-15">
         <div className="homepage-container flex flex-col gap-5">
+          <div className="bg-red-400">
+            <Greetings></Greetings>
+          </div>
           <div className="flex flex-col-reverse lg:flex-row gap-2 lg:px-20 px-0">
             <div className="w-full lg:w-1/4 px-5 lg:px-0 hidden lg:block">
               <HeroCard></HeroCard>
