@@ -16,11 +16,8 @@ const MediasPage = () => {
   const [formData, setFormData] = useState<any>({
     media: [],
   });
-  const [updateFormData, setUpdateFormData] = useState<any>();
-  const [selectedMediaId, setSelectedMediaId] = useState<any>(null);
 
   const fileInputRef = useRef<any>(null);
-  const updateFileInputRef = useRef<any>(null);
 
   async function refresh() {
     setFormData({
@@ -28,7 +25,6 @@ const MediasPage = () => {
     });
     // Reset file input field
     fileInputRef.current ? (fileInputRef.current.value = "") : null;
-    updateFileInputRef.current ? (updateFileInputRef.current.value = "") : null;
 
     loadMedias();
   }
@@ -39,10 +35,6 @@ const MediasPage = () => {
 
   const handleFileChange = (event: any) => {
     setFormData({ ...formData, media: event.target.files });
-  };
-
-  const handleUpdateFileChange = (event: any) => {
-    setUpdateFormData({ ...formData, media: event.target.files[0] });
   };
 
   const handleDelete = async (
@@ -56,33 +48,8 @@ const MediasPage = () => {
     refresh();
   };
 
-  const updateShowState = (e: any) => {
-    if (e.target.name === "active" && e.target.checked) {
-      setUpdateFormData({ ...updateFormData, show: true });
-    }
-    if (e.target.name === "deactive" && e.target.checked) {
-      setUpdateFormData({ ...updateFormData, show: false });
-    }
-  };
-
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const dataToSend = new FormData();
-
-    // Append all form fields to FormData
-    Object.entries(updateFormData).forEach(([key, value]: any) => {
-      dataToSend.append(key, value);
-    });
-
-    const response = await call(
-      axios.put(
-        SERVER_API + `/admin/dashboard/medias/${selectedMediaId}`,
-        dataToSend
-      ),
-      true
-    );
-    refresh();
+  const handleUpdate = async (mediaId: any) => {
+    navigate("/admin/update-media", { state: { mediaId } });
   };
 
   const handleRefresh = () => {
@@ -153,30 +120,13 @@ const MediasPage = () => {
                     ></Img>
                   </td>
                   <td className="border">
-                    {selectedMediaId === media._id.toString() ? (
-                      <form onSubmit={(e) => handleUpdate(e)}>
-                        <input
-                          type="file"
-                          name="media"
-                          accept=".png,.jpg"
-                          className="border"
-                          onChange={handleUpdateFileChange}
-                          ref={updateFileInputRef}
-                        />
-                        <LoadingButton loading={loading}>اعمال</LoadingButton>
-                      </form>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setUpdateFormData({
-                            media: media.media,
-                          });
-                          setSelectedMediaId(media._id.toString());
-                        }}
-                      >
-                        ویرایش
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        handleUpdate(media._id);
+                      }}
+                    >
+                      ویرایش
+                    </button>
                   </td>
                   <td className="border">
                     <button

@@ -41,6 +41,7 @@ import TrustsPage from "./pages/admin-page/trusts-page";
 import { handleGoUp } from "./helpers/handleGoUp";
 import MediasPage from "./pages/admin-page/medias-page";
 import AboutUs from "./pages/about-us";
+import OneMediaPage from "./pages/admin-page/oneMedia-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -98,6 +99,7 @@ function App() {
           <Route path="/admin/categories" element={<CategoriesPage />} />
           <Route path="/admin/update-category" element={<OneCategoryPage />} />
           <Route path="/admin/medias" element={<MediasPage />} />
+          <Route path="/admin/update-media" element={<OneMediaPage />} />
           <Route path="/admin/users" element={<UsersPage />} />
           <Route path="/admin/update-user" element={<OneUserPage />} />
           <Route path="/admin" element={<AdminPage />} />
