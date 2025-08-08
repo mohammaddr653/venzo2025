@@ -14,7 +14,11 @@ const Footer = () => {
               <div className="flex flex-row justify-between items-center">
                 <img src={Logo} className="" alt="logo" width={60} />
                 <div className="flex flex-row gap-4">
-                  <SocialIcons></SocialIcons>
+                  <SocialIcons
+                    width={"20px"}
+                    height={"20px"}
+                    fill={"#404040"}
+                  ></SocialIcons>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-3 justify-start text-neutral-700">
