@@ -73,7 +73,7 @@ const CategoriesPage = () => {
   }, [formData.motherId]);
 
   useEffect(() => {
-    buildList(list, categories, handleDelete, handleUpdate, false, null);
+    buildList(list, categories, handleDelete, handleUpdate, false, null, null);
     buildSelectionList(selectionList, categories, "", "دسته بندی مادر", null);
   }, [categories]);
 

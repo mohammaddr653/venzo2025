@@ -7,7 +7,7 @@ export const buildList = (
   handleUpdate: Function | null,
   menu: boolean,
   handleLink: Function | null,
-  setGlassShow: Function
+  setGlassShow: Function | null
 ) => {
   if (list.current) {
     list.current.innerHTML = "";
@@ -20,7 +20,7 @@ export const buildList = (
 
   function listLoop(item: any, parent: any) {
     const newLi = document.createElement("li");
-    if (item.display === "mega-menu") {
+    if (item.display === "mega-menu" && setGlassShow) {
       newLi.onmouseenter = () => setGlassShow(true);
       newLi.onmouseleave = () => setGlassShow(false);
     }
