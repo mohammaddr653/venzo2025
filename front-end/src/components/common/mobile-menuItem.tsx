@@ -41,3 +41,4 @@ const MobMenuItem = ({ item, categories }: any) => {
 };
 
 export default MobMenuItem;
+
