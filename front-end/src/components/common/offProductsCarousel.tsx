@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "../../assets/css/products-archive.css";
 import TitleCentral from "./title-central";
 import ProductCard from "./product-card";
 import axios from "axios";

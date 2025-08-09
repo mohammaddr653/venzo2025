@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Img from "./img";
 import { useEffect, useRef, useState } from "react";
+import "../../assets/css/product-card.css";
 import PriceUnit from "./priceUnit";
 import Offpercent from "./offpercent";
 import { createPriceAndStockObj } from "../../helpers/createPriceAndStockObj";
@@ -9,6 +10,7 @@ import {
   ProductPropertyvalsObj,
 } from "../../types/objects/properties";
 import CartPlusSvg from "../icons/cart-plus-svgrepo-com";
+import HeartSvg from "../icons/heart-svg";
 
 interface ProductCardProps {
   product: any;
@@ -56,38 +58,49 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <div className="flex flex-col gap-1.5 h-full">
-      <div className="flex flex-row gap-1 h-2.5">
-        {product?.properties
-          .find(
-            (property: ProductPropertiesObj) =>
-              property.property.type === "color"
-          )
-          ?.values.map((color: ProductPropertyvalsObj, index: any) => {
-            return color.propertyval?.hex ? (
-              <span
-                key={index}
-                style={{
-                  backgroundColor: "#" + color.propertyval.hex.toString(),
-                }}
-                className="h-full aspect-square rounded-full border border-neutral-300"
-              ></span>
-            ) : null;
-          })}
-      </div>
       <Link
         to={`/single-shop/${product._id}`}
         className="product-card rounded-xl border-neutral-200 border overflow-hidden hover:shadow-card-neutral transition-shadow duration-300"
       >
         <div className=" main-part w-full flex flex-col justify-start items-center h-full">
-          <div className="relative w-full overflow-hidden">
-            <Img
-              pic={product?.img}
-              sizes={"500px"}
-              className={
-                "product-img relative aspect-284/170 object-cover w-full z-0"
-              }
-              width={100}
-            ></Img>
+          <div className="relative w-full p-2">
+            <div className="w-full relative overflow-hidden rounded-xl">
+              <div className="flex absolute justify-between items-center top-0 right-0 rounded-xl w-full p-2 px-2.5 z-10">
+                <div className="flex flex-row gap-1">
+                  {product?.properties
+                    .find(
+                      (property: ProductPropertiesObj) =>
+                        property.property.type === "color"
+                    )
+                    ?.values.map(
+                      (color: ProductPropertyvalsObj, index: any) => {
+                        return color.propertyval?.hex ? (
+                          <span
+                            key={index}
+                            style={{
+                              backgroundColor:
+                                "#" + color.propertyval.hex.toString(),
+                            }}
+                            className="h-4.5 aspect-square rounded-full border-2 border-white outline-1 outline-[#444] inset-full-444"
+                          ></span>
+                        ) : null;
+                      }
+                    )}
+                </div>
+                <div>
+                  <HeartSvg></HeartSvg>
+                </div>
+              </div>
+
+              <Img
+                pic={product?.img}
+                sizes={"500px"}
+                className={
+                  "product-img relative aspect-284/170 object-cover w-full z-0"
+                }
+                width={100}
+              ></Img>
+            </div>
           </div>
           <div className="relative overflow-hidden w-full grow">
             <div className="relative flex flex-col justify-between items-center gap-4 min-h-[150px] py-4 z-10">

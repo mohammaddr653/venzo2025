@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import useLoadProducts from "../../hooks/useLoadProducts";
-import "../../assets/css/products-archive.css";
 import TitleCentral from "./title-central";
 import ProductCard from "./product-card";
 
