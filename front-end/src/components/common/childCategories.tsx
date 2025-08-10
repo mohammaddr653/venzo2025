@@ -17,7 +17,20 @@ const ChildCategories = ({ childCats, categoryId }: any) => {
   return (
     <div className="childCategories-container px-5 md:px-20">
       <Swiper
-        slidesPerView={"auto"}
+        breakpoints={{
+          0: {
+            slidesPerView: 1.5,
+          },
+          640: {
+            slidesPerView: 2.5,
+          },
+          768: {
+            slidesPerView: 4,
+          },
+          1024: {
+            slidesPerView: 6,
+          },
+        }}
         spaceBetween={20}
         initialSlide={0}
         className="mySwiper"
@@ -29,16 +42,16 @@ const ChildCategories = ({ childCats, categoryId }: any) => {
         {childCats.map((item: any, index: any) => {
           if (item.motherId === categoryId) {
             return (
-              <SwiperSlide className="max-w-[200px]">
+              <SwiperSlide>
                 <Link
                   key={index}
                   to={`/shop/${item._id}`}
-                  className=" rounded-md w-full flex flex-col justify-between border overflow-hidden border-neutral-300 p-2 gap-2 items-center"
+                  className=" rounded-md flex flex-col justify-between border overflow-hidden border-neutral-300 p-2 gap-2 items-center"
                 >
                   <Img
                     pic={item.img}
                     sizes={"500px"}
-                    className={"object-cover w-full border border-neutral-300"}
+                    className={"object-cover border border-neutral-300"}
                   ></Img>
                   <h3 className="text-size15">{item.name}</h3>
                 </Link>

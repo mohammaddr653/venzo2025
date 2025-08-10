@@ -63,8 +63,8 @@ const ProductResponsiveCard = ({ product }: ProductCardProps) => {
         className="product-card rounded-xl border-neutral-200 border overflow-hidden hover:shadow-card-neutral transition-shadow duration-300"
       >
         <div className=" main-part w-full flex flex-row sm:flex-col justify-start items-center h-full">
-          <div className="relative w-full p-2">
-            <div className="w-full relative overflow-hidden rounded-xl">
+          <div className="relative h-full sm:h-auto w-full p-2">
+            <div className=" h-full sm:h-auto w-full relative overflow-hidden rounded-xl">
               <div className="flex absolute justify-between items-center top-0 right-0 rounded-xl w-full p-2 px-2.5 z-10">
                 <div className="flex flex-row gap-1">
                   {product?.properties
@@ -96,9 +96,8 @@ const ProductResponsiveCard = ({ product }: ProductCardProps) => {
                 pic={product?.img}
                 sizes={"500px"}
                 className={
-                  "product-img relative aspect-284/170 object-cover w-full z-0"
+                  "product-img relative aspect-284/170 object-cover h-full sm:h-auto sm:w-full  z-0"
                 }
-                width={100}
               ></Img>
             </div>
           </div>
@@ -119,7 +118,7 @@ const ProductResponsiveCard = ({ product }: ProductCardProps) => {
                         ></Offpercent>
                       </div>
                       <div className="flex flex-row gap-1 items-center flex-nowrap">
-                        <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
+                        <span className="text-neutral-900  text-size17 sm:text-size24 font-weight300 text-nowrap">
                           {priceAndStock.discount.offer}
                         </span>
                         <PriceUnit></PriceUnit>
@@ -127,7 +126,7 @@ const ProductResponsiveCard = ({ product }: ProductCardProps) => {
                     </>
                   ) : (
                     <div className="flex flex-row gap-1 items-center flex-nowrap">
-                      <span className="text-neutral-900 text-size24 font-weight300 text-nowrap">
+                      <span className="text-neutral-900 text-size17 sm:text-size24 font-weight300 text-nowrap">
                         {priceAndStock.price}
                       </span>
                       <PriceUnit></PriceUnit>
