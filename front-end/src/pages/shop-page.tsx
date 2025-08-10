@@ -34,10 +34,10 @@ const ShopPage = () => {
       <main className="pt-20 pb-15">
         <div className="shopPage-container flex flex-col gap-10">
           <div className="flex flex-col gap-5">
-            {motherCats?.length && (
+            {motherCats?.length > 0 && (
               <BreadCrumb motherCats={motherCats}></BreadCrumb>
             )}
-            {childCats?.length && (
+            {childCats?.length > 0 && (
               <ChildCategories
                 childCats={childCats}
                 categoryId={categoryId}
@@ -47,7 +47,7 @@ const ShopPage = () => {
           <div className="flex flex-row justify-between items-stretch px-5 md:px-20 gap-5">
             {filters?.length ? (
               <div className="hidden lg:flex flex-[1] flex-col gap-2">
-                <p className="py-2">فیلتر ها</p>
+                <p className="py-3">فیلتر ها</p>
                 <FiltersForm
                   filters={filters}
                   appliedQueries={appliedQueries}
@@ -55,27 +55,30 @@ const ShopPage = () => {
                 ></FiltersForm>
               </div>
             ) : null}
-            <div className=" flex flex-[4] flex-col gap-5">
+            <div className=" flex flex-[4] flex-col justify-between gap-5">
               <div className="flex flex-col gap-2">
-                <div className="flex justify-end items-center rounded-md mt-auto">
+                <div className="flex justify-start items-center rounded-md mt-auto">
                   <button
-                    className="flex lg:hidden"
+                    className="flex lg:hidden bg-white border text-amber-900 border-primary rounded-md px-2 py-1 cursor-pointer"
                     onClick={() => setMobFiltersShow(true)}
                   >
                     فیلتر ها
                   </button>
-                  <p className="text-size15 py-2">تعداد نمایش</p>
-                  <select
-                    name="countPerPage"
-                    id="countPerPage"
-                    onChange={handleCountPerPage}
-                    value={appliedQueries.limit}
-                  >
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
+                  <label className="text-size15 py-2 flex gap-1 items-center ms-auto">
+                    <p className="font-weight300">تعداد نمایش :</p>
+                    <select
+                      name="countPerPage"
+                      id="countPerPage"
+                      className="appearance-none p-2 w-15 py-1 border border-neutral-300 rounded-md"
+                      onChange={handleCountPerPage}
+                      value={appliedQueries.limit}
+                    >
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </label>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {products?.map((item: any, index: any) => {
@@ -85,7 +88,7 @@ const ShopPage = () => {
                   })}
                 </div>
               </div>
-              <div className="bg-red-300 mt-auto">
+              <div>
                 <Pagination
                   handleNext={handleNext}
                   handlePrev={handlePrev}
@@ -97,13 +100,15 @@ const ShopPage = () => {
             </div>
           </div>
           {mobFiltersShow && (
-            <div className="bg-white fixed lg:hidden top-0 right-0 w-[100vw] h-[100vh] z-50">
-              <button
-                className="bg-amber-50"
-                onClick={() => setMobFiltersShow(false)}
-              >
-                <CrossSvg width={30} fill={"#333"}></CrossSvg>
-              </button>
+            <div className="bg-white py-2 fixed lg:hidden top-0 flex flex-col left-0 w-[100vw] h-[100vh] z-50">
+              <div className="flex justify-end">
+                <button
+                  className="p-2 text-center w-fit cursor-pointer"
+                  onClick={() => setMobFiltersShow(false)}
+                >
+                  <CrossSvg width={30} fill={"#333"}></CrossSvg>
+                </button>
+              </div>
               <MobFiltersForm
                 filters={filters}
                 appliedQueries={appliedQueries}
