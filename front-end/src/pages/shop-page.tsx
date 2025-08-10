@@ -1,7 +1,6 @@
 import Header from "../components/common/header";
 import useShopLog from "../hooks/logics/useShopLog";
 import Footer from "../components/common/footer";
-import ProductCard from "../components/common/product-card";
 import Pagination from "../components/common/pagination";
 import ChildCategories from "../components/common/childCategories";
 import BreadCrumb from "../components/common/breadCrumb";
@@ -9,6 +8,7 @@ import { useState } from "react";
 import CrossSvg from "../components/icons/cross-svg";
 import FiltersForm from "../components/common/filtersForm";
 import MobFiltersForm from "../components/common/mobFiltersForm";
+import ProductResponsiveCard from "../components/common/product-responsive-card";
 
 const ShopPage = () => {
   const {
@@ -80,10 +80,14 @@ const ShopPage = () => {
                     </select>
                   </label>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {products?.map((item: any, index: any) => {
                     return (
-                      <ProductCard key={index} product={item}></ProductCard>
+                      //very similar to ProductCard...for now at least
+                      <ProductResponsiveCard
+                        key={index}
+                        product={item}
+                      ></ProductResponsiveCard>
                     );
                   })}
                 </div>
