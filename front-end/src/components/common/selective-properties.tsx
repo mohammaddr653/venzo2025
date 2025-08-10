@@ -21,7 +21,7 @@ const SelectiveProperties = (props: SelectivePropertiesGridProps) => {
                     </span>
                     <span>{props.selectedPropertyvalString}</span>
                   </h4>
-                  <form className="selective-property-form flex flex-row flex-wrap gap-4">
+                  <form className="selective-property-form flex flex-row flex-wrap gap-1">
                     {property.values.map((propertyval: any, index: any) => {
                       return (
                         <label key={index}>

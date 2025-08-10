@@ -8,14 +8,14 @@ function HeartSvg() {
       viewBox="-1.18 -1.18 15.43 15.43"
       fill="white"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         stroke="#444"
-        stroke-width="1.82924"
+        strokeWidth="1.82924"
       >
         <g>
           <g>

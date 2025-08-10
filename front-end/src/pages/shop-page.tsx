@@ -5,6 +5,8 @@ import ProductCard from "../components/common/product-card";
 import Pagination from "../components/common/pagination";
 import ChildCategories from "../components/common/childCategories";
 import BreadCrumb from "../components/common/breadCrumb";
+import ColorFilterBox from "../components/common/colorFilter-box";
+import OrdinaryFilterBox from "../components/common/ordinaryFilter-box";
 
 const ShopPage = () => {
   const {
@@ -42,46 +44,20 @@ const ShopPage = () => {
                 {filters.map((item: any, index: any) => {
                   return (
                     <form className="flex flex-col gap-2 p-4" key={index}>
-                      <h4 className="font-weight300">{item.property.name}</h4>
-                      <div className="flex flex-col gap-1 ms-1">
-                        {item.values.length
-                          ? item.values.map((val: any, index: any) => {
-                              return (
-                                <label
-                                  key={index}
-                                  className="flex flex-row gap-1 items-center text-neutral-900 text-size14"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    name="selective"
-                                    value={val.propertyval?._id}
-                                    checked={
-                                      appliedQueries[
-                                        `attributes[${item.property._id}]`
-                                      ]?.includes(val.propertyval?._id)
-                                        ? true
-                                        : false
-                                    }
-                                    onChange={(e) =>
-                                      handleFilterCheck(e, item.property._id)
-                                    }
-                                  />
-                                  {val.propertyval?.hex ? (
-                                    <span
-                                      style={{
-                                        backgroundColor:
-                                          "#" + val.propertyval.hex.toString(),
-                                      }}
-                                      className="w-5 h-5 aspect-square rounded-full"
-                                    ></span>
-                                  ) : (
-                                    val.propertyval.value
-                                  )}
-                                </label>
-                              );
-                            })
-                          : null}
-                      </div>
+                      <h4 className="font-weight300">{item?.property.name}</h4>
+                      {item?.property?.type === "color" ? (
+                        <ColorFilterBox
+                          item={item}
+                          appliedQueries={appliedQueries}
+                          handleFilterCheck={handleFilterCheck}
+                        ></ColorFilterBox>
+                      ) : (
+                        <OrdinaryFilterBox
+                          item={item}
+                          appliedQueries={appliedQueries}
+                          handleFilterCheck={handleFilterCheck}
+                        ></OrdinaryFilterBox>
+                      )}
                     </form>
                   );
                 })}

@@ -6,23 +6,16 @@ interface PropertySelectorProps {
 const PropertySelector = (props: PropertySelectorProps) => {
   if (props.type === "color") {
     return (
-      <div className="rounded px-3 py-1 rounded-lg relative w-[32px] aspect-square flex items-center justify-center property-selector-box">
-        <span
-          className={`absolute w-[40px] aspect-square rounded-full border border-neutral-300 z-0 outer ${
-            props.formData.selectedPropertyvalString ===
-            props.propertyval.propertyval._id
-              ? "bg-lime-500"
-              : "bg-transparent"
-          }`}
-        ></span>
-        <span
-          className="absolute w-full h-full border-2 rounded-full border-white z-10 inner"
-          style={{
-            backgroundColor: "#" + props.propertyval.propertyval.hex.toString(),
-          }}
-        ></span>
-        <i className="bi bi-list-check"></i>
-      </div>
+      <span
+        className={`w-8 h-8 flex border-2 rounded-full border-white z-10 inner ${
+          props.formData.selectedPropertyvalString ===
+            props.propertyval.propertyval._id &&
+          "border-2 border-white outline-2 outline-green-600"
+        }`}
+        style={{
+          backgroundColor: "#" + props.propertyval.propertyval.hex.toString(),
+        }}
+      ></span>
     );
   }
   if (props.type === "ordinary") {
