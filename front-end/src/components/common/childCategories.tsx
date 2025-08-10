@@ -3,7 +3,7 @@ import Img from "./img";
 
 const ChildCategories = ({ childCats, categoryId }: any) => {
   return (
-    <div className="flex flex-row px-5 md:px-20 pt-10 gap-3">
+    <div className="flex flex-row px-5 md:px-20 gap-3">
       {childCats.map((item: any, index: any) => {
         if (item.motherId === categoryId) {
           return (
