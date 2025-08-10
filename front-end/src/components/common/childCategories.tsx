@@ -29,7 +29,7 @@ const ChildCategories = ({ childCats, categoryId }: any) => {
         {childCats.map((item: any, index: any) => {
           if (item.motherId === categoryId) {
             return (
-              <SwiperSlide className="max-w-[150px]">
+              <SwiperSlide className="max-w-[200px]">
                 <Link
                   key={index}
                   to={`/shop/${item._id}`}
