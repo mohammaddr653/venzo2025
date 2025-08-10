@@ -100,8 +100,8 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
                 ></AccountButtons>
               </div>
             </div>
-            <nav>
-              <ul className="flex pe-4 ps-2 flex-col font-weight300 text-cu-neutral-900">
+            <nav className="">
+              <ul className="flex px-2 w-full flex-col gap-2 items-center font-weight300 text-cu-neutral-900">
                 {categories?.length &&
                   categories.map((category: any, index: any) => {
                     return (

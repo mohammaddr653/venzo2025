@@ -7,7 +7,7 @@ const MobMenuItem = ({ item, categories }: any) => {
     categories.some((category: any) => category.motherId === item._id);
 
   return (
-    <li className={`${item.display} ps-2`}>
+    <li className={`${item.display} ps-2 w-full`}>
       <div className={`head flex flex-row items-center justify-between ${!condition&&"font-weight200"}`}>
         {item.type === "shop" && (
           <Link to={`/shop/${item._id}`}>{item.name}</Link>
