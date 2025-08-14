@@ -15,7 +15,10 @@ import SwiperButtonNext from "./swiper-button-next";
 
 const ChildCategories = ({ childCats, categoryId }: any) => {
   return (
-    <div className="childCategories-container px-5 md:px-20">
+    <div className="childCategories-container px-5 md:px-20 flex flex-col gap-2">
+      <p className="font-weight300 text-size16 text-neutral-800">
+        جستجوی دقیق تر
+      </p>
       <Swiper
         breakpoints={{
           0: {
@@ -33,7 +36,7 @@ const ChildCategories = ({ childCats, categoryId }: any) => {
         }}
         spaceBetween={20}
         initialSlide={0}
-        className="mySwiper"
+        className="mySwiper w-full"
       >
         <div className="swiperjs-controlls">
           <SwiperButtonPrev></SwiperButtonPrev>
