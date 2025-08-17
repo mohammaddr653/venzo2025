@@ -190,7 +190,7 @@ router.get(
 );
 router.post(
   "/dashboard/medias",
-  uploadHandler("media", /jpeg|jpg|png/, true, 1000),
+  uploadHandler("media", /jpeg|jpg|png|webp/, true, 1000),
   compressor("./uploads/medias"),
   fileToReqBodyHandler("media", true),
   validator.mediaValidator(),
@@ -199,7 +199,7 @@ router.post(
 );
 router.put(
   "/dashboard/medias/:mediaId",
-  uploadHandler("media", /jpeg|jpg|png/, false, 1000),
+  uploadHandler("media", /jpeg|jpg|png|webp/, false, 1000),
   compressor("./uploads/medias"),
   fileToReqBodyHandler("media"),
   controller.updateMedia.bind(controller)

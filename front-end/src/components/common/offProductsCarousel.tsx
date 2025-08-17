@@ -43,7 +43,7 @@ const OffProductsCarousel = () => {
         <Swiper
           breakpoints={{
             0: {
-              slidesPerView: 1.5,
+              slidesPerView: 1.1,
             },
             640: {
               slidesPerView: 2.5,

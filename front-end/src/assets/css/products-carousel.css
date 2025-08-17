@@ -22,7 +22,7 @@ div.products-carousel-container button.swiper-next {
   height: 40px;
   width: 40px;
   border-radius: 100%;
-  background-color: var(--color-secondary);
+  background-color: #efab52db;
   display: flex;
   flex-direction: row;
   align-items: center;

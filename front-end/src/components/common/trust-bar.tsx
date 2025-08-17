@@ -11,11 +11,11 @@ const TrustBar = () => {
   return (
     <>
       {trusts?.length ? (
-        <div className="flex flex-row lg:gap-10 flex-wrap [&>*]:grow">
+        <div className="flex flex-row lg:gap-3 flex-wrap [&>*]:grow">
           {trusts.map((trust: any, index: any) => {
             return trust.show ? (
               <div
-                className=" flex flex-col items-center justify-start rounded-xl py-3 gap-3 basis-36"
+                className=" flex flex-col  lg:border lg:border-neutral-primary lg:shadow-sm  items-center justify-start rounded-xl py-3 gap-3 basis-36"
                 key={index}
               >
                 <div className="flex flex-col items-center gap-1">
@@ -29,7 +29,7 @@ const TrustBar = () => {
                     {trust.title}
                   </h3>
                 </div>
-                <p className="text-size14 hidden md:block font-weight200 text-cu-neutral-800 text-justify">
+                <p className="text-size14 hidden px-4 md:block font-weight100 text-cu-neutral-800 text-justify">
                   {trust.caption}
                 </p>
               </div>

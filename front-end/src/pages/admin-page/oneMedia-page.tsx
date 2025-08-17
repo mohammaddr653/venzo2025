@@ -108,7 +108,7 @@ const OneMediaPage = () => {
                             <input
                               type="file"
                               name="media"
-                              accept=".png,.jpg"
+                              accept=".png,.jpg,.webp"
                               className="border"
                               onChange={handleUpdateFileChange}
                               ref={versionInputRef}

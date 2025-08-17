@@ -60,7 +60,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="flex flex-col gap-1.5 h-full">
       <Link
         to={`/single-shop/${product._id}`}
-        className="product-card rounded-xl border-neutral-200 border overflow-hidden hover:shadow-card-neutral transition-shadow duration-300"
+        className="product-card rounded-xl border-neutral-primary border overflow-hidden hover:shadow-card-neutral transition-shadow duration-300"
       >
         <div className=" main-part w-full flex flex-col justify-start items-center h-full">
           <div className="relative w-full p-2">

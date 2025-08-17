@@ -19,30 +19,38 @@ const compressor = (dir) => {
       file.urls = {};
       await Promise.all(
         Object.entries(sizes).map(async ([key, size]) => {
-          const url =
-            directory +
-            "/" +
-            fileName +
-            (key === "original" ? extName : `-${key}${extName}`);
-
           let pipeline = sharp(file.buffer).withMetadata();
-          const format = extName.substring(1).toLowerCase();
+          let format = extName.substring(1).toLowerCase();
           switch (format) {
             case "png":
-              pipeline = pipeline.png({ quality: 70 });
+              pipeline = pipeline.webp({ quality: 70 });
+              format = ".webp";
               break;
             case "webp":
               pipeline = pipeline.webp({ quality: 70 });
+              format = ".webp";
               break;
             case "jpg":
+              pipeline = pipeline.webp({ quality: 70 });
+              format = ".webp";
+              break;
             case "jpeg":
-              pipeline = pipeline.jpeg({ quality: 70 });
+              pipeline = pipeline.webp({ quality: 70 });
+              format = ".webp";
               break;
             default:
               // اگر فرمت پشتیبانی نشده بود، به jpeg تبدیل کن
               pipeline = pipeline.jpeg({ quality: 70 });
+              format = ".jpeg";
+
               break;
           }
+          const url =
+            directory +
+            "/" +
+            fileName +
+            (key === "original" ? format : `-${key}${format}`);
+
           const metadata = await pipeline.metadata();
 
           let width = metadata.width;

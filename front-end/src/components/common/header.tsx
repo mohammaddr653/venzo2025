@@ -9,7 +9,6 @@ interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
-  const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
   const { width, setWidth } = useWidthStore();
 
   return (

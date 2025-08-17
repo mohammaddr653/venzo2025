@@ -25,11 +25,11 @@ div#header-container.desktop-header nav li.mega-menu:hover~div.glass {
   opacity: 1;
 }
 
-div#header-container.desktop-header nav li.mega-menu a {
+div#header-container.desktop-header nav li.mega-menu>div.childs a {
   color: var(--color-neutral-800);
   transition: color 300ms;
 }
-div#header-container.desktop-header nav li a:hover {
+div#header-container.desktop-header nav li.mega-menu>div.childs a:hover {
   color: red;
   cursor: pointer;
 }

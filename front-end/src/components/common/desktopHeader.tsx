@@ -41,9 +41,7 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
       <div
         id="header-container"
         className={`desktop-header relative z-50 flex flex-row gap-10 justify-start items-center px-20 transition-all duration-300 ${
-          isScrolled || focus
-            ? "bg-white/80 backdrop-blur-2xl shadow-b-lean-300"
-            : "bg-transparent"
+          isScrolled || focus ? "bg-white shadow-b-lean-300" : "bg-transparent"
         }`}
       >
         <Link to={"/"}>
@@ -51,7 +49,13 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
         </Link>
         <div className="menu">
           <nav>
-            <ul className="flex px-0 flex-row gap-5 font-weight300 text-cu-neutral-900">
+            <ul
+              className={`flex px-0 flex-row gap-5 font-weight200 ${
+                isScrolled || focus
+                  ? "text-neutral-800 text-shadow-none"
+                  : "text-white text-shadow-lg shadow-black"
+              } `}
+            >
               {categories?.length &&
                 categories.map((category: any, index: any) => {
                   return (
