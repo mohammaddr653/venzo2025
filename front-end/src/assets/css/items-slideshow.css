@@ -1,0 +1,95 @@
+div.items-slideshow-container div.swiper.swiper-initialized {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  /* background-color: #efab52; */
+  height: 100%;
+  padding: 0 5px;
+}
+div.items-slideshow-container div.swiper.swiper-initialized div.swiper-slide {
+  padding: 5px 0;
+  padding: 0;
+  height: fit-content;
+  /* background-color: pink; */
+}
+div.items-slideshow-container
+  div.swiper.swiper-initialized
+  div.swiper-slide
+  > div.item-container {
+  padding: 0 15px;
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+
+div.items-slideshow-container
+  div.swiper.swiper-initialized
+  div.swiper-slide.swiper-slide-next
+  > div.item-container {
+  padding: 15px 15px;
+  border: 1px solid var(--color-neutral-50);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: transparent;
+  transition-property: padding;
+  transition-duration: 1000ms;
+}
+div.items-slideshow-container div.swiper.swiper-initialized div.swiper-wrapper {
+  padding: 0;
+  align-items: center;
+  height: 100%;
+  /* background-color: green; */
+}
+div.items-slideshow-container div.swiperjs-controlls {
+  background-color: yellow;
+  width: 100%;
+  visibility: hidden;
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  padding: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 10;
+}
+div.items-slideshow-container button.swiper-prev,
+div.items-slideshow-container button.swiper-next {
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: #efab52;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0 0 5px 1px var(--color-neutral-500);
+  justify-content: center;
+  visibility: visible;
+  border: none;
+  padding: 0px;
+  transition: all;
+  transition-duration: 300ms;
+}
+div.items-slideshow-container button:hover {
+  cursor: pointer;
+  background-color: var(--color-primary);
+}
+
+div.items-slideshow-container button i {
+  color: var(--color-white);
+  font-size: 10px;
+  height: 0;
+  width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 2px 2px 4px black;
+}
+div.items-slideshow-container div.swiper-pagination {
+  /* top: 90%; */
+  /* background-color: red; */
+}
+div.items-slideshow-container div.swiper-pagination span {
+  background-color: var(--color-secondary);
+  box-shadow: 0 0 5px 1px black;
+}
