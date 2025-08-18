@@ -24,7 +24,7 @@ const HomePage = () => {
             <div className="w-full lg:flex-[1] px-5 lg:px-0 hidden lg:block">
               <HeroCard></HeroCard>
             </div>
-            <div className="w-full lg:flex-[3] px-5 md:px-20 lg:px-0">
+            <div className="w-full lg:flex-[3] px-5 md:px-20 lg:px-0 my-5 lg:my-0">
               <ItemsSlidshow></ItemsSlidshow>
             </div>
           </div>

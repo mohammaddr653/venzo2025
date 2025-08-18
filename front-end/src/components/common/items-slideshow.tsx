@@ -17,17 +17,37 @@ import { useEffect } from "react";
 import SwiperButtonPrev from "./swiper-button-prev";
 import SwiperButtonNext from "./swiper-button-next";
 import Img from "./img";
+import TitleCentral from "./title-central";
+import { useWidthStore } from "../../store";
+import { BREAK_POINTS } from "../../../config";
 
 function ItemsSlideshow() {
+  const { width, setWidth } = useWidthStore();
   return (
-    <div className="border border-neutral-200 lg:border-0 lg:py-20 lg:px-10 items-slideshow-container lg:bg-[url(/images/pexels-dada-_design-240566386-17271985.jpg)] lg:border lg:border-neutral-primary bg-cover bg-no-repeat bg-bottom w-full rounded-lg flex items-center justify-center lg:justify-end">
-      <div className=" w-full lg:w-[500px] relative">
+    <div className=" lg:py-20 lg:px-10 items-slideshow-container lg:bg-[url(/images/pexels-dada-_design-240566386-17271985.jpg)] lg:border lg:border-neutral-primary bg-cover bg-no-repeat bg-bottom w-full rounded-lg flex flex-col lg:flex-row items-start gap-2 justify-between">
+      {width < BREAK_POINTS.lg ? (
+        <TitleCentral
+          title={"دسته بندی محصولات"}
+          class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
+          icon={false}
+        ></TitleCentral>
+      ) : (
+        <div className="w-full text-red-900 relative bottom-9 flex flex-col gap-3">
+          <p className=" text-[24px] font-weight400 text-shadow-stroke text-shadow-white">
+            با عشق ، برای خانه ات 💕
+          </p>
+          <p className="font-weight300 text-size13 text-shadow-stroke text-shadow-white">
+            پر فروش ترین دسته بندی ها ، برای خریدی مطمئن
+          </p>
+        </div>
+      )}
+      <div className="w-full lg:w-[500px] relative border-neutral-200 lg:border-0 rounded-lg">
         <Swiper
           className=""
           modules={[Autoplay, Pagination, Navigation, Scrollbar, A11y]}
           initialSlide={0}
           loop={true}
-          spaceBetween={"10px"}
+          spaceBetween={"5px"}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
