@@ -7,7 +7,7 @@ const HeroCard = () => {
       className=" bg-gradient-to-t from-amber-100 to-amber-50 rounded-xl relative h-full w-full border border-neutral-primary flex flex-col items-center gap-4 p-4"
     >
       <img
-        src="/images/icons/d0i713732ffa55576e36d0dd32dd1c74068.png"
+        src="/images/icons/1755699166431-232064117-d0i713732ffa55576e36d0dd32dd1c7324068.webp"
         width={350}
         className="hidden lg:block"
         alt="kitchen-png"
