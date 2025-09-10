@@ -12,6 +12,7 @@ const shopRouter = require("./shop");
 const singleShopRouter = require("./singleShop");
 const categoriesRouter = require("./categories");
 const cartRouter = require("./cart");
+const payRouter = require("./pay");
 const tokenRouter = require("./token");
 const verify = require("./verify");
 const passRestore = require("./pass-restore");
@@ -40,6 +41,7 @@ router.use("/page", pageRouter);
 router.use("/shop", shopRouter);
 router.use("/single-shop", singleShopRouter);
 router.use("/cart", isLoggedIn, verified, cartRouter);
+router.use("/pay", isLoggedIn, verified, payRouter);
 router.use("/verify", isLoggedIn, notVerified, verify);
 
 router.use(error);

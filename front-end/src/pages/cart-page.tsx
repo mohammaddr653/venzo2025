@@ -47,6 +47,11 @@ const CartPage = () => {
     loadCart();
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const response = await call(axios.post(SERVER_API + "/pay"), false);
+    window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
+  };
   return (
     <>
       <Header focus={true}></Header>
@@ -103,7 +108,7 @@ const CartPage = () => {
           </div>
           <br />
           <h2>قیمت کل : {totalPrice}</h2>
-          <form action="/pay" method="POST">
+          <form onSubmit={handleSubmit}>
             <button>پرداخت</button>
           </form>
           <div className="bg-sky-600">this is tailwind</div>
