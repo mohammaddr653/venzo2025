@@ -59,6 +59,7 @@ class PropertyvalServices {
       return serviceResponse(400, {});
     }
     propertyval.value = req.body.value;
+    //note:I think we can do this without transactions
     const transactionResult = await withTransaction(async (session) => {
       const updateOp = await propertyval.save({ session });
       return serviceResponse(200, {});

@@ -2,7 +2,6 @@
 const getPriceAndStock = (selectedPropertyvalString, product) => {
   let price = product.price;
   let stock = product.stock;
-  let selectionString = "";
 
   if (selectedPropertyvalString !== "") {
     const selectiveProperty = product.properties.find(
@@ -11,12 +10,11 @@ const getPriceAndStock = (selectedPropertyvalString, product) => {
     const selectedPropertyval = selectiveProperty.values.find((propertyval) =>
       selectedPropertyvalString.includes(propertyval.propertyval._id.toString())
     );
-    selectionString = selectedPropertyval?.propertyval?.value;
     price = selectedPropertyval.price;
     stock = selectedPropertyval.stock;
   }
 
-  return { price, stock, selectionString };
+  return { price, stock };
 };
 
 module.exports = getPriceAndStock;

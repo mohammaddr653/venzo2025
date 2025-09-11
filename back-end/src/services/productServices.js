@@ -213,6 +213,7 @@ class ProductServices {
     const productIds = cart.reservedProducts.map((item) =>
       item.productId.toString()
     );
+    //note: maybe we can merge this fundtion with newOrderFromCart function in orderServices
     const products = await Product.find({ _id: { $in: productIds } })
       .populate("img")
       .populate({ path: "properties.property", model: "Property" })
@@ -225,7 +226,7 @@ class ProductServices {
         const productInfo = cart.reservedProducts.find((p) =>
           p.productId.equals(product._id)
         );
-        const { price, stock, selectionString } = getPriceAndStock(
+        const { price, stock } = getPriceAndStock(
           productInfo.selectedPropertyvalString,
           product
         );
@@ -233,7 +234,7 @@ class ProductServices {
           ...product.toObject(),
           price: price,
           stock: stock,
-          selectionString: selectionString,
+          selectedPropertyvalString: productInfo.selectedPropertyvalString,
           count: productInfo ? productInfo.count : 0,
         };
       })

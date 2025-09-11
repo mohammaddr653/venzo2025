@@ -49,8 +49,8 @@ const CartPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await call(axios.post(SERVER_API + "/pay"), false);
-    window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
+    const response = await call(axios.post(SERVER_API + "/orders"), true);
+    // window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
   };
   return (
     <>
@@ -74,14 +74,17 @@ const CartPage = () => {
                     <tr key={index}>
                       <td>
                         {product.name}
-                        {product.selectionString ? (
-                          <>
-                            <br />
-                            <span className="bg-amber-500 text-black">
-                              {product.selectionString}
-                            </span>
-                          </>
-                        ) : null}
+                        {product.selectedPropertyvalString !== "" &&
+                          product.properties
+                            .find((item: any) => item.selective)
+                            .values.map((propertyval: any, index: any) => {
+                              if (
+                                product.selectedPropertyvalString.includes(
+                                  propertyval.propertyval._id
+                                )
+                              )
+                                return <p key={index} className="bg-amber-400 text-black">{propertyval.propertyval.value}</p>;
+                            })}
                       </td>
                       <td>{product.price * product.count}</td>
                       <td className="flex flex-row">

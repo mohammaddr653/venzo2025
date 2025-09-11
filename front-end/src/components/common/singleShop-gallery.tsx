@@ -39,6 +39,7 @@ const SingleShopGallery = ({ product }: SingleShopGalleryProps) => {
           ? product.gallery.slice(0, 5).map((image: any, index: any) => {
               return (
                 <button
+                  key={index}
                   className="relative max-w-[50px] rounded-md overflow-hidden cursor-pointer"
                   onClick={() => setClickedImg({ ...image })}
                 >
@@ -46,7 +47,6 @@ const SingleShopGallery = ({ product }: SingleShopGalleryProps) => {
                     pic={image}
                     sizes={"70px"}
                     className="aspect-square object-cover w-full"
-                    key={index}
                   ></Img>
                   {4 < product.gallery.length - 1 && index === 4 ? (
                     <div
