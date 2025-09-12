@@ -5,6 +5,7 @@ import axios from "axios";
 import LoadingButton from "../components/common/loadingButton";
 import useLoadUser from "../hooks/useLoadUser";
 import AvatarSelector from "../components/common/avatarSelector";
+import { Link } from "react-router-dom";
 
 const UserPage = () => {
   const { call, loading } = callManager();
@@ -62,6 +63,8 @@ const UserPage = () => {
           <LoadingButton loading={loading}>ثبت تغییرات</LoadingButton>
         </form>
       </div>
+      <Link to={"/orders"}>سفارش های من</Link>
+
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">
         this is zustand , hello{user ? user.name : " user"}

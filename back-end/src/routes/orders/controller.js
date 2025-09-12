@@ -8,23 +8,21 @@ const _ = require("lodash");
 
 module.exports = new (class extends controller {
   async getOrders(req, res) {
+    const result = await orderServices.getUserOrders(req, res);
     return this.response({
       res,
-      message: "this is your orders",
-      data: result,
+      message: "لیست تمام سفارشات",
+      data: result.data,
     });
   }
 
   async createOrderFromCart(req, res) {
     const { data: cart } = await cartServices.seeOneCart(req, res);
-    const result = await orderServices.newOrderFromCart(
-      req,
-      res,
-      cart
-    );
+    const result = await orderServices.newOrderFromCart(req, res, cart);
     return this.response({
       res,
       message: "new order created , here is the order id",
+      data:result.data._id
     });
   }
 })();

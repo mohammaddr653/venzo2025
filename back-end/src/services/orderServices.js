@@ -10,7 +10,7 @@ const totalPriceCalculator = require("../helpers/totalPriceCalculator");
 class OrderServices {
   async getUserOrders(req, res) {
     //خواندن سفارش های کاربر از دیتابیس
-    const findOp = await Product.find({});
+    const findOp = await Order.find({ userId: req.user._id });
     return serviceResponse(200, findOp);
   }
 
@@ -106,7 +106,7 @@ class OrderServices {
 
       //محاسبه قیمت کل
       const totalPrice = totalPriceCalculator(productsReadyToPay);
-      
+
       const newOrder = new Order({
         userId: req.user.id,
         products: productsReadyToPay,
@@ -117,7 +117,6 @@ class OrderServices {
       cart.reservedProducts = [];
       const cartUpdateOp = await cart.save({ session });
       const saveOp = await newOrder.save({ session });
-
       return serviceResponse(200, saveOp);
     });
     return transactionResult;

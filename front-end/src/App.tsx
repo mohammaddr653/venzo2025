@@ -42,6 +42,8 @@ import { handleGoUp } from "./helpers/handleGoUp";
 import MediasPage from "./pages/admin-page/medias-page";
 import AboutUs from "./pages/about-us";
 import OneMediaPage from "./pages/admin-page/oneMedia-page";
+import OrdersRoute from "./components/private-route-components/ordersRoute";
+import ClientOrdersPage from "./pages/client-orders-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -106,6 +108,9 @@ function App() {
         </Route>
         <Route element={<UserRoute user={user} />}>
           <Route path="/user" element={<UserPage />} />
+        </Route>
+        <Route element={<OrdersRoute user={user} />}>
+          <Route path="/orders" element={<ClientOrdersPage />} />
         </Route>
         <Route element={<CartRoute user={user} />}>
           <Route path="/cart" element={<CartPage />} />

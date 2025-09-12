@@ -9,7 +9,7 @@ module.exports = new (class extends controller {
     const result = await payServices.postPay(req, res);
     return this.response({
       res,
-      message: "redirect to gateway",
+      message: "here is the authority",
       data: result.data,
     });
   }

@@ -48,9 +48,17 @@ const CartPage = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
+    //ساخت سفارش جدید و بلافاصله انتقال به درگاه
     e.preventDefault();
-    const response = await call(axios.post(SERVER_API + "/orders"), true);
-    // window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
+    const createOrder = await call(axios.post(SERVER_API + "/orders"), true);
+    if (createOrder.data.data) {
+      const response = await call(
+        axios.post(SERVER_API + `/pay/${createOrder.data.data}`),
+        true
+      );
+      if (response.data.data)
+        window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
+    }
   };
   return (
     <>
@@ -83,7 +91,14 @@ const CartPage = () => {
                                   propertyval.propertyval._id
                                 )
                               )
-                                return <p key={index} className="bg-amber-400 text-black">{propertyval.propertyval.value}</p>;
+                                return (
+                                  <p
+                                    key={index}
+                                    className="bg-amber-400 text-black"
+                                  >
+                                    {propertyval.propertyval.value}
+                                  </p>
+                                );
                             })}
                       </td>
                       <td>{product.price * product.count}</td>

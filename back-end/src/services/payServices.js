@@ -3,16 +3,21 @@ const Cart = require("../models/cart");
 const reservedProduct = require("../models/reservedProduct");
 const serviceResponse = require("../helpers/serviceResponse");
 const { ZarinPal } = require("zarinpal-node-sdk");
+const Order = require("../models/order");
 
 class PayServices {
   async postPay(req, res) {
+
+    //دریافت اطلاعات سفارش
+    const findOp = await Order.findOne({ _id: req.params.orderId });
+
     const zarinpal = new ZarinPal({
       merchantId: process.env.MERCHANT_ID,
       sandbox: true,
     });
 
     const response = await zarinpal.payments.create({
-      amount: 10000,
+      amount: findOp.totalPrice,
       callback_url: "https://127.0.0.1:5173",
       description: "Payment for order #1234",
       mobile: "09123456789",
