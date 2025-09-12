@@ -72,6 +72,7 @@ const AdminPage = () => {
         <Link to={"/admin/categories"}>مدیریت دسته بندی ها</Link>
         <Link to={"/admin/products"}>مدیریت محصولات</Link>
         <Link to={"/admin/properties"}>مدیریت ویژگی ها</Link>
+        <Link to={"/admin/orders"}>مدیریت سفارش ها</Link>
         {/* <Link to={"/admin/blogs"}>مدیریت مقالات</Link> */}
       </div>
       <br />

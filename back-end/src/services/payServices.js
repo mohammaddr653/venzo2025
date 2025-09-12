@@ -7,9 +7,15 @@ const Order = require("../models/order");
 
 class PayServices {
   async postPay(req, res) {
-
     //دریافت اطلاعات سفارش
-    const findOp = await Order.findOne({ _id: req.params.orderId });
+    const updateOp = await Order.findOneAndUpdate(
+      { _id: req.params.orderId, status: { $ne: "paied" } },
+      { $set: { status: "online" } }
+    );
+    
+    if (!updateOp) {
+      return serviceResponse(409, {});
+    }
 
     const zarinpal = new ZarinPal({
       merchantId: process.env.MERCHANT_ID,
@@ -17,7 +23,7 @@ class PayServices {
     });
 
     const response = await zarinpal.payments.create({
-      amount: findOp.totalPrice,
+      amount: updateOp.totalPrice,
       callback_url: "https://127.0.0.1:5173",
       description: "Payment for order #1234",
       mobile: "09123456789",

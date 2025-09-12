@@ -11,7 +11,7 @@ module.exports = new (class extends controller {
     const result = await orderServices.getUserOrders(req, res);
     return this.response({
       res,
-      message: "لیست تمام سفارشات",
+      message: "لسیست تمام سفارشات کاربر",
       data: result.data,
     });
   }
@@ -22,7 +22,7 @@ module.exports = new (class extends controller {
     return this.response({
       res,
       message: "new order created , here is the order id",
-      data:result.data._id
+      data: result.data._id,
     });
   }
 })();

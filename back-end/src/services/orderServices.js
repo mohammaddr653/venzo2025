@@ -14,6 +14,12 @@ class OrderServices {
     return serviceResponse(200, findOp);
   }
 
+  async seeAllOrders(req, res) {
+    //خواندن تمام سفارش های فروشگاه از دیتابیس
+    const findOp = await Order.find({});
+    return serviceResponse(200, findOp);
+  }
+
   async newOrderFromCart(req, res, cart) {
     //ساخت سفارش جدید و خالی کردن سبد خرید
     const productsReadyToPay = [];

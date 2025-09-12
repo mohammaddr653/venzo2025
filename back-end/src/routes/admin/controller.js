@@ -3,6 +3,7 @@ const debug = require("debug")("app");
 const blogServices = require("../../services/blogServices");
 const categoriesServices = require("../../services/categoriesServices");
 const mediaServices = require("../../services/mediaServices");
+const orderServices = require("../../services/orderServices");
 const productServices = require("../../services/productServices");
 const propertyServices = require("../../services/propertyServices");
 const propertyvalServices = require("../../services/propertyvalServices");
@@ -11,7 +12,6 @@ const controller = require("./../controller");
 const _ = require("lodash");
 
 module.exports = new (class extends controller {
-
   async getUsers(req, res) {
     const result = await userServices.getAllUsers(req);
     return this.response({
@@ -503,5 +503,14 @@ module.exports = new (class extends controller {
       });
 
     throw Error;
+  }
+
+  async getAllOrders(req, res) {
+    const result = await orderServices.seeAllOrders(req, res);
+    return this.response({
+      res,
+      message: "لیست تمام سفارشات فروشگاه",
+      data: result.data,
+    });
   }
 })();

@@ -210,4 +210,8 @@ router.delete(
   controller.deleteMedia.bind(controller)
 );
 
+//orders
+
+router.get("/dashboard/orders", controller.getAllOrders.bind(controller));
+
 module.exports = router;

@@ -44,6 +44,7 @@ import AboutUs from "./pages/about-us";
 import OneMediaPage from "./pages/admin-page/oneMedia-page";
 import OrdersRoute from "./components/private-route-components/ordersRoute";
 import ClientOrdersPage from "./pages/client-orders-page";
+import OrdersPage from "./pages/admin-page/orders-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -104,6 +105,7 @@ function App() {
           <Route path="/admin/update-media" element={<OneMediaPage />} />
           <Route path="/admin/users" element={<UsersPage />} />
           <Route path="/admin/update-user" element={<OneUserPage />} />
+          <Route path="/admin/orders" element={<OrdersPage />} />
           <Route path="/admin" element={<AdminPage />} />
         </Route>
         <Route element={<UserRoute user={user} />}>
