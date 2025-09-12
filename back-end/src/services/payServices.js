@@ -19,7 +19,7 @@ class PayServices {
 
     const zarinpal = new ZarinPal({
       merchantId: process.env.MERCHANT_ID,
-      sandbox: true,
+      sandbox: false,
     });
 
     const response = await zarinpal.payments.create({

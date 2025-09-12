@@ -57,7 +57,7 @@ const CartPage = () => {
         true
       );
       if (response.data.data)
-        window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
+        window.location.href = `https://payment.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
     }
   };
   return (
