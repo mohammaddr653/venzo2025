@@ -3,6 +3,7 @@ const Product = require("../models/product");
 const withTransaction = require("../helpers/withTransaction");
 const serviceResponse = require("../helpers/serviceResponse");
 const Order = require("../models/order");
+const Propertyval = require("../models/propertyval");
 
 class OrderServices {
   async getUserOrders(req, res) {
@@ -12,9 +13,8 @@ class OrderServices {
   }
 
   async newOrderFromCart(req, res, cart) {
-    //ساخت سفارش جدید
+    //ساخت سفارش جدید و خالی کردن سبد خرید
     const productsReadyToPay = [];
-
     const transactionResult = await withTransaction(async (session) => {
       for (let item of cart.reservedProducts) {
         if (item.selectedPropertyvalString === "") {
@@ -35,21 +35,30 @@ class OrderServices {
               model: "Propertyval",
             });
 
-          if (updateOp) {
-            const orderProduct = {
-              productId: updateOp._id,
-              name: updateOp.name,
-              price: updateOp.price,
-              discount: updateOp.discount,
-              properties: updateOp.properties,
-              count: item.count,
-              selectedPropertyvalString: item.selectedPropertyvalString,
-            };
-            productsReadyToPay.push(orderProduct);
-          } else {
+          if (!updateOp) {
             throw new Error("Insufficient stock");
           }
+          const orderProduct = {
+            productId: updateOp._id,
+            name: updateOp.name,
+            price: updateOp.price,
+            discount: updateOp.discount,
+            properties: updateOp.properties,
+            count: item.count,
+            selectedPropertyvalString: "",
+          };
+          productsReadyToPay.push(orderProduct);
         } else {
+          const findOp = await Propertyval.findOne(
+            {
+              _id: item.selectedPropertyvalString,
+            },
+            null,
+            { session }
+          );
+          if (!findOp) {
+            throw new Error("selected propertyval not founded");
+          }
           const updateOp = await Product.findOneAndUpdate(
             {
               _id: item.productId,
@@ -72,20 +81,19 @@ class OrderServices {
               model: "Propertyval",
             });
 
-          if (updateOp) {
-            const orderProduct = {
-              productId: updateOp._id,
-              name: updateOp.name,
-              price: updateOp.price,
-              discount: updateOp.discount,
-              properties: updateOp.properties,
-              count: item.count,
-              selectedPropertyvalString: item.selectedPropertyvalString,
-            };
-            productsReadyToPay.push(orderProduct);
-          } else {
+          if (!updateOp) {
             throw new Error("Insufficient stock");
           }
+          const orderProduct = {
+            productId: updateOp._id,
+            name: updateOp.name,
+            price: updateOp.price,
+            discount: updateOp.discount,
+            properties: updateOp.properties,
+            count: item.count,
+            selectedPropertyvalString: findOp.value,
+          };
+          productsReadyToPay.push(orderProduct);
         }
       }
       const newOrder = new Order({
@@ -95,7 +103,10 @@ class OrderServices {
         totalPrice: 23,
       });
 
+      cart.reservedProducts = [];
+      const cartUpdateOp = await cart.save({ session });
       const saveOp = await newOrder.save({ session });
+
       return serviceResponse(200, saveOp);
     });
     return transactionResult;
