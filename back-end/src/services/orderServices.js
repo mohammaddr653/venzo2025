@@ -120,6 +120,7 @@ class OrderServices {
         products: productsReadyToPay,
         status: "canceled",
         totalPrice: totalPrice,
+        authority: "",
       });
 
       cart.reservedProducts = [];

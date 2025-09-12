@@ -43,7 +43,7 @@ router.use("/shop", shopRouter);
 router.use("/single-shop", singleShopRouter);
 router.use("/cart", isLoggedIn, verified, cartRouter);
 router.use("/orders", isLoggedIn, verified, ordersRouter);
-router.use("/pay", isLoggedIn, verified, payRouter);
+router.use("/pay", payRouter);
 router.use("/verify", isLoggedIn, notVerified, verify);
 
 router.use(error);

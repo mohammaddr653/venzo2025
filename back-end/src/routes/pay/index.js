@@ -4,5 +4,6 @@ const router = express.Router();
 const controller = require("./controller");
 
 router.post("/:orderId", controller.postPay.bind(controller));
+router.get("/callback", controller.callback.bind(controller));
 
 module.exports = router;
