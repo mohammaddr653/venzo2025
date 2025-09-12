@@ -213,5 +213,6 @@ router.delete(
 //orders
 
 router.get("/dashboard/orders", controller.getAllOrders.bind(controller));
+router.delete("/dashboard/orders/:orderId", controller.deleteOrder.bind(controller));
 
 module.exports = router;

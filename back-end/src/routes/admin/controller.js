@@ -47,7 +47,7 @@ module.exports = new (class extends controller {
         data: result.data,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async updateUser(req, res) {
@@ -66,7 +66,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async deleteUser(req, res) {
@@ -92,7 +92,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async createCategory(req, res) {
@@ -109,7 +109,7 @@ module.exports = new (class extends controller {
         message: "ساخت دسته بندی ناموفق بود",
         code: result.status,
       });
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async seeOneCategory(req, res) {
@@ -135,7 +135,7 @@ module.exports = new (class extends controller {
         message: "بروزرسانی دسته بندی ناموفق بود",
         code: result.status,
       });
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async deleteCategory(req, res) {
@@ -156,7 +156,7 @@ module.exports = new (class extends controller {
         message: "دسته بندی با موفقیت حذف شد",
       });
     }
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   //note:think about deleting this controller because I think its repeated in another controller too .
@@ -199,7 +199,7 @@ module.exports = new (class extends controller {
         message: "حذف محصول ناموفق بود",
         code: result.status,
       });
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async getBlogs(req, res) {
@@ -244,7 +244,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async deleteBlog(req, res) {
@@ -262,7 +262,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async getProperties(req, res) {
@@ -321,7 +321,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async deleteProperty(req, res) {
@@ -343,7 +343,7 @@ module.exports = new (class extends controller {
         message: "حذف ویژگی ناموفق بود",
         code: result.status,
       });
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async getPropertyvals(req, res) {
@@ -395,7 +395,7 @@ module.exports = new (class extends controller {
         message: "مقدار ویژگی ساخته شد",
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async updatePropertyval(req, res) {
@@ -414,7 +414,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async deletePropertyval(req, res) {
@@ -440,7 +440,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async getMedias(req, res) {
@@ -502,7 +502,7 @@ module.exports = new (class extends controller {
         code: result.status,
       });
 
-    throw Error;
+    throw new Error("something went wrong");
   }
 
   async getAllOrders(req, res) {
@@ -512,5 +512,23 @@ module.exports = new (class extends controller {
       message: "لیست تمام سفارشات فروشگاه",
       data: result.data,
     });
+  }
+
+  async deleteOrder(req, res) {
+    const result = await orderServices.removeOrder(req, res);
+    if (result.status === 200)
+      return this.response({
+        res,
+        message: "سفارش با موفقیت حذف شد",
+      });
+
+    if (result.status === 409)
+      return this.response({
+        res,
+        message: "حذف سفارشات تکمیل شده یا در حال پرداخت غیر ممکن است",
+        code: result.status,
+      });
+
+    throw new Error("something went wrong");
   }
 })();

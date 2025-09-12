@@ -21,6 +21,15 @@ const OrdersPage = () => {
     loadOrders();
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent, orderId: any) => {
+    e.preventDefault();
+    const response = await call(
+      axios.delete(SERVER_API + `/admin/dashboard/orders/${orderId}`),
+      true
+    );
+    loadOrders();
+  };
+
   return (
     <>
       <main className="pt-15">
@@ -51,7 +60,10 @@ const OrdersPage = () => {
                       <td>
                         {order.status === "pending" && (
                           <form>
-                            <button className="p-2 bg-red-500 border">
+                            <button
+                              className="p-2 bg-red-500 border"
+                              onClick={(e) => handleSubmit(e, order._id)}
+                            >
                               حذف
                             </button>
                           </form>

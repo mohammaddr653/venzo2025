@@ -54,6 +54,7 @@ class OrderServices {
             properties: updateOp.properties,
             count: item.count,
             selectedPropertyvalString: "",
+            selectedPropertyval: "",
           };
           productsReadyToPay.push(orderProduct);
         } else {
@@ -104,7 +105,8 @@ class OrderServices {
             discount: updateOp.discount,
             properties: updateOp.properties,
             count: item.count,
-            selectedPropertyvalString: findOp.value,
+            selectedPropertyvalString: item.selectedPropertyvalString,
+            selectedPropertyval: findOp.value,
           };
           productsReadyToPay.push(orderProduct);
         }
@@ -124,6 +126,52 @@ class OrderServices {
       const cartUpdateOp = await cart.save({ session });
       const saveOp = await newOrder.save({ session });
       return serviceResponse(200, saveOp);
+    });
+    return transactionResult;
+  }
+
+  async removeOrder(req, res) {
+    const transactionResult = await withTransaction(async (session) => {
+      const findOp = await Order.findOneAndDelete(
+        {
+          _id: req.params.orderId,
+          status: "pending",
+        },
+        { session }
+      );
+      if (!findOp) {
+        return serviceResponse(409, {});
+      }
+
+      for (let item of findOp.products) {
+        if (item.selectedPropertyvalString === "") {
+          const updateOp = await Product.updateOne(
+            {
+              _id: item.productId,
+            },
+            { $inc: { stock: item.count } },
+            { session }
+          );
+        } else {
+          const updateOp = await Product.updateOne(
+            {
+              _id: item.productId,
+            },
+            { $inc: { "properties.$[prop].values.$[val].stock": item.count } },
+            {
+              arrayFilters: [
+                { "prop.selective": true },
+                {
+                  "val.propertyval": item.selectedPropertyvalString,
+                },
+              ],
+              session,
+            }
+          );
+        }
+      }
+
+      return serviceResponse(200, {});
     });
     return transactionResult;
   }

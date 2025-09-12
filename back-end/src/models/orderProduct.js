@@ -21,8 +21,13 @@ const orderProduct = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    //یک استرینگ از تمام مقدار ویژگی های انتخاب شده . فعلا که یک ویژگی انتخابی بیشتر نداریم ولی بعدا برای ویژگی های انتخابی تو در تو دست ما رو باز میذاره
+    //آیدی مقدار ویژگی انتخاب شده
     selectedPropertyvalString: {
+      type: String,
+      default: "",
+    },
+    //مقدار ویژگی انتخاب شده
+    selectedPropertyval: {
       type: String,
       default: "",
     },
