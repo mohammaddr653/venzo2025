@@ -7,6 +7,7 @@ const serviceResponse = require("../helpers/serviceResponse");
 const shopAggregation = require("../helpers/queries/shopAggregation");
 const filtersAggregation = require("../helpers/queries/filtersAggregation");
 const filterConditionsQuery = require("../helpers/queries/filterConditionsQuery");
+const totalPriceCalculator = require("../helpers/totalPriceCalculator");
 
 class ProductServices {
   async getAllProducts(req, res) {
@@ -244,10 +245,7 @@ class ProductServices {
 
   async totalPrice(reservedProducts, req, res) {
     // محاسبه قیمت کل
-    let totalPrice = 0;
-    reservedProducts.forEach((product) => {
-      totalPrice = totalPrice + product.count * product.price;
-    });
+    const totalPrice = totalPriceCalculator(reservedProducts);
     return serviceResponse(200, totalPrice);
   }
 }

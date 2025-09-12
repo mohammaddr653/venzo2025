@@ -4,6 +4,8 @@ const withTransaction = require("../helpers/withTransaction");
 const serviceResponse = require("../helpers/serviceResponse");
 const Order = require("../models/order");
 const Propertyval = require("../models/propertyval");
+const getPriceAndStock = require("../helpers/getPriceAndStock");
+const totalPriceCalculator = require("../helpers/totalPriceCalculator");
 
 class OrderServices {
   async getUserOrders(req, res) {
@@ -84,10 +86,15 @@ class OrderServices {
           if (!updateOp) {
             throw new Error("Insufficient stock");
           }
+          const { price } = getPriceAndStock(
+            item.selectedPropertyvalString,
+            updateOp
+          );
+
           const orderProduct = {
             productId: updateOp._id,
             name: updateOp.name,
-            price: updateOp.price,
+            price: price,
             discount: updateOp.discount,
             properties: updateOp.properties,
             count: item.count,
@@ -96,11 +103,15 @@ class OrderServices {
           productsReadyToPay.push(orderProduct);
         }
       }
+
+      //محاسبه قیمت کل
+      const totalPrice = totalPriceCalculator(productsReadyToPay);
+      
       const newOrder = new Order({
         userId: req.user.id,
         products: productsReadyToPay,
         status: "pending",
-        totalPrice: 23,
+        totalPrice: totalPrice,
       });
 
       cart.reservedProducts = [];
