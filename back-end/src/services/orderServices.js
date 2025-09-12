@@ -14,6 +14,12 @@ class OrderServices {
     return serviceResponse(200, findOp);
   }
 
+  async seeOneOrder(req, res) {
+    //خواندن یک سفارش از دیتابیس
+    const findOp = await Order.findOne({ _id: req.params.orderId });
+    return serviceResponse(200, findOp);
+  }
+
   async seeAllOrders(req, res) {
     //خواندن تمام سفارش های فروشگاه از دیتابیس
     const findOp = await Order.find({});
@@ -121,6 +127,7 @@ class OrderServices {
         status: "canceled",
         totalPrice: totalPrice,
         authority: "",
+        referenceId: "",
       });
 
       cart.reservedProducts = [];

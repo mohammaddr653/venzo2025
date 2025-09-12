@@ -16,6 +16,15 @@ module.exports = new (class extends controller {
     });
   }
 
+  async getOneOrder(req, res) {
+    const result = await orderServices.seeOneOrder(req, res);
+    return this.response({
+      res,
+      message: "خواندن یک سفارش",
+      data: result.data,
+    });
+  }
+
   async createOrderFromCart(req, res) {
     const { data: cart } = await cartServices.seeOneCart(req, res);
     const result = await orderServices.newOrderFromCart(req, res, cart);

@@ -45,6 +45,7 @@ import OneMediaPage from "./pages/admin-page/oneMedia-page";
 import OrdersRoute from "./components/private-route-components/ordersRoute";
 import ClientOrdersPage from "./pages/client-orders-page";
 import OrdersPage from "./pages/admin-page/orders-page";
+import CallbackPage from "./pages/callback-page";
 
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
@@ -76,6 +77,7 @@ function App() {
         <Route path="/shop/:categoryId" element={<ShopPage />} />
         <Route path="/single-archive" element={<SingleArchivePage />} />
         <Route path="/archive/:categoryId" element={<ArchivePage />} />
+        <Route path="/callback" element={<CallbackPage />} />
         <Route element={<VerifyRoute user={user} />}>
           <Route path="/verify" element={<VerifyPage />} />
         </Route>

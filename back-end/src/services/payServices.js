@@ -50,14 +50,21 @@ class PayServices {
   async verifyPayment(req, res) {
     //تایید یا رد سفارش
     const { Authority, Status } = req.query;
-    if (Status === "NOK") {
-      //پرداخت ناموفق
-      return serviceResponse(400, {});
-    }
     const findOp = await Order.findOne({ authority: Authority });
     if (!findOp) {
       //سفارش یافت نشد
       return serviceResponse(404, {});
+    }
+    if (findOp.referenceId !== "") {
+      findOp.status = "paid";
+      const saveOp = await findOp.save();
+      return serviceResponse(101, {}); //قبلا تایید شده
+    }
+    if (Status === "NOK") {
+      //پرداخت ناموفق
+      findOp.status = "canceled";
+      const saveOp = await findOp.save();
+      return serviceResponse(400, {});
     }
 
     try {
@@ -71,15 +78,23 @@ class PayServices {
         console.log("Reference ID:", response.data.ref_id);
         console.log("Card PAN:", response.data.card_pan);
         console.log("Fee:", response.data.fee);
+        findOp.status = "paid";
+        findOp.referenceId = response.data.ref_id;
+        const saveOp = await findOp.save();
+
+        return serviceResponse(200, findOp._id);
       } else if (response.data.code === 101) {
         console.log("Payment already verified.");
+        findOp.status = "paid";
+        const saveOp = await findOp.save();
+        return serviceResponse(101, {});
       } else {
         console.log("Transaction failed with code:", response.data.code);
+        return serviceResponse(401, {});
       }
-      return serviceResponse(200, {});
     } catch (error) {
       console.error("Payment Verification Failed:", error);
-      return serviceResponse(402, {});
+      return serviceResponse(500, {});
     }
   }
 }
