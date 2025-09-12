@@ -9,8 +9,8 @@ class PayServices {
   async postPay(req, res) {
     //دریافت اطلاعات سفارش
     const updateOp = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, status: { $ne: "paied" } },
-      { $set: { status: "online" } }
+      { _id: req.params.orderId, status: { $ne: "paid" } },
+      { $set: { status: "pending" } }
     );
     
     if (!updateOp) {

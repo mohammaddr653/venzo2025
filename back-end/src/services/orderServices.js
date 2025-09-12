@@ -118,7 +118,7 @@ class OrderServices {
       const newOrder = new Order({
         userId: req.user.id,
         products: productsReadyToPay,
-        status: "pending",
+        status: "canceled",
         totalPrice: totalPrice,
       });
 
@@ -135,7 +135,7 @@ class OrderServices {
       const findOp = await Order.findOneAndDelete(
         {
           _id: req.params.orderId,
-          status: "pending",
+          status: "canceled",
         },
         { session }
       );

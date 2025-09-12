@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   products: { type: [orderProduct], default: [] },
-  status: { type: String, enum: ["pending","online", "paied"] },
+  status: { type: String, enum: ["canceled","pending", "paid"] },
   totalPrice: { type: Number, required: true },
 });
 orderSchema.plugin(timestamp);

@@ -34,7 +34,7 @@ const OrdersPage = () => {
     <>
       <main className="pt-15">
         <div className="client-orders-page-container flex flex-col gap-5">
-          <h1>client orders page</h1>
+          <h1>all orders page</h1>
           <div>
             <table>
               <caption>لیست سفارش های شما</caption>
@@ -52,13 +52,13 @@ const OrdersPage = () => {
                     <tr key={index}>
                       <td>{order._id}</td>
                       <td>{order.totalPrice} تومان</td>
-                      <td className="flex flex-row">
-                        {order.status === "paied" && <p>تکمیل شده</p>}
-                        {order.status === "pending" && <p>در انتظار پرداخت</p>}
-                        {order.status === "online" && <p>در حال پرداخت</p>}
+                      <td>
+                        {order.status === "paid" && <p>پرداخت شده</p>}
+                        {order.status === "canceled" && <p>پرداخت نشده</p>}
+                        {order.status === "pending" && <p>در حال پرداخت</p>}
                       </td>
                       <td>
-                        {order.status === "pending" && (
+                        {order.status === "canceled" && (
                           <form>
                             <button
                               className="p-2 bg-red-500 border"
