@@ -53,9 +53,18 @@ const OrdersPage = () => {
                       <td>{order._id}</td>
                       <td>{order.totalPrice} تومان</td>
                       <td>
-                        {order.status === "paid" && <p>پرداخت شده</p>}
-                        {order.status === "canceled" && <p>پرداخت نشده</p>}
-                        {order.status === "pending" && <p>در حال پرداخت</p>}
+                        {order.status === "paid" && (
+                          <p className="bg-green-600 text-white">پرداخت شده</p>
+                        )}
+                        {order.status === "canceled" && (
+                          <p className="bg-blue-600 text-white">پرداخت نشده</p>
+                        )}
+                        {order.status === "expired" && (
+                          <p className="bg-black text-white">منقضی شده</p>
+                        )}
+                        {order.status === "pending" && (
+                          <p className="bg-yellow-500 text-white">در حال پرداخت</p>
+                        )}
                       </td>
                       <td>
                         {order.status === "canceled" && (
@@ -64,7 +73,7 @@ const OrdersPage = () => {
                               className="p-2 bg-red-500 border"
                               onClick={(e) => handleSubmit(e, order._id)}
                             >
-                              حذف
+                              منقضی کردن
                             </button>
                           </form>
                         )}

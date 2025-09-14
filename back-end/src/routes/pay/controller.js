@@ -17,13 +17,15 @@ module.exports = new (class extends controller {
     if (result.status === 409) {
       return this.response({
         res,
-        message: "این سفارش قبلا پرداخت شده است",
+        message: "این سفارش منقضی شده یا قبلا پرداخت شده است",
+        code: result.status,
       });
     }
     if (result.status === 500) {
       return this.response({
         res,
         message: "انتقال به درگاه پرداخت ناموفق بود . لطفا دوباره امتحان کنید",
+        code: result.status,
       });
     }
 

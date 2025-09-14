@@ -14,35 +14,46 @@ class PayServices {
   async postPay(req, res) {
     //دریافت اطلاعات سفارش
     const updateOp = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, status: { $ne: "paid" } },
+      { _id: req.params.orderId, status: { $nin: ["paid", "expired"] } },
       { $set: { status: "pending" } }
     );
 
     if (!updateOp) {
       return serviceResponse(409, {});
     }
+    if (
+      updateOp.authExpire &&
+      updateOp.authority &&
+      new Date() < updateOp.authExpire
+    ) {
+      return serviceResponse(200, updateOp.authority); // همان شناسه قبلی را بده
+    }
+    try {
+      const response = await zarinpal.payments.create({
+        amount: updateOp.totalPrice,
+        callback_url: "http://127.0.0.1:5000/api/pay/callback",
+        description: "Payment for order #1234",
+        mobile: "09123456789",
+        email: "customer@example.com",
+        cardPan: ["6219861034529007", "5022291073776543"],
+        referrer_id: "affiliate123",
+      });
+      // let newPayment = new Payment({
+      //   user: req.user.id,
+      //   amount: req.session.paymentAmount,
+      //   resnumber: response.data.data.authority,
+      // });
+      // await newPayment.save();
 
-    const response = await zarinpal.payments.create({
-      amount: updateOp.totalPrice,
-      callback_url: "http://127.0.0.1:5000/api/pay/callback",
-      description: "Payment for order #1234",
-      mobile: "09123456789",
-      email: "customer@example.com",
-      cardPan: ["6219861034529007", "5022291073776543"],
-      referrer_id: "affiliate123",
-    });
-    // let newPayment = new Payment({
-    //   user: req.user.id,
-    //   amount: req.session.paymentAmount,
-    //   resnumber: response.data.data.authority,
-    // });
-    // await newPayment.save();
-
-    //authority should be saved in database
-    updateOp.authority = response.data.authority;
-    const saveOp = await updateOp.save();
-    if (saveOp.authority === response.data.authority) {
-      return serviceResponse(200, response.data.authority);
+      //authority should be saved in database
+      updateOp.authority = response.data.authority;
+      updateOp.authExpire = new Date(Date.now() + 15 * 60 * 1000); //پانزده دقیقه اعتبار
+      const saveOp = await updateOp.save();
+      if (saveOp.authority === response.data.authority) {
+        return serviceResponse(200, response.data.authority);
+      }
+    } catch (error) {
+      throw new Error("مبلغ سفارش باید حداقل 1000 تومان باشد");
     }
     return serviceResponse(500, {});
   }
@@ -55,12 +66,7 @@ class PayServices {
       //سفارش یافت نشد
       return serviceResponse(404, {});
     }
-    if (findOp.referenceId !== "") {
-      findOp.status = "paid";
-      const saveOp = await findOp.save();
-      return serviceResponse(101, {}); //قبلا تایید شده
-    }
-    if (Status === "NOK") {
+    if (Status === "NOK" && findOp.referenceId === "") {
       //پرداخت ناموفق
       findOp.status = "canceled";
       const saveOp = await findOp.save();

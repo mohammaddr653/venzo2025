@@ -42,7 +42,7 @@ const CallbackPage = () => {
         <div className="callback-page-container flex flex-col gap-5">
           <h1>callback page</h1>
           {info.code === "404" && (
-            <h4>متاسفانه سفارش شما یافت نشد . با پشتیبانی تماس حاصل فرمایید</h4>
+            <h4>متاسفانه سفارش شما یافت نشد . اگر مبلغی از حسابتان برداشت شده بطور خودکار به حساب باز میگردد</h4>
           )}
           {info.code === "400" && <h4>تراکنش ناموفق بود</h4>}
           {info.code === "500" && (

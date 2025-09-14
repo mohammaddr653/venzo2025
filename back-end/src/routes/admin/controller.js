@@ -514,18 +514,18 @@ module.exports = new (class extends controller {
     });
   }
 
-  async deleteOrder(req, res) {
-    const result = await orderServices.removeOrder(req, res);
+  async exOrder(req, res) {
+    const result = await orderServices.expireOrder(req, res);
     if (result.status === 200)
       return this.response({
         res,
-        message: "سفارش با موفقیت حذف شد",
+        message: "سفارش با موفقیت منقضی شد",
       });
 
     if (result.status === 409)
       return this.response({
         res,
-        message: "حذف سفارشات تکمیل شده یا در حال پرداخت غیر ممکن است",
+        message: "منقضی کردن سفارشات تکمیل شده یا در حال پرداخت غیر ممکن است",
         code: result.status,
       });
 

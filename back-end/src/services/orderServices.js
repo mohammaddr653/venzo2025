@@ -127,6 +127,7 @@ class OrderServices {
         status: "canceled",
         totalPrice: totalPrice,
         authority: "",
+        authExpire: null,
         referenceId: "",
       });
 
@@ -138,13 +139,14 @@ class OrderServices {
     return transactionResult;
   }
 
-  async removeOrder(req, res) {
+  async expireOrder(req, res) {
     const transactionResult = await withTransaction(async (session) => {
-      const findOp = await Order.findOneAndDelete(
+      const findOp = await Order.findOneAndUpdate(
         {
           _id: req.params.orderId,
           status: "canceled",
         },
+        { $set: { status: "expired" } },
         { session }
       );
       if (!findOp) {
