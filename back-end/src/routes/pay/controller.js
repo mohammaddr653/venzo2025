@@ -41,4 +41,36 @@ module.exports = new (class extends controller {
         }`
     );
   }
+
+  async manualVerify(req, res) {
+    const result = await payServices.verifyPayment(req, res);
+    if (result.status === 200) {
+      return this.response({
+        res,
+        message: "تراکنش تایید شد .",
+      });
+    }
+    if (result.status === 101) {
+      return this.response({
+        res,
+        message: "تراکنش قبلا تایید شده",
+      });
+    }
+    if (result.status === 401) {
+      return this.response({
+        res,
+        message: "تراکنش تایید نشد",
+        code: result.status,
+      });
+    }
+    if (result.status === 500) {
+      return this.response({
+        res,
+        message: "امکان تایید تراکنش وجود نداشت .",
+        code: result.status,
+      });
+    }
+
+    throw new Error("unknow error happend");
+  }
 })();

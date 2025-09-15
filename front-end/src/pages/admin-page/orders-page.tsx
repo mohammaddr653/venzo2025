@@ -21,10 +21,10 @@ const OrdersPage = () => {
     loadOrders();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent, orderId: any) => {
+  const handleVerify = async (e: React.FormEvent, authority: any) => {
     e.preventDefault();
     const response = await call(
-      axios.delete(SERVER_API + `/admin/dashboard/orders/${orderId}`),
+      axios.get(SERVER_API + `/pay/verify?Authority=${authority}`),
       true
     );
     loadOrders();
@@ -49,40 +49,61 @@ const OrdersPage = () => {
               <tbody>
                 {orders?.map((order: any, index: any) => {
                   return (
-                    <tr key={index}>
+                    <tr key={index} className="border">
                       <td>{order._id}</td>
                       <td>{order.totalPrice} تومان</td>
                       <td>
-                        {order.status === "paid" && (
-                          <p className="bg-green-600 text-white">پرداخت شده</p>
+                        <p className="w-fit">
+                          {order.status === "paid" && (
+                            <p className="bg-green-600 text-white">
+                              پرداخت شده
+                            </p>
+                          )}
+                          {order.status === "canceled" && (
+                            <p className="bg-blue-600 text-white">
+                              پرداخت نشده
+                            </p>
+                          )}
+                          {order.status === "expired" && (
+                            <p className="bg-black text-white">منقضی شده</p>
+                          )}
+                          {order.status === "check" && (
+                            <p className="bg-red-600 text-white">
+                              در انتظار تایید
+                            </p>
+                          )}
+                          {order.status === "pending" && (
+                            <p className="bg-yellow-500 text-white">
+                              در حال پرداخت
+                            </p>
+                          )}
+                        </p>
+                        {order.authority !== "" && (
+                          <p>شناسه پرداخت : {order.authority}</p>
                         )}
-                        {order.status === "canceled" && (
-                          <p className="bg-blue-600 text-white">پرداخت نشده</p>
-                        )}
-                        {order.status === "expired" && (
-                          <p className="bg-black text-white">منقضی شده</p>
-                        )}
-                        {order.status === "check" && (
-                          <p className="bg-red-600 text-white">
-                            در انتظار تایید
-                          </p>
-                        )}
-                        {order.status === "pending" && (
-                          <p className="bg-yellow-500 text-white">
-                            در حال پرداخت
-                          </p>
+                        {order.referenceId !== "" && (
+                          <p>کد رهگیری : {order.referenceId}</p>
                         )}
                       </td>
-                      <td>
-                        {order.status === "canceled" && (
-                          <form>
-                            <button
-                              className="p-2 bg-red-500 border"
-                              onClick={(e) => handleSubmit(e, order._id)}
-                            >
-                              منقضی کردن
-                            </button>
-                          </form>
+                      <td className="flex flex-row gap-2">
+                        {order.authority !== "" && (
+                          <>
+                            <form>
+                              <button
+                                className="p-2 bg-red-500 border"
+                                onClick={(e) =>
+                                  handleVerify(e, order.authority)
+                                }
+                              >
+                                اعتبار سنجی
+                              </button>
+                            </form>
+                            <form>
+                              <button className="p-2 bg-red-500 border">
+                                استعلام
+                              </button>
+                            </form>
+                          </>
                         )}
                       </td>
                     </tr>

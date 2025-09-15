@@ -5,5 +5,6 @@ const controller = require("./controller");
 
 router.post("/:orderId", controller.postPay.bind(controller));
 router.get("/callback", controller.callback.bind(controller));
+router.get("/verify", controller.manualVerify.bind(controller));
 
 module.exports = router;
