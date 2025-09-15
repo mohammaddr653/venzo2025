@@ -43,6 +43,7 @@ module.exports = new (class extends controller {
   }
 
   async manualVerify(req, res) {
+    //تایید تراکنش بصورت دستی
     const result = await payServices.verifyPayment(req, res);
     if (result.status === 200) {
       return this.response({
@@ -67,6 +68,26 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         message: "امکان تایید تراکنش وجود نداشت .",
+        code: result.status,
+      });
+    }
+
+    throw new Error("unknow error happend");
+  }
+
+  async inquiry(req, res) {
+    //استعلام تراکنش
+    const result = await payServices.inquireTransaction(req, res);
+    if (result.status === 200) {
+      return this.response({
+        res,
+        message: `نتیجه استعلام : ${JSON.stringify(result.data)}`,
+      });
+    }
+    if (result.status === 500) {
+      return this.response({
+        res,
+        message: "استعلام ناموفق",
         code: result.status,
       });
     }

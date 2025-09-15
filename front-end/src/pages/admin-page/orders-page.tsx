@@ -22,12 +22,22 @@ const OrdersPage = () => {
   }, []);
 
   const handleVerify = async (e: React.FormEvent, authority: any) => {
+    //تایید تراکنش بصورت دستی
     e.preventDefault();
     const response = await call(
       axios.get(SERVER_API + `/pay/verify?Authority=${authority}`),
       true
     );
     loadOrders();
+  };
+
+  const handleInquiry = async (e: React.FormEvent, authority: any) => {
+    //استعلام تراکنش
+    e.preventDefault();
+    const response = await call(
+      axios.get(SERVER_API + `/pay/inquiry?Authority=${authority}`),
+      true
+    );
   };
 
   return (
@@ -99,7 +109,12 @@ const OrdersPage = () => {
                               </button>
                             </form>
                             <form>
-                              <button className="p-2 bg-red-500 border">
+                              <button
+                                className="p-2 bg-red-500 border"
+                                onClick={(e) =>
+                                  handleInquiry(e, order.authority)
+                                }
+                              >
                                 استعلام
                               </button>
                             </form>

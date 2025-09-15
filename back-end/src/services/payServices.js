@@ -15,7 +15,10 @@ class PayServices {
     //دریافت اطلاعات سفارش
     const pendingExpire = new Date(Date.now() + 15 * 60 * 1000); //پانزده دقیقه اعتبار
     const updateOp = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, status: { $nin: ["paid", "expired","check"] } },
+      {
+        _id: req.params.orderId,
+        status: { $nin: ["paid", "expired", "check"] },
+      },
       { $set: { status: "pending", pendingExpire: pendingExpire } }
     );
 
@@ -105,6 +108,22 @@ class PayServices {
       console.error("Payment Verification Failed:", error);
       findOp.status = "check"; //نیاز به بررسی
       const saveOp = await findOp.save();
+    }
+    return serviceResponse(500, {});
+  }
+
+  async inquireTransaction(req, res) {
+    //استعلام تراکنش
+    const { Authority } = req.query;
+
+    try {
+      const inquiryResult = await zarinpal.inquiries.inquire({
+        authority: Authority,
+      });
+
+      return serviceResponse(200, inquiryResult);
+    } catch (error) {
+      console.error("Error during inquiry:", error);
     }
     return serviceResponse(500, {});
   }
