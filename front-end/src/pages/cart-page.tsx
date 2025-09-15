@@ -50,7 +50,7 @@ const CartPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     //ساخت سفارش جدید و بلافاصله انتقال به درگاه
     e.preventDefault();
-    const createOrder = await call(axios.post(SERVER_API + "/orders"), true);
+    const createOrder = await call(axios.post(SERVER_API + "/orders"), false);
     if (createOrder.data.data) {
       const response = await call(
         axios.post(SERVER_API + `/pay/${createOrder.data.data}`),
@@ -59,6 +59,7 @@ const CartPage = () => {
       if (response.data.data)
         window.location.href = `https://sandbox.zarinpal.com/pg/StartPay/${response.data.data}`; //انتقال به صفحه پرداخت
     }
+    loadCart();
   };
   return (
     <>

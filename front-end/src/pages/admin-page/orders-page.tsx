@@ -62,8 +62,15 @@ const OrdersPage = () => {
                         {order.status === "expired" && (
                           <p className="bg-black text-white">منقضی شده</p>
                         )}
+                        {order.status === "check" && (
+                          <p className="bg-red-600 text-white">
+                            در انتظار تایید
+                          </p>
+                        )}
                         {order.status === "pending" && (
-                          <p className="bg-yellow-500 text-white">در حال پرداخت</p>
+                          <p className="bg-yellow-500 text-white">
+                            در حال پرداخت
+                          </p>
                         )}
                       </td>
                       <td>

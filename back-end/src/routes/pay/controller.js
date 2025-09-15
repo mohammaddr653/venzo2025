@@ -10,7 +10,7 @@ module.exports = new (class extends controller {
     if (result.status === 200) {
       return this.response({
         res,
-        message: "here is the authority",
+        message: "در حال انتقال به درگاه پرداخت...",
         data: result.data,
       });
     }

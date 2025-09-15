@@ -32,10 +32,6 @@ const CallbackPage = () => {
       loadOrder();
   }, [info]);
 
-  useEffect(() => {
-    console.log(order);
-  }, [order]);
-
   return (
     <>
       <main className="pt-15">

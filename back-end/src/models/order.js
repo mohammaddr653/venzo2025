@@ -9,7 +9,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   products: { type: [orderProduct], default: [] },
-  status: { type: String, enum: ["expired", "canceled", "pending", "paid"] },
+  status: {
+    type: String,
+    enum: ["expired", "canceled", "pending", "check", "paid"],
+  },
+  pendingExpire: { type: Date, default: null }, // انقضای وضعیت pending
   totalPrice: { type: Number, required: true },
   authority: { type: String, default: "" }, //شناسه پرداخت که از زرین پال میگیریم
   authExpire: { type: Date, default: null }, // انقضای authority

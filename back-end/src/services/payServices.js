@@ -13,9 +13,10 @@ const zarinpal = new ZarinPal({
 class PayServices {
   async postPay(req, res) {
     //دریافت اطلاعات سفارش
+    const pendingExpire = new Date(Date.now() + 15 * 60 * 1000); //پانزده دقیقه اعتبار
     const updateOp = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, status: { $nin: ["paid", "expired"] } },
-      { $set: { status: "pending" } }
+      { _id: req.params.orderId, status: { $nin: ["paid", "expired","check"] } },
+      { $set: { status: "pending", pendingExpire: pendingExpire } }
     );
 
     if (!updateOp) {
@@ -53,7 +54,7 @@ class PayServices {
         return serviceResponse(200, response.data.authority);
       }
     } catch (error) {
-      throw new Error("مبلغ سفارش باید حداقل 1000 تومان باشد");
+      console.log(error);
     }
     return serviceResponse(500, {});
   }
@@ -96,12 +97,16 @@ class PayServices {
         return serviceResponse(101, {});
       } else {
         console.log("Transaction failed with code:", response.data.code);
+        findOp.status = "check"; //نیاز به بررسی
+        const saveOp = await findOp.save();
         return serviceResponse(401, {});
       }
     } catch (error) {
       console.error("Payment Verification Failed:", error);
-      return serviceResponse(500, {});
+      findOp.status = "check"; //نیاز به بررسی
+      const saveOp = await findOp.save();
     }
+    return serviceResponse(500, {});
   }
 }
 module.exports = new PayServices();

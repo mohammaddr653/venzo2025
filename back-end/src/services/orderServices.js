@@ -125,6 +125,7 @@ class OrderServices {
         userId: req.user.id,
         products: productsReadyToPay,
         status: "canceled",
+        pendingExpire: null,
         totalPrice: totalPrice,
         authority: "",
         authExpire: null,
@@ -139,6 +140,7 @@ class OrderServices {
     return transactionResult;
   }
 
+  //note: this function is useless for now due to the cron job does this operation automatically
   async expireOrder(req, res) {
     const transactionResult = await withTransaction(async (session) => {
       const findOp = await Order.findOneAndUpdate(
