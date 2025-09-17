@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useUserStore } from "../../store";
+import { useUserStore, useWidthStore } from "../../store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
@@ -7,6 +7,7 @@ import callManager from "../../hooks/callManager";
 import { createPriceAndStockObj } from "../../helpers/createPriceAndStockObj";
 
 const useSingleShopLog = () => {
+  const { width, setWidth } = useWidthStore();
   const { productId } = useParams();
   const { call, loading } = callManager();
   const { user } = useUserStore();
@@ -115,6 +116,7 @@ const useSingleShopLog = () => {
   };
 
   return {
+    width,
     product,
     motherCats,
     priceAndStock,

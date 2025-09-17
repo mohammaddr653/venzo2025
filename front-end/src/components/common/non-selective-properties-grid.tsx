@@ -5,9 +5,9 @@ interface NonSelectivePropertiesGridProps {
 }
 
 const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
-  return (
-    <div className="flex flex-col">
-      {props.product?.properties.some((obj: any) => !obj.selective) ? (
+  if (props.product?.properties.some((obj: any) => !obj.selective)) {
+    return (
+      <div className="flex flex-col">
         <div className="flex flex-col gap-8">
           <ul className="grid grid-cols-3 gap-2">
             {props.product.properties
@@ -74,8 +74,8 @@ const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
             icon={true}
           ></TitleCentral>
         </div>
-      ) : null}
-    </div>
-  );
+      </div>
+    );
+  }
 };
 export default NonSelectivePropertiesGrid;

@@ -8,9 +8,11 @@ import SelectiveProperties from "../components/common/selective-properties";
 import BreadCrumb from "../components/common/breadCrumb";
 import Offpercent from "../components/common/offpercent";
 import PriceUnit from "../components/common/priceUnit";
+import { BREAK_POINTS } from "../../config";
 
 const SingleShopPage = () => {
   const {
+    width,
     product,
     motherCats,
     priceAndStock,
@@ -29,14 +31,21 @@ const SingleShopPage = () => {
             <BreadCrumb motherCats={motherCats}></BreadCrumb>
           ) : null}
           <div className="flex flex-col md:flex-row gap-10 px-5 md:px-20">
-            <div className="flex flex-row gap-4 flex-6">
+            <div className="flex flex-col items-end md:items-start md:flex-row gap-4 flex-6 relative">
+              {width <= BREAK_POINTS.md && (
+                <div className="w-full">
+                  <TitleRight title={product?.name}></TitleRight>
+                </div>
+              )}
               <div className="flex flex-col gap-2">
                 <i className="bi bi-heart text-size24"></i>
               </div>
               <SingleShopGallery product={product}></SingleShopGallery>
             </div>
             <div className=" flex-11 w-full flex flex-col gap-10">
-              <TitleRight title={product?.name}></TitleRight>
+              {width > BREAK_POINTS.md && (
+                <TitleRight title={product?.name}></TitleRight>
+              )}
               <NonSelectivePropertiesGrid
                 product={product}
               ></NonSelectivePropertiesGrid>
@@ -86,7 +95,7 @@ const SingleShopPage = () => {
             </div>
           </div>
           {product?.description === "" ? null : (
-            <div className=" px-5 md:px-20 mt-10 flex flex-col gap-4">
+            <div className=" px-5 md:px-20 mt-0 md:mt-10 flex flex-col gap-4">
               <h4 className="font-weight300 text-neutral-800">بررسی محصول</h4>
               <div
                 className="text-justify border border-neutral-300 p-5 rounded-md text-neutral-700"
