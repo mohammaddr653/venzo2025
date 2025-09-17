@@ -3,7 +3,6 @@
 const filtersAggregation = (categoryArr) => {
   const query = [
     { $match: { categoryId: { $in: categoryArr } } },
-    { $match: { "properties.values.propertyval": { $type: "objectId" } } },
     { $unwind: "$properties" },
     {
       $lookup: {
@@ -31,7 +30,6 @@ const filtersAggregation = (categoryArr) => {
     {
       $unwind: {
         path: "$properties.values.propertyval",
-        preserveNullAndEmptyArrays: true,
       },
     },
     {
