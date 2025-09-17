@@ -11,10 +11,11 @@ const ProductsArchive = () => {
   return products?.length ? (
     <div>
       <div className="py-10">
-        <TitleCentral
-          title={"جدیدترین محصولات"}
-          class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
-        ></TitleCentral>
+        <TitleCentral>
+          <h3 className="text-size24 text-neutral-600 font-weight300 text-nowrap flex flex-row items-center justify-center gap-1">
+            <span>جدیدترین محصولات</span>
+          </h3>
+        </TitleCentral>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {products.map((product: any, index: any) => {

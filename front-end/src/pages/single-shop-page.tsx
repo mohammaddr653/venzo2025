@@ -9,6 +9,7 @@ import BreadCrumb from "../components/common/breadCrumb";
 import Offpercent from "../components/common/offpercent";
 import PriceUnit from "../components/common/priceUnit";
 import { BREAK_POINTS } from "../../config";
+import PropertiesTable from "../components/common/propertiesTable";
 
 const SingleShopPage = () => {
   const {
@@ -98,11 +99,12 @@ const SingleShopPage = () => {
             <div className=" px-5 md:px-20 mt-0 md:mt-10 flex flex-col gap-4">
               <h4 className="font-weight300 text-neutral-800">بررسی محصول</h4>
               <div
-                className="text-justify border border-neutral-300 p-5 rounded-md text-neutral-700"
+                className="text-justify border border-neutral-300 p-5 rounded-md text-neutral-700 leading-loose text-size16"
                 dangerouslySetInnerHTML={{ __html: product?.description }}
               ></div>
             </div>
           )}
+          <PropertiesTable product={product}></PropertiesTable>
         </div>
       </main>
       <Footer></Footer>

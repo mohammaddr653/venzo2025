@@ -66,13 +66,12 @@ const NonSelectivePropertiesGrid = (props: NonSelectivePropertiesGridProps) => {
                 );
               })}
           </ul>
-          <TitleCentral
-            title={"مشاهده همه ویژگی ها"}
-            class={
-              "text-size15 text-nowrap text-neutral-700 border border-neutral-300 px-4 py-2 rounded-md"
-            }
-            icon={true}
-          ></TitleCentral>
+          <TitleCentral>
+            <a href="#product-properties" className="text-size15 text-nowrap text-neutral-700 border border-neutral-300 px-4 py-2 rounded-md flex flex-row items-center justify-center gap-1">
+              <span>مشاهده همه ویژگی ها</span>
+              <i className="bi bi-chevron-left text-size13"></i>
+            </a>
+          </TitleCentral>
         </div>
       </div>
     );

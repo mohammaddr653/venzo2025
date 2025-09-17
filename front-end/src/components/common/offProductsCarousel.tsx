@@ -34,10 +34,11 @@ const OffProductsCarousel = () => {
   return products?.length ? (
     <div className="products-carousel-container">
       <div className="py-5">
-        <TitleCentral
-          title={"خرید با تخفیف"}
-          class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
-        ></TitleCentral>
+        <TitleCentral>
+          <h3 className="text-size24 text-neutral-600 font-weight300 text-nowrap flex flex-row items-center justify-center gap-1">
+            <span>خرید با تخفیف</span>
+          </h3>
+        </TitleCentral>
       </div>
       <div className="carousel">
         <Swiper

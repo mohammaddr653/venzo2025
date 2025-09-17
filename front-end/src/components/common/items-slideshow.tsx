@@ -27,10 +27,11 @@ function ItemsSlideshow() {
     <div className=" lg:py-20 lg:px-10 items-slideshow-container lg:bg-[url(/images/pexels-dada-_design-240566386-17271985.jpg)] lg:border lg:border-neutral-primary bg-cover bg-no-repeat bg-bottom w-full rounded-lg flex flex-col lg:flex-row items-start gap-2 justify-between">
       {width < BREAK_POINTS.lg ? (
         <TitleCentral
-          title={"دسته بندی محصولات"}
-          class={"text-size24 text-neutral-600 font-weight300 text-nowrap"}
-          icon={false}
-        ></TitleCentral>
+        >
+          <h3 className="text-size24 text-neutral-600 font-weight300 text-nowrap flex flex-row items-center justify-center gap-1">
+            <span>دسته بندی محصولات</span>
+          </h3>
+        </TitleCentral>
       ) : (
         <div className="w-full text-red-900 relative bottom-9 flex flex-col gap-3">
           <p className=" text-[24px] font-weight400 text-shadow-stroke text-shadow-white">
