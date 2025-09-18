@@ -1,5 +1,5 @@
 const PriceUnit = () => {
-  return <span className="text-neutral-700 text-size14">تومان</span>;
+  return <span className="text-size14 ps-1">تومان</span>;
 };
 
 export default PriceUnit;

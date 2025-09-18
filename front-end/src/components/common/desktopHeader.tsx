@@ -36,62 +36,66 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
   }, []);
 
   return (
-    <header className="fixed z-50">
-      {isScrolled ? <GoUp></GoUp> : null}
-      <div
-        id="header-container"
-        className={`desktop-header relative z-50 flex flex-row gap-10 justify-start items-center px-20 transition-all duration-300 ${
-          isScrolled || focus ? "bg-white shadow-b-lean-300" : "bg-transparent"
-        }`}
-      >
-        <Link to={"/"}>
-          <img src={Logo} className="" alt="logo" width={60} />
-        </Link>
-        <div className="menu">
-          <nav>
-            <ul
-              className={`flex px-0 flex-row gap-5 font-weight200 ${
-                isScrolled || focus
-                  ? "text-neutral-800 text-shadow-none"
-                  : "text-white text-shadow-lg shadow-black"
-              } `}
-            >
-              {categories?.length &&
-                categories.map((category: any, index: any) => {
-                  return (
-                    category.motherId === "root" && (
-                      <DeskMenuItem
-                        key={category._id}
-                        item={category}
-                        categories={categories}
-                      ></DeskMenuItem>
-                    )
-                  );
-                })}
-              <div
-                className={`glass absolute w-[100vw] h-[100vh] bg-glass-shadow top-full right-0 z-30 transition-all duration-300 delay-150 invisible opacity-0`}
-              ></div>
-            </ul>
-          </nav>
-          <div className="flex flex-row gap-2 items-center">
-            <div className="w-full px-0">
-              <SearchBar className={"w-auto"}></SearchBar>
-            </div>
-            <span className="block bg-cu-neutral-700 w-1px h-6 rounded-3xl border-0"></span>
-            <div className="block">
-              <CartCounter user={user}></CartCounter>
-            </div>
-            <div className="block">
-              <AccountButtons
-                user={user}
-                userLogout={userLogout}
-                mode={"desktop"}
-              ></AccountButtons>
+    <>
+      <header className="fixed z-50">
+        <div
+          id="header-container"
+          className={`desktop-header relative z-50 flex flex-row gap-10 justify-start items-center px-20 transition-all duration-300 ${
+            isScrolled || focus
+              ? "bg-white shadow-b-lean-300"
+              : "bg-transparent"
+          }`}
+        >
+          <Link to={"/"}>
+            <img src={Logo} className="" alt="logo" width={60} />
+          </Link>
+          <div className="menu">
+            <nav>
+              <ul
+                className={`flex px-0 flex-row gap-5 font-weight200 ${
+                  isScrolled || focus
+                    ? "text-neutral-800 text-shadow-none"
+                    : "text-white text-shadow-lg shadow-black"
+                } `}
+              >
+                {categories?.length &&
+                  categories.map((category: any, index: any) => {
+                    return (
+                      category.motherId === "root" && (
+                        <DeskMenuItem
+                          key={category._id}
+                          item={category}
+                          categories={categories}
+                        ></DeskMenuItem>
+                      )
+                    );
+                  })}
+                <div
+                  className={`glass absolute w-[100vw] h-[100vh] bg-glass-shadow top-full right-0 z-30 transition-all duration-300 delay-150 invisible opacity-0`}
+                ></div>
+              </ul>
+            </nav>
+            <div className="flex flex-row gap-2 items-center">
+              <div className="w-full px-0">
+                <SearchBar className={"w-auto"}></SearchBar>
+              </div>
+              <span className="block bg-cu-neutral-700 w-1px h-6 rounded-3xl border-0"></span>
+              <div className="block">
+                <CartCounter user={user}></CartCounter>
+              </div>
+              <div className="block">
+                <AccountButtons
+                  user={user}
+                  userLogout={userLogout}
+                  mode={"desktop"}
+                ></AccountButtons>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+      {isScrolled ? <GoUp></GoUp> : null}
+    </>
   );
 };
 

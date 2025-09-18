@@ -50,7 +50,6 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
   return (
     <>
       <header className="fixed z-50">
-        {isScrolled ? <GoUp></GoUp> : null}
         <div
           id="header-container"
           className={`mobile-header relative z-50 flex flex-row gap-10 justify-between items-center px-5 transition-all duration-300 ${
@@ -75,7 +74,7 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
               onClick={() => setMobileMenuShow(false)}
             ></div>
           ) : null}
-          <div className={`hideMenu ${mobileMenuShow ? "showMenu" : null}`}>
+          <div className={`hideMenu ${mobileMenuShow ? "showMenu" : null} border-r border-neutral-300`}>
             <div className="flex flex-row justify-between items-center px-4">
               <Link to={"/"}>
                 <img src={Logo} alt="logo" width={60} />
@@ -119,6 +118,7 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
           </div>
         </div>
       </header>
+      {isScrolled ? <GoUp></GoUp> : null}
     </>
   );
 };

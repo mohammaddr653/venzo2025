@@ -5,6 +5,8 @@ import callManager from "../hooks/callManager";
 import { SERVER_API } from "../../config";
 import axios from "axios";
 import Footer from "../components/common/footer";
+import Img from "../components/common/img";
+import PriceUnit from "../components/common/priceUnit";
 
 const CartPage = () => {
   const { user } = useUserStore();
@@ -69,72 +71,110 @@ const CartPage = () => {
         <div className="cartpage-container flex flex-col gap-5">
           <h1 className="px-5 md:px-20">سبد خرید</h1>
           {reservedProducts?.length ? (
-            <div>
-              <table>
-                <caption>list of products</caption>
-                <thead>
-                  <tr>
-                    <th>name</th>
-                    <th>total price</th>
-                    <th>count</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div className="grid grid-cols-3 px-5 md:px-20 gap-5">
+              <div className=" col-span-3 md:col-span-2 rounded-md border-2 border-neutral-200 overflow-hidden">
+                <div className="flex flex-col">
                   {reservedProducts?.map((product: any, index: any) => {
                     return (
-                      <tr key={index}>
-                        <td>
-                          {product.name}
-                          {product.selectedPropertyvalString !== "" &&
-                            product.properties
-                              .find((item: any) => item.selective)
-                              .values.map((propertyval: any, index: any) => {
-                                if (
-                                  product.selectedPropertyvalString.includes(
-                                    propertyval.propertyval._id
+                      <div
+                        key={index}
+                        className={`flex flex-col md:flex-row justify-between p-2 py-3 ${
+                          index + 1 !== reservedProducts.length &&
+                          "border-b border-neutral-200"
+                        }`}
+                      >
+                        <div className="flex gap-2">
+                          <Img
+                            pic={product?.img}
+                            sizes={"500px"}
+                            className={"aspect-square object-cover rounded-md"}
+                            width={100}
+                          ></Img>
+                          <div>
+                            {product.name}
+                            {product.selectedPropertyvalString !== "" &&
+                              product.properties
+                                .find((item: any) => item.selective)
+                                .values.map((propertyval: any, index: any) => {
+                                  if (
+                                    product.selectedPropertyvalString.includes(
+                                      propertyval.propertyval._id
+                                    )
                                   )
-                                )
-                                  return (
-                                    <p
-                                      key={index}
-                                      className="bg-amber-400 text-black"
-                                    >
-                                      {propertyval.propertyval.value}
-                                    </p>
-                                  );
-                              })}
-                        </td>
-                        <td>{product.price * product.count}</td>
-                        <td className="flex flex-row">
-                          <span className="p-2 bg-red-500 text-amber-50 border border-b-black">
-                            {product.count}
-                          </span>
-                          <form
-                            onSubmit={(e) => handleIncrement(e, product._id)}
-                          >
-                            <button className="p-2 bg-red-500 border">+</button>
-                          </form>
-                          <form
-                            onSubmit={(e) => handleDecrement(e, product._id)}
-                          >
-                            <button className="p-2 bg-red-500 border">-</button>
-                          </form>
-                          <form onSubmit={(e) => handleDelete(e, product._id)}>
-                            <button className="p-2 bg-red-500 border">
-                              DELETE
-                            </button>
-                          </form>
-                        </td>
-                      </tr>
+                                    return (
+                                      <p
+                                        key={index}
+                                        className="bg-amber-400 text-black"
+                                      >
+                                        {propertyval.propertyval.value}
+                                      </p>
+                                    );
+                                })}
+                          </div>
+                        </div>
+                        <div className="flex flex-row md:flex-col justify-between items-end md:items-center">
+                          <div className="flex flex-col justify-start items-start md:items-center">
+                            <div className="flex flex-row items-center h-fit gap-1">
+                              <div className="border border-neutral-300 rounded-md flex gap-3 h-fit flex-nowrap">
+                                <form
+                                  onSubmit={(e) =>
+                                    handleIncrement(e, product._id)
+                                  }
+                                >
+                                  <button className="px-2 cursor-pointer">
+                                    +
+                                  </button>
+                                </form>
+                                <span className="block text-amber-950">
+                                  {product.count}
+                                </span>
+                                <form
+                                  onSubmit={(e) =>
+                                    handleDecrement(e, product._id)
+                                  }
+                                >
+                                  <button className="px-2 cursor-pointer">
+                                    -
+                                  </button>
+                                </form>
+                              </div>
+                              <form
+                                onSubmit={(e) => handleDelete(e, product._id)}
+                              >
+                                <button className="p-2 cursor-pointer">
+                                  ❌
+                                </button>
+                              </form>
+                            </div>
+                            <div className="text-size14 font-weight200 text-neutral-500">
+                              {product.price}
+                              <PriceUnit></PriceUnit>
+                            </div>
+                          </div>
+                          <div className="text-size15 font-weight300 text-neutral-700">
+                            {product.price * product.count}
+                            <PriceUnit></PriceUnit>
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
-                </tbody>
-              </table>
-              <br />
-              <h2>قیمت کل : {totalPrice}</h2>
-              <form onSubmit={handleSubmit}>
-                <button>پرداخت</button>
-              </form>
+                </div>
+              </div>
+              <aside className=" md:sticky md:top-20 w-full fixed bottom-0 right-0 bg-white h-fit md:rounded-md border-neutral-200 border-t md:border-2 p-4 flex flex-col gap-2 items-end z-40 md:z-auto">
+                <h2 className="flex justify-between w-full">
+                  <span className="text-neutral-600">قیمت کل :</span>
+                  <span className="text-size15 font-weight300 text-neutral-700">
+                    {totalPrice}
+                    <PriceUnit></PriceUnit>
+                  </span>
+                </h2>
+                <form onSubmit={handleSubmit}>
+                  <button className="bg-green-500 text-shadow cursor-pointer text-white px-2 py-1 rounded-md">
+                    پرداخت
+                  </button>
+                </form>
+              </aside>
             </div>
           ) : (
             <h4 className="px-5 md:px-20">سبد خرید شما خالی است</h4>
