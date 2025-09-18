@@ -154,6 +154,8 @@ class ProductServices {
     product.description = req.body.description;
     product.properties = JSON.parse(req.body.properties);
     product.img = req.body.img === "" ? null : req.body.img;
+    product.gallery = JSON.parse(req.body.gallery);
+
     if (req.body.categoryId) {
       product.categoryId = new mongoose.Types.ObjectId(req.body.categoryId);
     }

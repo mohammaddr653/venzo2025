@@ -23,6 +23,8 @@ const OneProductPage = () => {
   const { propertiesAndVals, loadPropertiesAndVals } =
     useLoadPropertiesAndVals();
   const [libShow, setLibShow] = useState(false);
+  const [galleryLibShow, setGalleryLibShow] = useState(false);
+  const [selectedGalleryImgs, setSelectedGalleryImgs] = useState<any>([]);
   const [selectedImgs, setSelectedImgs] = useState<any>([]);
 
   const [formData, setFormData] = useState({
@@ -34,6 +36,7 @@ const OneProductPage = () => {
     description: "",
     properties: [],
     img: "",
+    gallery: [],
   });
   const [properties, setProperties] = useState<ProductPropertiesObj[]>([]);
   const { state } = useLocation();
@@ -62,6 +65,16 @@ const OneProductPage = () => {
     }
   }, [selectedImgs]);
 
+  useEffect(() => {
+    const gallery = selectedGalleryImgs.map((img: any) => img._id);
+    setFormData((prev: any) => {
+      return {
+        ...prev,
+        gallery: JSON.stringify([...gallery]),
+      };
+    });
+  }, [selectedGalleryImgs]);
+
   async function loadOneProduct() {
     const response = await call(
       axios.get(SERVER_API + `/admin/dashboard/products/${productId}`),
@@ -82,6 +95,9 @@ const OneProductPage = () => {
       setSelectedImgs((prev: any) => {
         return [...prev, matchedProduct.img];
       });
+    if (matchedProduct.gallery?.length)
+      setSelectedGalleryImgs([...matchedProduct.gallery]);
+
     if (matchedProduct.discount) setDiscount({ ...matchedProduct.discount });
   }
 
@@ -207,6 +223,35 @@ const OneProductPage = () => {
           </div>
 
           <br />
+
+          <div className="flex flex-row items-center">
+            {selectedGalleryImgs.map((img: any, index: any) => {
+              return (
+                <Img
+                  pic={img}
+                  sizes={"500px"}
+                  className={"aspect-square object-cover"}
+                  width={100}
+                  key={index}
+                ></Img>
+              );
+            })}
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                setGalleryLibShow(true);
+              }}
+            >
+              گالری تصاویر محصول
+            </p>
+            {galleryLibShow ? (
+              <Library
+                setLibShow={setGalleryLibShow}
+                selectedImgs={selectedGalleryImgs}
+                setSelectedImgs={setSelectedGalleryImgs}
+              ></Library>
+            ) : null}
+          </div>
 
           <LoadingButton loading={loading}>بروزرسانی</LoadingButton>
         </form>
