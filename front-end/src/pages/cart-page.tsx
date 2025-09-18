@@ -7,6 +7,7 @@ import axios from "axios";
 import Footer from "../components/common/footer";
 import Img from "../components/common/img";
 import PriceUnit from "../components/common/priceUnit";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   const { user } = useUserStore();
@@ -83,7 +84,7 @@ const CartPage = () => {
                           "border-b border-neutral-200"
                         }`}
                       >
-                        <div className="flex gap-2">
+                        <Link to={`/single-shop/${product._id}`} className="flex gap-2">
                           <Img
                             pic={product?.img}
                             sizes={"500px"}
@@ -111,7 +112,7 @@ const CartPage = () => {
                                     );
                                 })}
                           </div>
-                        </div>
+                        </Link>
                         <div className="flex flex-row md:flex-col justify-between items-end md:items-center">
                           <div className="flex flex-col justify-start items-start md:items-center">
                             <div className="flex flex-row items-center h-fit gap-1">
