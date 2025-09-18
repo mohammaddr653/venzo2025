@@ -11,7 +11,7 @@ const Footer = () => {
   }, []);
   return (
     <>
-      <footer>
+      <footer className="mt-auto">
         <div
           id="footer-container"
           className="flex flex-col gap-20 border-t border-neutral-200 py-10 px-5 md:px-20"

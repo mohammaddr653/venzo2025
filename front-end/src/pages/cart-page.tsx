@@ -4,6 +4,7 @@ import { useUserStore } from "../store";
 import callManager from "../hooks/callManager";
 import { SERVER_API } from "../../config";
 import axios from "axios";
+import Footer from "../components/common/footer";
 
 const CartPage = () => {
   const { user } = useUserStore();
@@ -64,78 +65,83 @@ const CartPage = () => {
   return (
     <>
       <Header focus={true}></Header>
-      <main className="pt-15">
+      <main className="pt-20 pb-15">
         <div className="cartpage-container flex flex-col gap-5">
-          <h1>cart page</h1>
-          <div>
-            <table>
-              <caption>list of products</caption>
-              <thead>
-                <tr>
-                  <th>name</th>
-                  <th>total price</th>
-                  <th>count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reservedProducts?.map((product: any, index: any) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        {product.name}
-                        {product.selectedPropertyvalString !== "" &&
-                          product.properties
-                            .find((item: any) => item.selective)
-                            .values.map((propertyval: any, index: any) => {
-                              if (
-                                product.selectedPropertyvalString.includes(
-                                  propertyval.propertyval._id
+          <h1 className="px-5 md:px-20">سبد خرید</h1>
+          {reservedProducts?.length ? (
+            <div>
+              <table>
+                <caption>list of products</caption>
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>total price</th>
+                    <th>count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservedProducts?.map((product: any, index: any) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          {product.name}
+                          {product.selectedPropertyvalString !== "" &&
+                            product.properties
+                              .find((item: any) => item.selective)
+                              .values.map((propertyval: any, index: any) => {
+                                if (
+                                  product.selectedPropertyvalString.includes(
+                                    propertyval.propertyval._id
+                                  )
                                 )
-                              )
-                                return (
-                                  <p
-                                    key={index}
-                                    className="bg-amber-400 text-black"
-                                  >
-                                    {propertyval.propertyval.value}
-                                  </p>
-                                );
-                            })}
-                      </td>
-                      <td>{product.price * product.count}</td>
-                      <td className="flex flex-row">
-                        <span className="p-2 bg-red-500 text-amber-50 border border-b-black">
-                          {product.count}
-                        </span>
-                        <form onSubmit={(e) => handleIncrement(e, product._id)}>
-                          <button className="p-2 bg-red-500 border">+</button>
-                        </form>
-                        <form onSubmit={(e) => handleDecrement(e, product._id)}>
-                          <button className="p-2 bg-red-500 border">-</button>
-                        </form>
-                        <form onSubmit={(e) => handleDelete(e, product._id)}>
-                          <button className="p-2 bg-red-500 border">
-                            DELETE
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <br />
-          <h2>قیمت کل : {totalPrice}</h2>
-          <form onSubmit={handleSubmit}>
-            <button>پرداخت</button>
-          </form>
-          <div className="bg-sky-600">this is tailwind</div>
-          <div className="bg-sky-300">
-            this is zustand , hello{user ? user.name : " user"}
-          </div>
+                                  return (
+                                    <p
+                                      key={index}
+                                      className="bg-amber-400 text-black"
+                                    >
+                                      {propertyval.propertyval.value}
+                                    </p>
+                                  );
+                              })}
+                        </td>
+                        <td>{product.price * product.count}</td>
+                        <td className="flex flex-row">
+                          <span className="p-2 bg-red-500 text-amber-50 border border-b-black">
+                            {product.count}
+                          </span>
+                          <form
+                            onSubmit={(e) => handleIncrement(e, product._id)}
+                          >
+                            <button className="p-2 bg-red-500 border">+</button>
+                          </form>
+                          <form
+                            onSubmit={(e) => handleDecrement(e, product._id)}
+                          >
+                            <button className="p-2 bg-red-500 border">-</button>
+                          </form>
+                          <form onSubmit={(e) => handleDelete(e, product._id)}>
+                            <button className="p-2 bg-red-500 border">
+                              DELETE
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <br />
+              <h2>قیمت کل : {totalPrice}</h2>
+              <form onSubmit={handleSubmit}>
+                <button>پرداخت</button>
+              </form>
+            </div>
+          ) : (
+            <h4 className="px-5 md:px-20">سبد خرید شما خالی است</h4>
+          )}
         </div>
       </main>
+      <Footer></Footer>
     </>
   );
 };
