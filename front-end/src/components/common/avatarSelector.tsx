@@ -5,6 +5,7 @@ import LoadingButton from "./loadingButton";
 import axios from "axios";
 import { SERVER_API } from "../../../config";
 import useLoadUser from "../../hooks/useLoadUser";
+import EditSvg from "../icons/edit-svg";
 
 const AvatarSelector = ({ user }: any) => {
   const { call, loading } = callManager();
@@ -66,13 +67,16 @@ const AvatarSelector = ({ user }: any) => {
 
   return (
     <>
-      <div className="relative grid grid-cols-6 gap-2 bg-red-700">
-        <div className="bg-amber-600 flex flex-col items-center">
-          <button className="w-fit" onClick={() => setAvatarEditShow(true)}>
-            ✏
+      <div className="relative grid grid-cols-6">
+        <div className=" flex flex-col items-center">
+          <button
+            className="cursor-pointer bg-neutral-800 w-8 h-8 flex justify-center items-center rounded-full"
+            onClick={() => setAvatarEditShow(true)}
+          >
+            <EditSvg width="16" height="16" fill="white"></EditSvg>
           </button>
         </div>
-        <div className="bg-amber-600 col-span-4">
+        <div className=" col-span-4">
           <Img
             pic={user?.avatar}
             sizes={"500px"}
@@ -80,7 +84,7 @@ const AvatarSelector = ({ user }: any) => {
             width={100}
           ></Img>
         </div>
-        <div className="bg-amber-600"></div>
+        <div className=""></div>
       </div>
       {avatarEditShow && (
         <div className="fixed w-screen h-screen top-0 right-0 z-60 flex justify-center items-center">

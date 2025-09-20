@@ -48,13 +48,10 @@ const UserPage = () => {
       <Header focus={true}></Header>
       <main className="pt-20 pb-15">
         <div className="userpage-container flex gap-2 justify-between items-stretch px-5 md:px-20">
-          <div className="flex-[1]">
+          <div className="flex-[1] flex-col items-center">
             <AvatarSelector user={user}></AvatarSelector>
-            <h1>{user?.name}</h1>
-            <h1>{user?.email}</h1>
-            <h1>{user?.isadmin ? "is admin" : "not admin"}</h1>
-            <h1>user page</h1>
-            <div className="bg-green-300">
+            <h1 className="text-center py-2 font-extrabold">{user?.name}</h1>
+            <div className="bg-green-300 mt-5">
               <h1>ویرایش اکانت</h1>
               <form onSubmit={handleSubmit}>
                 <input
