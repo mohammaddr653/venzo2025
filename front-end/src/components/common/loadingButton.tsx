@@ -5,6 +5,7 @@ interface LoadingButtonProps {
   disabled?: any;
   form?: any;
   children?: any;
+  className?: any;
 }
 
 const LoadingButton = (props: LoadingButtonProps) => {
@@ -12,6 +13,7 @@ const LoadingButton = (props: LoadingButtonProps) => {
     <button
       type="submit"
       disabled={props.loading | props.disabled ? true : false}
+      className={props.className}
       form={props.form}
     >
       {props.loading ? "loading" : props.children}

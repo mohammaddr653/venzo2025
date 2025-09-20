@@ -6,6 +6,8 @@ import LoadingButton from "../components/common/loadingButton";
 import useLoadUser from "../hooks/useLoadUser";
 import AvatarSelector from "../components/common/avatarSelector";
 import { Link } from "react-router-dom";
+import Header from "../components/common/header";
+import Footer from "../components/common/footer";
 
 const UserPage = () => {
   const { call, loading } = callManager();
@@ -42,34 +44,38 @@ const UserPage = () => {
     getAuthedUser();
   };
   return (
-    <div>
-      <h1>{user?.name}</h1>
-      <h1>{user?.email}</h1>
-      <h1>{user?.isadmin ? "is admin" : "not admin"}</h1>
-      <h1>user page</h1>
-      <AvatarSelector user={user}></AvatarSelector>
-      <div className="bg-green-300">
-        <h1>ویرایش اکانت</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="name"
-            name="name"
-            value={formData.name}
-            className="border"
-            onChange={handleChange}
-          />
-          <br />
-          <LoadingButton loading={loading}>ثبت تغییرات</LoadingButton>
-        </form>
-      </div>
-      <Link to={"/orders"}>سفارش های من</Link>
-
-      <div className="bg-sky-600">this is tailwind</div>
-      <div className="bg-sky-300">
-        this is zustand , hello{user ? user.name : " user"}
-      </div>
-    </div>
+    <>
+      <Header focus={true}></Header>
+      <main className="pt-20 pb-15">
+        <div className="userpage-container flex gap-2 justify-between items-stretch px-5 md:px-20">
+          <div className="flex-[1]">
+            <AvatarSelector user={user}></AvatarSelector>
+            <h1>{user?.name}</h1>
+            <h1>{user?.email}</h1>
+            <h1>{user?.isadmin ? "is admin" : "not admin"}</h1>
+            <h1>user page</h1>
+            <div className="bg-green-300">
+              <h1>ویرایش اکانت</h1>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="name"
+                  name="name"
+                  value={formData.name}
+                  className="border"
+                  onChange={handleChange}
+                />
+                <br />
+                <LoadingButton loading={loading}>ثبت تغییرات</LoadingButton>
+              </form>
+            </div>
+            <Link to={"/orders"}>سفارش های من</Link>
+          </div>
+          <div className="flex-[4] bg-amber-500">afe</div>
+        </div>
+      </main>
+      <Footer></Footer>
+    </>
   );
 };
 export default UserPage;
