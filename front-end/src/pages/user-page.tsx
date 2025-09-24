@@ -88,7 +88,7 @@ const UserPage = () => {
               </button>
             </div>
           </div>
-          <div className="md:flex-[4] w-0 bg-amber-500 md:border-r border-neutral-300">
+          <div className="md:flex-[4] w-0 md:border-r border-neutral-300">
             {(route === "edit-account" || route === "default") && (
               <div
                 className={`fixed ${
