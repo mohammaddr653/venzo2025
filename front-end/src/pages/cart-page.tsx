@@ -14,12 +14,31 @@ const CartPage = () => {
   const [reservedProducts, setReservedProducts] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState(null);
   const { call, loading } = callManager();
+  const [form, setForm] = useState<any>({
+    name: "",
+    phone: "",
+    province: "",
+    city: "",
+    address: "",
+    postalCode: "",
+    note: "",
+  });
 
   async function loadCart() {
     const response = await call(axios.get(SERVER_API + "/cart"), false);
     setReservedProducts([...response.data.data.reservedProducts]);
     setTotalPrice(response.data.data.totalPrice);
+    setForm({
+      name: "",
+      phone: "",
+      province: "",
+      city: "",
+      address: "",
+      postalCode: "",
+      note: "",
+    });
   }
+
   useEffect(() => {
     loadCart();
   }, []);
@@ -42,6 +61,10 @@ const CartPage = () => {
     loadCart();
   }
 
+  function handleChange(e: any) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
   async function handleDelete(e: React.FormEvent, id: string) {
     e.preventDefault();
     const response = await call(
@@ -54,7 +77,10 @@ const CartPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     //ساخت سفارش جدید و بلافاصله انتقال به درگاه
     e.preventDefault();
-    const createOrder = await call(axios.post(SERVER_API + "/orders"), false);
+    const createOrder = await call(
+      axios.post(SERVER_API + "/orders", form),
+      false
+    );
     if (createOrder.data.data) {
       const response = await call(
         axios.post(SERVER_API + `/pay/${createOrder.data.data}`),
@@ -73,8 +99,8 @@ const CartPage = () => {
           <h1 className="px-5 md:px-20">سبد خرید</h1>
           {reservedProducts?.length ? (
             <div className="grid grid-cols-3 px-5 md:px-20 gap-5">
-              <div className=" col-span-3 md:col-span-2 rounded-md border-2 border-neutral-200 overflow-hidden">
-                <div className="flex flex-col">
+              <div className="flex flex-col gap-2 col-span-3 md:col-span-2">
+                <div className="flex flex-col rounded-md border-2 border-neutral-200 overflow-hidden">
                   {reservedProducts?.map((product: any, index: any) => {
                     return (
                       <div
@@ -84,7 +110,10 @@ const CartPage = () => {
                           "border-b border-neutral-200"
                         }`}
                       >
-                        <Link to={`/single-shop/${product._id}`} className="flex gap-2">
+                        <Link
+                          to={`/single-shop/${product._id}`}
+                          className="flex gap-2"
+                        >
                           <Img
                             pic={product?.img}
                             sizes={"500px"}
@@ -160,6 +189,74 @@ const CartPage = () => {
                       </div>
                     );
                   })}
+                </div>
+                <div className="p-5 flex flex-col gap-4 rounded-md border-2 border-neutral-200 overflow-hidden">
+                  <h4 className="font-bold text-neutral-700">
+                    مشخصات گیرنده :
+                  </h4>
+                  <form className="flex flex-col items-start gap-3">
+                    <label htmlFor="name" className="flex flex-col gap-1">
+                      <p>نام و نام خانوادگی</p>
+                      <input
+                        type="text"
+                        name="name"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="phone" className="flex flex-col gap-1">
+                      <p>شماره تماس</p>
+                      <input
+                        type="text"
+                        name="phone"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="province" className="flex flex-col gap-1">
+                      <p>استان</p>
+                      <input
+                        type="text"
+                        name="province"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="city" className="flex flex-col gap-1">
+                      <p>شهر</p>
+                      <input
+                        type="text"
+                        name="city"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="address" className="flex flex-col gap-1">
+                      <p>آدرس کامل</p>
+                      <textarea
+                        name="address"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="postalCode" className="flex flex-col gap-1">
+                      <p>کد پستی</p>
+                      <input
+                        type="text"
+                        name="postalCode"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                    <label htmlFor="note" className="flex flex-col gap-1">
+                      <p>یادداشت</p>
+                      <textarea
+                        name="note"
+                        onChange={handleChange}
+                        className="p-2 border border-neutral-300 rounded-md"
+                      />
+                    </label>
+                  </form>
                 </div>
               </div>
               <aside className=" md:sticky md:top-20 w-full fixed bottom-0 right-0 bg-white h-fit md:rounded-md border-neutral-200 border-t md:border-2 p-4 flex flex-col gap-2 items-end z-40 md:z-auto">

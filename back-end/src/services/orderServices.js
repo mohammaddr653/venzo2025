@@ -130,6 +130,15 @@ class OrderServices {
         authority: "",
         authExpire: null,
         referenceId: "",
+        receiver: {
+          name: req.body.name,
+          phone: req.body.phone,
+          province: req.body.province,
+          city: req.body.city,
+          address: req.body.address,
+          postalCode: req.body.postalCode,
+          note: req.body.note,
+        },
       });
 
       cart.reservedProducts = [];

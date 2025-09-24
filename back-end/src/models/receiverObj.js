@@ -28,7 +28,6 @@ const receiverObjSchema = new mongoose.Schema(
     },
     note: {  //یادداشت
       type: String,
-      required: true,
     },
   },
   { _id: false }
