@@ -3,6 +3,7 @@ import { useUserStore } from "../../store";
 import callManager from "../../hooks/callManager";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
+import OrderStatus from "../../components/common/order-status";
 
 const OrdersPage = () => {
   const { user } = useUserStore();
@@ -63,31 +64,7 @@ const OrdersPage = () => {
                       <td>{order._id}</td>
                       <td>{order.totalPrice} تومان</td>
                       <td>
-                        <p className="w-fit">
-                          {order.status === "paid" && (
-                            <p className="bg-green-600 text-white">
-                              پرداخت شده
-                            </p>
-                          )}
-                          {order.status === "canceled" && (
-                            <p className="bg-blue-600 text-white">
-                              پرداخت نشده
-                            </p>
-                          )}
-                          {order.status === "expired" && (
-                            <p className="bg-black text-white">منقضی شده</p>
-                          )}
-                          {order.status === "check" && (
-                            <p className="bg-red-600 text-white">
-                              در انتظار تایید
-                            </p>
-                          )}
-                          {order.status === "pending" && (
-                            <p className="bg-yellow-500 text-white">
-                              در حال پرداخت
-                            </p>
-                          )}
-                        </p>
+                        <OrderStatus order={order}></OrderStatus>
                         {order.authority !== "" && (
                           <p>شناسه پرداخت : {order.authority}</p>
                         )}
