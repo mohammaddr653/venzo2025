@@ -4,11 +4,13 @@ import callManager from "../../hooks/callManager";
 import { SERVER_API } from "../../../config";
 import axios from "axios";
 import OrderStatus from "../../components/common/order-status";
+import ExpandedOrder from "../../components/common/expanded-order";
 
 const OrdersPage = () => {
   const { user } = useUserStore();
   const [orders, setOrders] = useState<any>([]);
   const { call, loading } = callManager();
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
   async function loadOrders() {
     const response = await call(
@@ -22,9 +24,8 @@ const OrdersPage = () => {
     loadOrders();
   }, []);
 
-  const handleVerify = async (e: React.FormEvent, authority: any) => {
+  const handleVerify = async (e: any, authority: any) => {
     //تایید تراکنش بصورت دستی
-    e.preventDefault();
     const response = await call(
       axios.get(SERVER_API + `/pay/verify?Authority=${authority}`),
       true
@@ -32,9 +33,8 @@ const OrdersPage = () => {
     loadOrders();
   };
 
-  const handleInquiry = async (e: React.FormEvent, authority: any) => {
+  const handleInquiry = async (e: any, authority: any) => {
     //استعلام تراکنش
-    e.preventDefault();
     const response = await call(
       axios.get(SERVER_API + `/pay/inquiry?Authority=${authority}`),
       true
@@ -75,26 +75,24 @@ const OrdersPage = () => {
                       <td className="flex flex-row gap-2">
                         {order.authority !== "" && (
                           <>
-                            <form>
-                              <button
-                                className="p-2 bg-red-500 border"
-                                onClick={(e) =>
-                                  handleVerify(e, order.authority)
-                                }
-                              >
-                                اعتبار سنجی
-                              </button>
-                            </form>
-                            <form>
-                              <button
-                                className="p-2 bg-red-500 border"
-                                onClick={(e) =>
-                                  handleInquiry(e, order.authority)
-                                }
-                              >
-                                استعلام
-                              </button>
-                            </form>
+                            <button
+                              onClick={() => setSelectedOrder(order)}
+                              className="p-2 py-1 rounded-md cursor-pointer bg-neutral-400 text-white text-shadow border"
+                            >
+                              جزئیات سفارش
+                            </button>
+                            <button
+                              className="p-2 bg-red-500 border"
+                              onClick={(e) => handleVerify(e, order.authority)}
+                            >
+                              اعتبار سنجی
+                            </button>
+                            <button
+                              className="p-2 bg-red-500 border"
+                              onClick={(e) => handleInquiry(e, order.authority)}
+                            >
+                              استعلام
+                            </button>
                           </>
                         )}
                       </td>
@@ -104,11 +102,13 @@ const OrdersPage = () => {
               </tbody>
             </table>
           </div>
-          <div className="bg-sky-600">this is tailwind</div>
-          <div className="bg-sky-300">
-            this is zustand , hello{user ? user.name : " user"}
-          </div>
         </div>
+        {selectedOrder && (
+          <ExpandedOrder
+            selectedOrder={selectedOrder}
+            setSelectedOrder={setSelectedOrder}
+          ></ExpandedOrder>
+        )}
       </main>
     </>
   );

@@ -18,10 +18,6 @@ const ClientOrders = () => {
   }
 
   useEffect(() => {
-    console.log(selectedOrder);
-  }, [selectedOrder]);
-
-  useEffect(() => {
     loadOrders();
   }, []);
 
