@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
 const orderProduct = require("./orderProduct");
+const receiverObjSchema = require("./receiverObj");
 
 const orderSchema = new mongoose.Schema({
   userId: {
@@ -18,6 +19,7 @@ const orderSchema = new mongoose.Schema({
   authority: { type: String, default: "" }, //شناسه پرداخت که از زرین پال میگیریم
   authExpire: { type: Date, default: null }, // انقضای authority
   referenceId: { type: String, default: "" }, //شناسه تراکنش که بعد از تایید تراکنش میگیریم
+  receiver: { type: receiverObjSchema, required: true },
 });
 orderSchema.plugin(timestamp);
 module.exports = mongoose.model("Order", orderSchema);
