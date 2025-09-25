@@ -10,12 +10,13 @@ import useDesktopHeaderLog from "../../hooks/logics/useDesktopHeaderLog";
 import DeskMenuItem from "./desktop-menuItem";
 
 interface DesktopHeaderProps {
-  focus?: boolean; //if its true cuses some changes in style and the header gets focus
+  focus: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
   const { user, categories, userLogout } = useDesktopHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
+  const [focusState, setFocusState] = useState<boolean>(focus);
 
   function handleScroll() {
     let lastScrollTop = 0;
@@ -35,13 +36,17 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    setFocusState(focus);
+  }, [focus]);
+
   return (
     <>
       <header className="fixed z-50">
         <div
           id="header-container"
-          className={`desktop-header relative z-50 flex flex-row gap-10 justify-start items-center px-20 transition-all duration-300 ${
-            isScrolled || focus
+          className={`desktop-header relative z-50 flex flex-row gap-10 justify-start items-center px-20 transition-all duration-300 delay-150 ${
+            isScrolled || focusState
               ? "bg-white shadow-b-lean-300"
               : "bg-transparent"
           }`}
@@ -52,8 +57,8 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
           <div className="menu">
             <nav>
               <ul
-                className={`flex px-0 flex-row gap-5 font-weight200 ${
-                  isScrolled || focus
+                className={`flex px-0 flex-row gap-5 font-weight200 transition-all duration-300 delay-150 ${
+                  isScrolled || focusState
                     ? "text-neutral-800 text-shadow-none"
                     : "text-white text-shadow-lg shadow-black"
                 } `}
@@ -65,6 +70,8 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
                         <DeskMenuItem
                           key={category._id}
                           item={category}
+                          focus={focus}
+                          setFocusState={setFocusState}
                           categories={categories}
                         ></DeskMenuItem>
                       )

@@ -5,7 +5,7 @@ const ArchivePage = () => {
   const { user } = useUserStore();
   return (
     <div>
-      <Header></Header>
+      <Header focus={true}></Header>
       <h1>archive page</h1>
       <div className="bg-sky-600">this is tailwind</div>
       <div className="bg-sky-300">

@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 
-const DeskMenuItem = ({ item, categories }: any) => {
+const DeskMenuItem = ({ item, categories, focus, setFocusState }: any) => {
+  function handleHover(item: any, value: boolean) {
+    if (item.display === "mega-menu" && item.motherId === "root") {
+      setFocusState(value);
+    }
+  }
   return (
-    <li className={item.display}>
+    <li
+      className={item.display}
+      onMouseEnter={() => handleHover(item, true)}
+      onMouseLeave={() => handleHover(item, focus)}
+    >
       <div className="head">
         {item.type === "shop" && (
           <Link to={`/shop/${item._id}`}>{item.name}</Link>
