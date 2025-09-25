@@ -12,8 +12,13 @@ const Pagination = ({
     <>
       {totalPagesCount ? (
         <div className="pagination flex flex-row justify-between">
-          <button onClick={handleNext}>Next</button>
-          <div className="flex flex-row-reverse">
+          <button
+            className="border border-neutral-300 rounded-md px-2 py-1 text-size14 text-neutral-800 cursor-pointer"
+            onClick={handleNext}
+          >
+            صفحه بعد
+          </button>
+          <div className="flex flex-row-reverse gap-1">
             {Array.from({ length: totalPagesCount }, (_, index) => {
               if (
                 (index + 1 <= page + 1 && index + 1 >= page - 1) ||
@@ -25,7 +30,7 @@ const Pagination = ({
                   <React.Fragment key={index}>
                     {index + 1 === page - 1 && index + 1 > 2 ? "..." : null}
                     <button
-                      className={`border rounded-md w-[30px] h-[30px] flex items-center justify-center ${
+                      className={`border rounded-md w-[30px] h-[30px] flex items-center justify-center cursor-pointer ${
                         page === index + 1 ? "bg-amber-400" : null
                       }`}
                       onClick={() => {
@@ -42,7 +47,12 @@ const Pagination = ({
               }
             })}
           </div>
-          <button onClick={handlePrev}>Prev</button>
+          <button
+            className="border border-neutral-300 rounded-md px-2 py-1 text-size14 text-neutral-800 cursor-pointer"
+            onClick={handlePrev}
+          >
+            صفحه قبل
+          </button>
         </div>
       ) : (
         <div>محتوایی یافت نشد</div>
