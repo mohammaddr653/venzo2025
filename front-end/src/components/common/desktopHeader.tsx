@@ -16,7 +16,7 @@ interface DesktopHeaderProps {
 const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
   const { user, categories, userLogout } = useDesktopHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
-  const [focusState, setFocusState] = useState<boolean>(false);
+  const [focusState, setFocusState] = useState<boolean>(focus);
 
   function handleScroll() {
     let lastScrollTop = 0;
@@ -70,6 +70,7 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
                         <DeskMenuItem
                           key={category._id}
                           item={category}
+                          focus={focus}
                           setFocusState={setFocusState}
                           categories={categories}
                         ></DeskMenuItem>
