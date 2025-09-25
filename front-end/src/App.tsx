@@ -14,7 +14,7 @@ import AdminRoute from "./components/private-route-components/adminRoute";
 import LoginPage from "./pages/login-page";
 import RegisterPage from "./pages/register-page";
 import { useEffect } from "react";
-import { useUserStore, useWidthStore } from "./store";
+import { useMobileMenuStore, useUserStore, useWidthStore } from "./store";
 import axios from "axios";
 import UsersPage from "./pages/admin-page/users-page";
 import CategoriesPage from "./pages/admin-page/categories-page";
@@ -48,6 +48,7 @@ import CallbackPage from "./pages/callback-page";
 function App() {
   const { user, userLoading, getAuthedUser } = useLoadUser();
   const { width, setWidth } = useWidthStore();
+  const { mobileMenuShow, setMobileMenuShow } = useMobileMenuStore();
 
   const location = useLocation(); // Detects route changes
   useEffect(() => {
@@ -63,6 +64,7 @@ function App() {
 
   useEffect(() => {
     handleGoUp("instant");
+    setMobileMenuShow(false); //با هربار تغییر آدرس منوی موبایل بسته شود
   }, [location.pathname]);
 
   if (userLoading) return <p>Loading defaults...</p>; //waiting to read some values from server

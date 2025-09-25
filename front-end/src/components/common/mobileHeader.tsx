@@ -8,6 +8,7 @@ import GoUp from "./goUp";
 import useMobileHeaderLog from "../../hooks/logics/useMobileHeaderLog";
 import MobMenuItem from "./mobile-menuItem";
 import { mobileMenuScripts } from "../../helpers/mobileMenuScripts";
+import { useMobileMenuStore } from "../../store";
 
 interface MobileHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
@@ -16,7 +17,7 @@ interface MobileHeaderProps {
 const MobileHeader = ({ focus }: MobileHeaderProps) => {
   const { user, categories, userLogout } = useMobileHeaderLog();
   const [isScrolled, setIsScrolled] = useState<any>();
-  const [mobileMenuShow, setMobileMenuShow] = useState<any>(false);
+  const { mobileMenuShow, setMobileMenuShow } = useMobileMenuStore();
   const listenerRef = useRef(false);
 
   function handleScroll() {
@@ -74,7 +75,11 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
               onClick={() => setMobileMenuShow(false)}
             ></div>
           ) : null}
-          <div className={`hideMenu ${mobileMenuShow ? "showMenu" : null} border-r border-neutral-300`}>
+          <div
+            className={`hideMenu ${
+              mobileMenuShow ? "showMenu" : null
+            } border-r border-neutral-300`}
+          >
             <div className="flex flex-row justify-between items-center px-4">
               <Link to={"/"}>
                 <img src={Logo} alt="logo" width={60} />

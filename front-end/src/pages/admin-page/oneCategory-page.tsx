@@ -171,7 +171,7 @@ const OneCategoryPage = () => {
                 setLibShow(true);
               }}
             >
-              افزودن تصویر محصول
+              افزودن تصویر دسته بندی
             </p>
             {libShow ? (
               <Library
