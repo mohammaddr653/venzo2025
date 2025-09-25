@@ -5,7 +5,7 @@ import MobileHeader from "./mobileHeader";
 import DesktopHeader from "./desktopHeader";
 
 interface HeaderProps {
-  focus?: boolean; //if its true cuses some changes in style and the header gets focus
+  focus: boolean; //if its true cuses some changes in style and the header gets focus
 }
 
 const Header = (props: HeaderProps) => {
