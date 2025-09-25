@@ -8,6 +8,7 @@ import Footer from "../components/common/footer";
 import Img from "../components/common/img";
 import PriceUnit from "../components/common/priceUnit";
 import { Link } from "react-router-dom";
+import Offpercent from "../components/common/offpercent";
 
 const CartPage = () => {
   const { user } = useUserStore();
@@ -142,7 +143,7 @@ const CartPage = () => {
                                 })}
                           </div>
                         </Link>
-                        <div className="flex flex-row md:flex-col justify-between items-end md:items-center">
+                        <div className="flex flex-row md:flex-col gap-2 justify-between items-end md:items-center">
                           <div className="flex flex-col justify-start items-start md:items-center">
                             <div className="flex flex-row items-center h-fit gap-1">
                               <div className="border border-neutral-300 rounded-md flex gap-3 h-fit flex-nowrap">
@@ -176,14 +177,31 @@ const CartPage = () => {
                                 </button>
                               </form>
                             </div>
-                            <div className="text-size14 font-weight200 text-neutral-500">
-                              {product.price}
-                              <PriceUnit></PriceUnit>
+                            <div className="text-size13 font-weight200 text-neutral-500">
+                              <span>
+                                {product.discount
+                                  ? product.discount.offer
+                                  : product.price}
+                                <PriceUnit></PriceUnit>
+                              </span>
                             </div>
                           </div>
-                          <div className="text-size15 font-weight300 text-neutral-700">
-                            {product.price * product.count}
-                            <PriceUnit></PriceUnit>
+                          <div className="flex flex-row-reverse gap-1 text-size15 font-weight300 text-neutral-700">
+                            <span>
+                              {(product.discount
+                                ? product.discount.offer
+                                : product.price) * product.count}
+                              <PriceUnit></PriceUnit>
+                            </span>
+                            {product.discount && (
+                              <Offpercent
+                                percent={Math.round(
+                                  ((product.price - product.discount.offer) *
+                                    100) /
+                                    product.price
+                                )}
+                              ></Offpercent>
+                            )}
                           </div>
                         </div>
                       </div>

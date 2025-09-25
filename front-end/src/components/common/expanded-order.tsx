@@ -53,7 +53,24 @@ const ExpandedOrder = ({ selectedOrder, setSelectedOrder }: any) => {
                       <td className="p-2">{order?.name}</td>
                       <td className="p-2">{order?.selectedPropertyval}</td>
                       <td className="p-2">
-                        {order?.price}<PriceUnit></PriceUnit>
+                        <div className="flex items-center gap-1 font-bold">
+                          {order?.discount ? (
+                            <>
+                              <span className="line-through text-size13 font-extralight">
+                                {order?.price}
+                              </span>
+                              <span>
+                                {order?.discount.offer}
+                                <PriceUnit></PriceUnit>
+                              </span>
+                            </>
+                          ) : (
+                            <span>
+                              {order?.price}
+                              <PriceUnit></PriceUnit>
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="p-2">{order?.count}</td>
                     </tr>

@@ -52,11 +52,16 @@ class OrderServices {
           if (!updateOp) {
             throw new Error("Insufficient stock");
           }
+          const { price, discount } = getPriceAndStock(
+            item.selectedPropertyvalString,
+            updateOp
+          );
+
           const orderProduct = {
             productId: updateOp._id,
             name: updateOp.name,
-            price: updateOp.price,
-            discount: updateOp.discount,
+            price: price,
+            discount: discount,
             properties: updateOp.properties,
             count: item.count,
             selectedPropertyvalString: "",
@@ -99,7 +104,7 @@ class OrderServices {
           if (!updateOp) {
             throw new Error("Insufficient stock");
           }
-          const { price } = getPriceAndStock(
+          const { price, discount } = getPriceAndStock(
             item.selectedPropertyvalString,
             updateOp
           );
@@ -108,7 +113,7 @@ class OrderServices {
             productId: updateOp._id,
             name: updateOp.name,
             price: price,
-            discount: updateOp.discount,
+            discount: discount,
             properties: updateOp.properties,
             count: item.count,
             selectedPropertyvalString: item.selectedPropertyvalString,

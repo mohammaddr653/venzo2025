@@ -2,7 +2,10 @@
 const totalPriceCalculator = (products) => {
   let totalPrice = 0;
   products.forEach((product) => {
-    totalPrice = totalPrice + product.count * product.price;
+    totalPrice =
+      totalPrice +
+      product.count *
+        (product.discount ? product.discount.offer : product.price);
   });
   return totalPrice;
 };

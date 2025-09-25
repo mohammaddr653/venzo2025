@@ -229,13 +229,14 @@ class ProductServices {
         const productInfo = cart.reservedProducts.find((p) =>
           p.productId.equals(product._id)
         );
-        const { price, stock } = getPriceAndStock(
+        const { price, discount, stock } = getPriceAndStock(
           productInfo.selectedPropertyvalString,
           product
         );
         return {
           ...product.toObject(),
           price: price,
+          discount: discount,
           stock: stock,
           selectedPropertyvalString: productInfo.selectedPropertyvalString,
           count: productInfo ? productInfo.count : 0,
