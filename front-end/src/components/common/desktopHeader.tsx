@@ -88,7 +88,7 @@ const DesktopHeader = ({ focus }: DesktopHeaderProps) => {
               </div>
               <span className="block bg-cu-neutral-700 w-1px h-6 rounded-3xl border-0"></span>
               <div className="block">
-                <CartCounter user={user}></CartCounter>
+                <CartCounter user={user} width={40}></CartCounter>
               </div>
               <div className="block">
                 <AccountButtons

@@ -10,17 +10,9 @@ export const SERVER_URL =
 
 export const SERVER_API = SERVER_URL + "/api";
 
-export const DEFAULT_PRODUCT =
+export const DEFAULT_IMAGE =
   SERVER_URL +
-  "/public/static-images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
-
-export const DEFAULT_BLOG =
-  SERVER_URL +
-  "/public/static-images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
-
-export const DEFAULT_AVATAR =
-  SERVER_URL +
-  "/public/static-images/abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products.jpg";
+  "/public/static-images/1759131600005-673329792-abstract-luxury-plain-blur-grey-black-gradient-used-as-background-studio-wall-display-your-products-medium.webp"; //تصویر پیش فرض
 
 export const Logo = SERVER_URL + "/public/static-images/logo.png";
 

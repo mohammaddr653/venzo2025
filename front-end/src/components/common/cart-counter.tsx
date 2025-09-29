@@ -10,7 +10,7 @@ const CartCounter = (props: any) => {
             <img
               src="/images/icons/icons8-cart-48.png"
               alt="exit-icon"
-              width={40}
+              width={props.width}
             />
           </Link>
         </div>

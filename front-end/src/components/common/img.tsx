@@ -1,5 +1,5 @@
 //note:this component needs to be set correctly everywhere it used . due to width of the image set the sizes property .
-import { DEFAULT_PRODUCT, SERVER_URL } from "../../../config";
+import { DEFAULT_IMAGE, SERVER_URL } from "../../../config";
 
 const Img = ({ pic, ...props }: any) => {
   return (
@@ -7,7 +7,7 @@ const Img = ({ pic, ...props }: any) => {
       src={
         pic?.urls?.original?.url
           ? SERVER_URL + pic.urls.original.url
-          : DEFAULT_PRODUCT
+          : DEFAULT_IMAGE
       }
       srcSet={
         pic?.urls

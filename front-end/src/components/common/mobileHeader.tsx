@@ -9,6 +9,7 @@ import useMobileHeaderLog from "../../hooks/logics/useMobileHeaderLog";
 import MobMenuItem from "./mobile-menuItem";
 import { mobileMenuScripts } from "../../helpers/mobileMenuScripts";
 import { useMobileMenuStore } from "../../store";
+import CartCounter from "./cart-counter";
 
 interface MobileHeaderProps {
   focus?: boolean; //if its true cuses some changes in style and the header gets focus
@@ -62,13 +63,16 @@ const MobileHeader = ({ focus }: MobileHeaderProps) => {
           <Link to={"/"}>
             <img src={Logo} className="" alt="logo" width={60} />
           </Link>
-          <img
-            src="/images/icons/icons8-menu-48.png"
-            width={30}
-            alt="hambergur-icon"
-            className="cursor-pointer"
-            onClick={() => setMobileMenuShow(true)}
-          />
+          <div className="flex items-center gap-2">
+            <CartCounter user={user} width={30}></CartCounter>
+            <img
+              src="/images/icons/icons8-menu-48.png"
+              width={30}
+              alt="hambergur-icon"
+              className="cursor-pointer"
+              onClick={() => setMobileMenuShow(true)}
+            />
+          </div>
           {mobileMenuShow ? (
             <div
               className="mobileMenu-overlay"

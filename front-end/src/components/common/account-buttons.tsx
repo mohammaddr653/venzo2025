@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { DEFAULT_AVATAR, SERVER_URL } from "../../../config";
+import { SERVER_URL } from "../../../config";
 import "../../assets/css/account-buttons.css";
 import Img from "./img";
 

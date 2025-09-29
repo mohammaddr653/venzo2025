@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import callManager from "../../hooks/callManager";
-import { SERVER_URL, SERVER_API, DEFAULT_PRODUCT } from "../../../config";
+import { SERVER_URL, SERVER_API, DEFAULT_IMAGE } from "../../../config";
 import axios from "axios";
 import LoadingButton from "../../components/common/loadingButton";
 import useLoadTrusts from "../../hooks/useLoadTrusts";

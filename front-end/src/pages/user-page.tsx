@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import callManager from "../hooks/callManager";
-import { DEFAULT_AVATAR, SERVER_API, SERVER_URL } from "../../config";
+import {
+  BREAK_POINTS,
+  SERVER_API,
+  SERVER_URL,
+} from "../../config";
 import axios, { all } from "axios";
 import LoadingButton from "../components/common/loadingButton";
 import useLoadUser from "../hooks/useLoadUser";
@@ -10,12 +14,14 @@ import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import CrossSvg from "../components/icons/cross-svg";
 import ClientOrders from "../components/common/client-orders";
+import { useWidthStore } from "../store";
 
 const UserPage = () => {
   const { call, loading } = callManager();
   const { user, userLoading, getAuthedUser } = useLoadUser();
   const [allParams, setAllParams] = useSearchParams();
   const [route, setRoute] = useState<any>();
+  const { width, setWidth } = useWidthStore();
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -71,6 +77,7 @@ const UserPage = () => {
                 id="edit-account"
                 className={`text-right py-1 cursor-pointer ${
                   (route === "edit-account" || route === "default") &&
+                  width > BREAK_POINTS.md &&
                   "text-green-600 font-extrabold"
                 }`}
                 onClick={(e) => handleRoute(e)}
@@ -80,12 +87,15 @@ const UserPage = () => {
               <button
                 id="orders"
                 className={`text-right py-1 cursor-pointer ${
-                  route === "orders" && "text-green-600 font-extrabold"
+                  route === "orders" &&
+                  width > BREAK_POINTS.md &&
+                  "text-green-600 font-extrabold"
                 }`}
                 onClick={(e) => handleRoute(e)}
               >
                 سفارش های من
               </button>
+              <Link to={"/cart"}>سبد خرید</Link>
             </div>
           </div>
           <div className="md:flex-[4] w-0 md:border-r border-neutral-300">
