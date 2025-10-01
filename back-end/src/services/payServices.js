@@ -4,6 +4,8 @@ const reservedProduct = require("../models/reservedProduct");
 const serviceResponse = require("../helpers/serviceResponse");
 const { ZarinPal } = require("zarinpal-node-sdk");
 const Order = require("../models/order");
+const sendEmail = require("../mails/newOrder");
+const User = require("../models/user");
 
 const zarinpal = new ZarinPal({
   merchantId: process.env.MERCHANT_ID,
@@ -42,12 +44,6 @@ class PayServices {
         cardPan: ["6219861034529007", "5022291073776543"],
         referrer_id: "affiliate123",
       });
-      // let newPayment = new Payment({
-      //   user: req.user.id,
-      //   amount: req.session.paymentAmount,
-      //   resnumber: response.data.data.authority,
-      // });
-      // await newPayment.save();
 
       //authority should be saved in database
       updateOp.authority = response.data.authority;
@@ -91,6 +87,23 @@ class PayServices {
         findOp.status = "paid";
         findOp.referenceId = response.data.ref_id;
         const saveOp = await findOp.save();
+        //ارسال ایمیل به مشتری
+        const client = await User.findById(saveOp.userId);
+        let clientContent = `<p>از خرید شما ممنونیم . سفارش شما تایید شد و درحال آماده سازی برای ارسال است .</p>
+        <p>شماره سفارش : <span>${saveOp._id}</span></p>
+        <p>شناسه تراکنش : ${saveOp.authority}</p>
+        <p>کد رهگیری : ${saveOp.referenceId}</p>`;
+        sendEmail(
+          "فاکتور خرید از فروشگاه اینترنتی وانیمارت",
+          client.email,
+          clientContent
+        );
+        //ارسال ایمیل به ادمین
+        let content = `<a href='${process.env.ORIGIN_URL}/admin/orders'>سفارش جدیدی ثبت شد . لطفا بررسی کنید .</a>
+        <p>شماره سفارش : <span>${saveOp._id}</span></p>
+        <p>شناسه تراکنش : ${saveOp.authority}</p>
+        <p>کد رهگیری : ${saveOp.referenceId}</p>`;
+        sendEmail("سفارش جدیدی دارید", "mohammaddr653@gmail.com", content);
 
         return serviceResponse(200, findOp._id);
       } else if (response.data.code === 101) {
